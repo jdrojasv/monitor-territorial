@@ -1,661 +1,649 @@
 <!DOCTYPE html>
-<html lang="es" data-theme="dark">
+<html lang="es">
 <head>
-<meta charset="UTF-8"/>
-<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>Monitor Regional — Huila · Caquetá · Putumayo</title>
-<link rel="preconnect" href="https://fonts.googleapis.com"/>
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
-<link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet"/>
-<style>
-:root{
-  --bg:#0b0d07;--bg2:#111407;--bg3:#161a0d;
-  --surface:#1a1f10;--surface2:#1f2614;
-  --border:#2a3018;--border2:#364020;
-  --text:#dde4c8;--text2:#b8c29a;
-  --muted:#6e7d52;--muted2:#4a5838;
-  --accent:#7ec850;--accent-dim:#2a3d14;
-  --accent2:#e8954a;--accent3:#5aabcf;
-  --shadow:rgba(0,0,0,.65);
-  --fh:'Syne',sans-serif;--fb:'DM Sans',sans-serif;--fm:'DM Mono',monospace;
-  --r:6px;--tr:.2s ease;
-}
-[data-theme="light"]{
-  --bg:#f0f2e8;--bg2:#e4e8d8;--bg3:#d8deca;
-  --surface:#fff;--surface2:#f4f6ec;
-  --border:#c4ceac;--border2:#a8b890;
-  --text:#1a2008;--text2:#364020;
-  --muted:#6a7850;--muted2:#9aaa80;
-  --accent:#357a0e;--accent-dim:#d4edbc;
-  --accent2:#b0600a;--accent3:#1a6898;
-  --shadow:rgba(0,0,0,.12);
-}
-*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-html{scroll-behavior:smooth}
-body{font-family:var(--fb);background:var(--bg);color:var(--text);line-height:1.6;min-height:100vh;transition:background var(--tr),color var(--tr)}
-a{color:inherit;text-decoration:none}
-button{cursor:pointer;border:none;background:none;font:inherit;color:inherit}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Monitor Regional | Ordenamiento Territorial Colombia</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
-header{position:sticky;top:0;z-index:200;background:var(--bg2);border-bottom:2px solid var(--accent-dim);box-shadow:0 2px 20px var(--shadow);transition:background var(--tr)}
-.hdr{max-width:1400px;margin:0 auto;padding:0 1.25rem;display:flex;align-items:center;justify-content:space-between;gap:.75rem;height:56px}
-.brand{display:flex;align-items:center;gap:.6rem}
-.brand-ico{width:32px;height:32px;border-radius:8px;background:var(--accent-dim);display:flex;align-items:center;justify-content:center;font-size:1rem;flex-shrink:0}
-.brand-name{font-family:var(--fh);font-size:1.1rem;font-weight:800;color:var(--accent);letter-spacing:-.03em;line-height:1}
-.brand-sub{font-size:.56rem;color:var(--muted);font-family:var(--fm);letter-spacing:.06em;text-transform:uppercase;margin-top:2px}
-.hdr-r{display:flex;align-items:center;gap:.5rem}
-.btn-ref{display:flex;align-items:center;gap:.35rem;padding:.3rem .85rem;background:var(--accent);color:#060802;border-radius:var(--r);font-size:.68rem;font-weight:700;letter-spacing:.04em;text-transform:uppercase;transition:opacity .15s}
-.btn-ref:hover{opacity:.82}.btn-ref.busy{opacity:.4;pointer-events:none}
-.btn-th{width:34px;height:34px;border-radius:50%;border:1.5px solid var(--border2);display:flex;align-items:center;justify-content:center;font-size:.9rem;transition:border-color .15s,transform .2s}
-.btn-th:hover{border-color:var(--accent);transform:rotate(18deg)}
+        :root {
+            --bg: #f5f7fb;
+            --surface: #ffffff;
+            --surface-alt: #f8f9fc;
+            --border: #eef2f6;
+            --text-primary: #1a2c3e;
+            --text-secondary: #5b6e8c;
+            --text-muted: #8b9ab0;
+            --accent: #2c5f8a;
+            --accent-light: #eef2fa;
+            --accent-green: #2c7a4d;
+            --accent-gold: #b8860b;
+            --shadow-sm: 0 1px 2px rgba(0,0,0,0.03), 0 1px 2px rgba(0,0,0,0.05);
+            --shadow-md: 0 4px 12px rgba(0,0,0,0.03), 0 2px 4px rgba(0,0,0,0.05);
+            --radius: 16px;
+            --radius-sm: 10px;
+        }
 
-.tabbar{background:var(--bg3);border-bottom:1px solid var(--border);overflow-x:auto;scrollbar-width:none}
-.tabbar::-webkit-scrollbar{display:none}
-.tabs{max-width:1400px;margin:0 auto;padding:0 1.25rem;display:flex;white-space:nowrap}
-.tab{padding:.6rem 1.1rem;font-size:.68rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);border-bottom:3px solid transparent;transition:color var(--tr),border-color var(--tr)}
-.tab:hover{color:var(--text2)}.tab.active{color:var(--accent);border-color:var(--accent)}
+        body.dark {
+            --bg: #0f1724;
+            --surface: #1a2538;
+            --surface-alt: #101a2a;
+            --border: #2a3448;
+            --text-primary: #eef2ff;
+            --text-secondary: #a0b3d9;
+            --text-muted: #6f7d9e;
+            --accent: #5b8cbd;
+            --accent-light: #1f2e44;
+            --shadow-sm: 0 1px 2px rgba(0,0,0,0.2);
+            --shadow-md: 0 4px 12px rgba(0,0,0,0.2);
+        }
 
-.filters{background:var(--bg2);border-bottom:1px solid var(--border);padding:.5rem 1.25rem;display:flex;flex-wrap:wrap;align-items:center;gap:.35rem;transition:background var(--tr)}
-.fl{font-size:.6rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);margin-right:.1rem}
-.chip{padding:.15rem .6rem;border:1.5px solid var(--border2);border-radius:20px;font-size:.64rem;font-weight:600;background:var(--surface);color:var(--muted);transition:all .15s}
-.chip:hover,.chip.on{background:var(--accent);border-color:var(--accent);color:#060802}
-.sep{width:1px;height:16px;background:var(--border2);margin:0 .2rem}
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--bg);
+            color: var(--text-primary);
+            line-height: 1.5;
+            transition: background 0.2s ease, color 0.2s ease;
+        }
 
-.wrap{max-width:1400px;margin:0 auto;padding:1.1rem 1.25rem 3rem}
+        /* Layout */
+        .container {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 32px 24px;
+        }
 
-.sbar{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:.35rem;padding:.35rem 0;margin-bottom:.85rem;border-bottom:1px solid var(--border)}
-.si{font-size:.72rem;color:var(--muted);font-family:var(--fm)}
-.si b{color:var(--text)}
-.dot{display:inline-block;width:6px;height:6px;border-radius:50%;background:var(--accent);margin-right:5px;animation:pulse 2s ease-in-out infinite}
-@keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.4;transform:scale(.75)}}
+        /* Header */
+        .header {
+            margin-bottom: 32px;
+        }
+        .header-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+            gap: 16px;
+        }
+        .logo h1 {
+            font-size: 1.6rem;
+            font-weight: 600;
+            letter-spacing: -0.3px;
+            background: linear-gradient(135deg, var(--text-primary) 0%, var(--accent) 100%);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+        .logo p {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            margin-top: 4px;
+        }
+        .theme-toggle {
+            background: var(--surface-alt);
+            border: 1px solid var(--border);
+            border-radius: 40px;
+            padding: 8px 18px;
+            font-size: 0.85rem;
+            font-weight: 500;
+            cursor: pointer;
+            color: var(--text-secondary);
+            transition: all 0.2s;
+            backdrop-filter: blur(4px);
+        }
+        .theme-toggle:hover {
+            background: var(--surface);
+            border-color: var(--accent);
+            color: var(--accent);
+        }
 
-.pbar-wrap{height:3px;background:var(--border);border-radius:2px;margin-bottom:.85rem;overflow:hidden}
-.pbar{height:100%;background:var(--accent);border-radius:2px;transition:width .4s ease;width:0%}
+        /* Stats cards */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 16px;
+            margin-bottom: 28px;
+        }
+        .stat-card {
+            background: var(--surface);
+            border-radius: var(--radius);
+            padding: 20px 16px;
+            border: 1px solid var(--border);
+            transition: all 0.2s;
+            box-shadow: var(--shadow-sm);
+        }
+        .stat-number {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--accent);
+            line-height: 1.2;
+        }
+        .stat-label {
+            font-size: 0.8rem;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: var(--text-muted);
+            margin-top: 8px;
+        }
 
-.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(290px,1fr));gap:1rem}
-.card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);display:flex;flex-direction:column;overflow:hidden;transition:box-shadow .2s,transform .18s,border-color .2s;animation:fu .3s ease both}
-@keyframes fu{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
-.card:hover{box-shadow:0 6px 28px var(--shadow);transform:translateY(-2px);border-color:var(--accent-dim)}
-.cbody{padding:.85rem 1rem;flex:1;display:flex;flex-direction:column;gap:.45rem}
-.cmeta{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:.25rem}
-.csrc{font-family:var(--fm);font-size:.6rem;font-weight:500;color:var(--accent3);text-transform:uppercase;letter-spacing:.05em;max-width:60%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.cdate{font-size:.6rem;color:var(--muted);font-family:var(--fm)}
-.ctit{font-family:var(--fh);font-size:.92rem;font-weight:700;line-height:1.32;color:var(--text)}
-.cdesc{font-size:.78rem;color:var(--text2);line-height:1.52;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
-.ctags{display:flex;flex-wrap:wrap;gap:.3rem;margin-top:.15rem}
-.tag{font-size:.58rem;font-weight:700;padding:.15rem .45rem;border-radius:3px;text-transform:uppercase;letter-spacing:.04em}
-.tag-dep{background:#0e2030;color:var(--accent3)}
-.tag-mun{background:#1a2010;color:var(--accent)}
-.tag-tema{background:#2a1808;color:var(--accent2)}
-[data-theme="light"] .tag-dep{background:#d0eaf8;color:#1a5080}
-[data-theme="light"] .tag-mun{background:#d4edbc;color:#255010}
-[data-theme="light"] .tag-tema{background:#fce4cc;color:#904010}
-.cfoot{padding:.55rem 1rem;border-top:1px solid var(--border);display:flex;align-items:center;justify-content:space-between}
-.cdomain{font-size:.6rem;color:var(--muted);font-family:var(--fm);max-width:55%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.btn-src{display:inline-flex;align-items:center;gap:.3rem;padding:.28rem .65rem;background:var(--accent);color:#060802;border-radius:var(--r);font-size:.62rem;font-weight:700;text-transform:uppercase;letter-spacing:.04em;transition:opacity .15s;white-space:nowrap}
-.btn-src:hover{opacity:.82}
+        /* Filters bar */
+        .filters-bar {
+            background: var(--surface);
+            border-radius: var(--radius);
+            padding: 20px;
+            margin-bottom: 28px;
+            border: 1px solid var(--border);
+            box-shadow: var(--shadow-sm);
+        }
+        .filters-group {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 16px;
+            align-items: flex-end;
+        }
+        .filter-item {
+            flex: 1;
+            min-width: 150px;
+        }
+        .filter-item label {
+            font-size: 0.7rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: var(--text-muted);
+            display: block;
+            margin-bottom: 6px;
+        }
+        select, input {
+            width: 100%;
+            padding: 10px 12px;
+            background: var(--bg);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-sm);
+            font-size: 0.85rem;
+            color: var(--text-primary);
+            font-family: inherit;
+            transition: 0.2s;
+        }
+        select:focus, input:focus {
+            outline: none;
+            border-color: var(--accent);
+        }
+        .btn {
+            padding: 10px 20px;
+            border-radius: var(--radius-sm);
+            font-weight: 500;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: all 0.2s;
+            border: none;
+            background: var(--accent);
+            color: white;
+            font-family: inherit;
+        }
+        .btn-secondary {
+            background: transparent;
+            border: 1px solid var(--border);
+            color: var(--text-secondary);
+        }
+        .btn-secondary:hover {
+            background: var(--surface-alt);
+            border-color: var(--accent);
+        }
+        .btn:hover {
+            transform: translateY(-1px);
+            filter: brightness(0.97);
+        }
 
-.rss-section{margin-bottom:2rem}
-.rss-sec-title{font-family:var(--fh);font-size:.9rem;font-weight:800;color:var(--accent);text-transform:uppercase;letter-spacing:.04em;margin-bottom:.7rem;padding-bottom:.35rem;border-bottom:1px solid var(--border2)}
-.rss-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:.85rem}
-.rcard{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);overflow:hidden;animation:fu .3s ease both}
-.rcard-hdr{padding:.55rem .85rem;background:var(--surface2);border-bottom:1px solid var(--border);display:flex;align-items:center;gap:.5rem}
-.rcard-ico{font-size:.95rem;flex-shrink:0}
-.rcard-name{font-family:var(--fm);font-size:.68rem;font-weight:500;color:var(--text);line-height:1.3}
-.rcard-q{font-size:.58rem;color:var(--muted);margin-top:1px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.rcard-body{padding:.55rem .85rem;display:flex;flex-direction:column;gap:.45rem}
-.ri{padding-bottom:.45rem;border-bottom:1px dashed var(--border);font-size:.75rem;line-height:1.42}
-.ri:last-child{border-bottom:none;padding-bottom:0}
-.ri a{color:var(--accent3);font-weight:600}
-.ri a:hover{text-decoration:underline}
-.ri-date{font-size:.6rem;color:var(--muted);font-family:var(--fm)}
-.rcard-foot{padding:.4rem .85rem;border-top:1px solid var(--border);display:flex;justify-content:space-between;align-items:center}
-.rcard-foot a{font-size:.62rem;font-weight:600;color:var(--accent)}
-.rcard-foot a:hover{text-decoration:underline}
-.rcard-count{font-size:.58rem;color:var(--muted);font-family:var(--fm)}
+        /* Feed tabs */
+        .feed-tabs {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 24px;
+            border-bottom: 1px solid var(--border);
+            padding-bottom: 8px;
+        }
+        .tab-btn {
+            background: transparent;
+            border: none;
+            padding: 8px 20px;
+            font-size: 0.85rem;
+            font-weight: 500;
+            color: var(--text-muted);
+            cursor: pointer;
+            border-radius: 40px;
+            transition: all 0.2s;
+        }
+        .tab-btn.active {
+            background: var(--accent-light);
+            color: var(--accent);
+        }
+        .tab-btn:hover:not(.active) {
+            color: var(--text-primary);
+        }
 
-.empty{grid-column:1/-1;text-align:center;padding:3.5rem 2rem;color:var(--muted)}
-.empty .eico{font-size:2.5rem;margin-bottom:.75rem;opacity:.5}
-.empty p{font-size:.82rem;max-width:380px;margin:0 auto;line-height:1.6}
-.spin{width:32px;height:32px;border:3px solid var(--border2);border-top-color:var(--accent);border-radius:50%;animation:spin .7s linear infinite;margin:0 auto .75rem}
-@keyframes spin{to{transform:rotate(360deg)}}
+        /* News grid */
+        .news-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
+            gap: 24px;
+            margin-top: 16px;
+        }
+        .card {
+            background: var(--surface);
+            border-radius: var(--radius);
+            border: 1px solid var(--border);
+            overflow: hidden;
+            transition: all 0.2s;
+            box-shadow: var(--shadow-sm);
+        }
+        .card:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-md);
+            border-color: var(--accent-light);
+        }
+        .card-header {
+            padding: 18px 20px 12px;
+            border-bottom: 1px solid var(--border);
+        }
+        .card-title {
+            font-size: 1rem;
+            font-weight: 600;
+            line-height: 1.4;
+            margin-bottom: 10px;
+            color: var(--text-primary);
+        }
+        .card-meta {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+        .tag {
+            font-size: 0.7rem;
+            font-weight: 600;
+            padding: 4px 10px;
+            border-radius: 30px;
+            background: var(--accent-light);
+            color: var(--accent);
+        }
+        .tag-municipio {
+            background: #e6f4ea;
+            color: #2c7a4d;
+        }
+        body.dark .tag-municipio {
+            background: #1f3b2c;
+            color: #6fbf8c;
+        }
+        .tag-ot {
+            background: #fef3e2;
+            color: #b86b0c;
+        }
+        body.dark .tag-ot {
+            background: #2f2a1f;
+            color: #e6b45e;
+        }
+        .time-badge {
+            font-size: 0.7rem;
+            color: var(--text-muted);
+        }
+        .card-body {
+            padding: 16px 20px;
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            line-height: 1.5;
+        }
+        .card-footer {
+            padding: 12px 20px 18px;
+            border-top: 1px solid var(--border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.75rem;
+            color: var(--text-muted);
+        }
+        .source-link {
+            color: var(--accent);
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 0.8rem;
+            transition: opacity 0.2s;
+        }
+        .source-link:hover {
+            text-decoration: underline;
+            opacity: 0.8;
+        }
 
-.about-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:.85rem}
-.acard{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:1rem}
-.acard h3{font-family:var(--fh);font-size:.88rem;font-weight:800;color:var(--accent);margin-bottom:.55rem}
-.acard ul{list-style:none;display:flex;flex-direction:column;gap:.25rem}
-.acard li{font-size:.75rem;color:var(--text2);padding-left:.9rem;position:relative}
-.acard li::before{content:'›';position:absolute;left:0;color:var(--accent);font-weight:700}
-.sec-title{font-family:var(--fh);font-size:1.05rem;font-weight:800;color:var(--text);margin-bottom:1rem;padding-bottom:.4rem;border-bottom:2px solid var(--accent-dim);display:inline-block}
+        .loader {
+            text-align: center;
+            padding: 60px;
+            color: var(--text-muted);
+            font-size: 0.9rem;
+        }
+        .empty-state {
+            text-align: center;
+            padding: 60px;
+            color: var(--text-muted);
+            font-size: 0.9rem;
+        }
 
-.tcontent{display:none}.tcontent.active{display:block}
+        .footer {
+            margin-top: 48px;
+            padding-top: 24px;
+            border-top: 1px solid var(--border);
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            text-align: center;
+        }
+        .update-info {
+            text-align: right;
+            font-size: 0.7rem;
+            color: var(--text-muted);
+            margin-top: 12px;
+        }
 
-@media(max-width:580px){
-  .grid{grid-template-columns:1fr}
-  .brand-sub{display:none}
-  .tab{padding:.55rem .7rem;font-size:.62rem}
-}
-</style>
+        @media (max-width: 680px) {
+            .container { padding: 20px 16px; }
+            .stats-grid { grid-template-columns: repeat(2, 1fr); gap: 12px; }
+            .filters-group { flex-direction: column; align-items: stretch; }
+            .filter-item { min-width: auto; }
+            .news-grid { grid-template-columns: 1fr; }
+        }
+    </style>
 </head>
 <body>
-
-<header>
-  <div class="hdr">
-    <div class="brand">
-      <div class="brand-ico">🗺</div>
-      <div>
-        <div class="brand-name">Monitor Regional</div>
-        <div class="brand-sub">Huila · Caquetá · Putumayo — Act. c/hora</div>
-      </div>
+<div class="container">
+    <div class="header">
+        <div class="header-top">
+            <div class="logo">
+                <h1>Territorio & Región</h1>
+                <p>Monitoreo de ordenamiento territorial · Sur de Colombia</p>
+            </div>
+            <button class="theme-toggle" id="darkModeBtn">🌙 Oscuro</button>
+        </div>
     </div>
-    <div class="hdr-r">
-      <button class="btn-ref" id="btnRef" onclick="loadAll()">
-        <span id="rIco">⟳</span> Actualizar
-      </button>
-      <button class="btn-th" id="btnTh" onclick="toggleTheme()" title="Cambiar tema">☀️</button>
+
+    <div class="stats-grid" id="statsGrid">
+        <div class="stat-card"><div class="stat-number" id="totalMunicipios">0</div><div class="stat-label">Noticias locales</div></div>
+        <div class="stat-card"><div class="stat-number" id="totalOT">0</div><div class="stat-label">Ordenamiento territorial</div></div>
+        <div class="stat-card"><div class="stat-number" id="totalHoy">0</div><div class="stat-label">Últimas 24h</div></div>
+        <div class="stat-card"><div class="stat-number" id="totalAyer">0</div><div class="stat-label">Últimas 48h</div></div>
     </div>
-  </div>
-</header>
 
-<nav class="tabbar">
-  <div class="tabs">
-    <button class="tab active" onclick="goTab('noticias',this)">📰 Noticias</button>
-    <button class="tab" onclick="goTab('rss',this)">📡 Feeds RSS</button>
-    <button class="tab" onclick="goTab('acerca',this)">ℹ️ Acerca</button>
-  </div>
-</nav>
+    <div class="filters-bar">
+        <div class="filters-group">
+            <div class="filter-item"><label>Departamento</label><select id="deptoFilter"><option value="">Todos</option><option value="Huila">Huila</option><option value="Putumayo">Putumayo</option><option value="Caqueta">Caquetá</option></select></div>
+            <div class="filter-item"><label>Municipio</label><select id="munFilter"><option value="">Todos</option></select></div>
+            <div class="filter-item"><label>Período</label><select id="periodFilter"><option value="48">Últimas 48h</option><option value="24">Últimas 24h</option><option value="12">Últimas 12h</option></select></div>
+            <div class="filter-item"><label>Buscar</label><input type="text" id="searchInput" placeholder="Palabra clave"></div>
+            <div class="filter-item"><button class="btn" id="applyFilters">Aplicar filtros</button></div>
+            <div class="filter-item"><button class="btn btn-secondary" id="refreshBtn">↻ Actualizar</button></div>
+        </div>
+    </div>
 
-<div class="filters" id="filtersBar">
-  <span class="fl">Dpto</span>
-  <button class="chip on" data-g="dep" data-v="all" onclick="filt('dep','all',this)">Todos</button>
-  <button class="chip" data-g="dep" data-v="huila" onclick="filt('dep','huila',this)">Huila</button>
-  <button class="chip" data-g="dep" data-v="caqueta" onclick="filt('dep','caqueta',this)">Caquetá</button>
-  <button class="chip" data-g="dep" data-v="putumayo" onclick="filt('dep','putumayo',this)">Putumayo</button>
-  <div class="sep"></div>
-  <span class="fl">Tema</span>
-  <button class="chip on" data-g="tema" data-v="all" onclick="filt('tema','all',this)">Todos</button>
-  <button class="chip" data-g="tema" data-v="pot" onclick="filt('tema','pot',this)">Territorial / POT</button>
-  <button class="chip" data-g="tema" data-v="ambiental" onclick="filt('tema','ambiental',this)">Ambiental</button>
-  <button class="chip" data-g="tema" data-v="gobierno" onclick="filt('tema','gobierno',this)">Gobierno</button>
-  <button class="chip" data-g="tema" data-v="economico" onclick="filt('tema','economico',this)">Economía</button>
-  <button class="chip" data-g="tema" data-v="seguridad" onclick="filt('tema','seguridad',this)">Seguridad</button>
+    <div class="feed-tabs">
+        <button class="tab-btn active" data-feed="todos">Todas las fuentes</button>
+        <button class="tab-btn" data-feed="municipios">Noticias locales</button>
+        <button class="tab-btn" data-feed="ot">Ordenamiento territorial</button>
+    </div>
+
+    <div id="newsContainer" class="news-grid"></div>
+    <div class="update-info" id="updateTime"></div>
+    <div class="footer">
+        <p>Municipios monitoreados: Pitalito · Palestina · San Agustín · Isnos · Palermo · Orito · Puerto Caicedo · Valle del Guamuez · Florencia</p>
+        <p style="margin-top: 8px">Datos obtenidos de fuentes públicas · Actualización cada 30 minutos</p>
+    </div>
 </div>
 
-<main class="wrap">
-
-  <div class="tcontent active" id="tc-noticias">
-    <div class="pbar-wrap"><div class="pbar" id="pbar"></div></div>
-    <div class="sbar">
-      <div class="si"><span class="dot"></span>Últimas <b>48 horas</b> · <span id="cnt">iniciando carga…</span></div>
-      <div class="si" id="upd">— <span id="feedStatus"></span></div>
-    </div>
-    <div class="grid" id="newsGrid">
-      <div class="empty"><div class="spin"></div><p>Consultando fuentes regionales y nacionales…</p></div>
-    </div>
-  </div>
-
-  <div class="tcontent" id="tc-rss">
-    <div id="rssOut">
-      <div class="empty"><div class="spin"></div><p>Los feeds se cargarán después de la primera actualización.</p></div>
-    </div>
-  </div>
-
-  <div class="tcontent" id="tc-acerca">
-    <p class="sec-title">Acerca del Monitor Regional</p>
-    <div class="about-grid">
-      <div class="acard"><h3>🏙 Huila (10 municipios)</h3><ul>
-        <li>Pitalito</li><li>Palestina</li><li>Acevedo</li><li>Guadalupe</li>
-        <li>San José de Isnos</li><li>San Agustín</li><li>La Plata</li>
-        <li>Gigante</li><li>Timaná</li><li>Palermo</li></ul></div>
-      <div class="acard">
-        <h3>🌿 Caquetá</h3><ul><li>Florencia</li></ul>
-        <h3 style="margin-top:.8rem">🌄 Putumayo</h3><ul>
-        <li>Puerto Caicedo</li><li>Orito</li><li>Valle del Guamuez</li></ul></div>
-      <div class="acard"><h3>📋 Temas Principales</h3><ul>
-        <li>Ordenamiento Territorial (POT/PBOT/EOT)</li>
-        <li>Planes Parciales y Urbanísticos</li>
-        <li>Licencias Urbanísticas / Curadurías</li>
-        <li>Uso del Suelo y Zonificación</li>
-        <li>Medidas Ambientales CAM</li>
-        <li>Resoluciones Corpoamazonia</li>
-        <li>Contratación y Gobierno</li>
-        <li>Noticias generales de la región</li></ul></div>
-      <div class="acard"><h3>🏛 Entidades Monitoreadas</h3><ul>
-        <li>Gobernaciones Huila / Caquetá / Putumayo</li>
-        <li>Alcaldías municipales</li>
-        <li>CAM · Corpoamazonia</li>
-        <li>Cámara de Comercio del Huila</li>
-        <li>Colombia Compra Eficiente</li>
-        <li>CNSC · INVIAS · DNP</li></ul></div>
-      <div class="acard"><h3>📰 Medios Cubiertos</h3><ul>
-        <li>Locales: Diario del Huila, Huila Noticias, Noticias Putumayo</li>
-        <li>Regionales: La Voz de la Selva, Surcolombiana</li>
-        <li>Nacionales: El Tiempo, El Espectador, Semana, El Colombiano</li>
-        <li>TV/Radio: RCN, Caracol, Blu Radio, Noticias Uno</li></ul></div>
-      <div class="acard"><h3>⚙️ Cómo publicar</h3><ul>
-        <li>Sube index.html a tu repositorio GitHub</li>
-        <li>Settings → Pages → Branch: main → / (root)</li>
-        <li>Disponible en: usuario.github.io/repo</li>
-        <li>Auto-refresh cada 30 minutos</li>
-        <li>Sin servidor ni base de datos</li></ul></div>
-    </div>
-  </div>
-
-</main>
-
-<footer style="border-top:1px solid var(--border);background:var(--bg2);padding:1.25rem;text-align:center;font-size:.65rem;color:var(--muted);line-height:1.9;transition:background var(--tr)">
-  Monitor Regional Huila · Caquetá · Putumayo &nbsp;|&nbsp; Ordenamiento Territorial · Licencias · Uso de Suelo · CAM · Corpoamazonia<br>
-  Las noticias enlazan directamente a sus fuentes originales. Este sitio no almacena ni reproduce contenido editorial.
-</footer>
-
 <script>
-/* ═══════════════════════════════════════════════════════
-   MONITOR REGIONAL v5 — Engine robusto
-   Proxies múltiples con fallback, refresh cada 60 min
-   ═══════════════════════════════════════════════════════ */
-
-let FILTERS = { dep:'all', tema:'all' };
-let ALL_ARTICLES = [];
-let CACHE = {};
-
-/* ── Proxies CORS con fallback ──────────────────── */
-const PROXIES = [
-  url => `https://api.allorigins.win/get?url=${encodeURIComponent(url)}`,
-  url => `https://corsproxy.io/?${encodeURIComponent(url)}`,
-  url => `https://api.codetabs.com/v1/proxy?quest=${encodeURIComponent(url)}`,
-];
-
-/* ── Etiquetado de departamentos y municipios ──────── */
-const MUN_KEYS = {
-  pitalito:   ['pitalito'],
-  palestina:  ['palestina huila','palestina, huila'],
-  acevedo:    ['acevedo huila','acevedo, huila'],
-  guadalupe:  ['guadalupe huila','guadalupe, huila'],
-  isnos:      ['isnos','san josé de isnos','san jose de isnos'],
-  sanagustin: ['san agustín','san agustin'],
-  laplata:    ['la plata huila','la plata, huila','plata huila'],
-  gigante:    ['gigante huila','gigante, huila'],
-  timana:     ['timaná','timana huila'],
-  palermo:    ['palermo huila','palermo, huila'],
-  florencia:  ['florencia caquetá','florencia caqueta','florencia, caquetá','florencia, caqueta'],
-  puertoC:    ['puerto caicedo'],
-  orito:      ['orito putumayo','orito, putumayo'],
-  valleg:     ['valle del guamuez','la hormiga putumayo'],
-};
-const DEP_MUN = {
-  huila:    ['pitalito','palestina','acevedo','guadalupe','isnos','sanagustin','laplata','gigante','timana','palermo'],
-  caqueta:  ['florencia'],
-  putumayo: ['puertoC','orito','valleg'],
-};
-const DEP_WORDS = {
-  huila:    ['huila','neiva','garzón','garzon','campoalegre','rivera'],
-  caqueta:  ['caquetá','caqueta','florencia caquetá','florencia caqueta'],
-  putumayo: ['putumayo','mocoa'],
-};
-const TOPIC_KW = {
-  pot:      ['ordenamiento territorial','plan de ordenamiento','pot ','pbot','eot ','plan basico de ordenamiento','esquema de ordenamiento','plan parcial','planes parciales','zonificación','zonificacion','licencia urbanística','licencia urbanistica','curaduría','curaduria','uso de suelo','uso del suelo','cambio de uso','curador urbano'],
-  ambiental:['cam huila','corpoamazonia','medida ambiental','licencia ambiental','resolución ambiental','resolucion ambiental','permiso ambiental','plan de manejo ambiental','pma ','deforestación','deforestacion','reserva natural','área protegida','area protegida','riesgo ambiental','emergencia ambiental'],
-  gobierno: ['alcaldía','alcaldia','gobernación','gobernacion','concejo municipal','asamblea departamental','secretaría','secretaria municipal','presupuesto municipal','contratación','contratacion','licitación','licitacion','colombia compra','secop','cnsc','servicio civil','empleo público','empleo publico'],
-  economico:['inversión','inversion','proyecto productivo','desarrollo económico','desarrollo economico','empleo','empresa','cámara de comercio','camara de comercio','agroindustria','turismo','infraestructura','vías terciarias','vias terciarias','acueducto','alcantarillado','regalías','regalias'],
-  seguridad:['orden público','orden publico','fuerza pública','fuerza publica','policía','policia','ejercito','ejército','grupos armados','disidencias','farc','eln','narcotráfico','narcotrafico','incautación','incautacion'],
-};
-
-/* ══════════════════════════════════════════════════════
-   FEEDS — 55 fuentes Google News RSS
-   ══════════════════════════════════════════════════════ */
-const GN_BASE = 'https://news.google.com/rss/search?hl=es-419&gl=CO&ceid=CO:es&q=';
-const gn = q => GN_BASE + encodeURIComponent(q);
-
-const FEEDS = [
-  /* ──── PITALITO ──── */
-  {id:'pt1', dep:'huila', mun:'pitalito', icon:'📰', label:'Pitalito — General',        url: gn('Pitalito Huila noticias')},
-  {id:'pt2', dep:'huila', mun:'pitalito', icon:'🏛', label:'Pitalito — Alcaldía',       url: gn('"Alcaldía de Pitalito" OR "alcaldia pitalito"')},
-  {id:'pt3', dep:'huila', mun:'pitalito', icon:'🗺', label:'Pitalito — Territorial',    url: gn('Pitalito "ordenamiento territorial" OR "licencia urbanistica" OR "uso de suelo" OR "plan parcial"')},
-  {id:'pt4', dep:'huila', mun:'pitalito', icon:'🌿', label:'Pitalito — Ambiental',      url: gn('Pitalito ambiental OR CAM OR Corpoamazonia OR "medida ambiental"')},
-  /* ──── PALESTINA ──── */
-  {id:'pal1',dep:'huila', mun:'palestina',icon:'📰', label:'Palestina Huila — Noticias',url: gn('Palestina Huila noticias')},
-  /* ──── ACEVEDO ──── */
-  {id:'ac1', dep:'huila', mun:'acevedo',  icon:'📰', label:'Acevedo Huila — Noticias',  url: gn('Acevedo Huila noticias')},
-  {id:'ac2', dep:'huila', mun:'acevedo',  icon:'🗺', label:'Acevedo — Territorial',     url: gn('Acevedo Huila "ordenamiento" OR "licencia" OR "uso de suelo"')},
-  /* ──── GUADALUPE ──── */
-  {id:'gu1', dep:'huila', mun:'guadalupe',icon:'📰', label:'Guadalupe Huila — Noticias',url: gn('"Guadalupe" Huila noticias')},
-  /* ──── ISNOS ──── */
-  {id:'is1', dep:'huila', mun:'isnos',    icon:'📰', label:'San José de Isnos — Noticias',url: gn('Isnos OR "San José de Isnos" Huila noticias')},
-  /* ──── SAN AGUSTÍN ──── */
-  {id:'sa1', dep:'huila', mun:'sanagustin',icon:'📰',label:'San Agustín — General',     url: gn('"San Agustín" Huila noticias')},
-  {id:'sa2', dep:'huila', mun:'sanagustin',icon:'🗺',label:'San Agustín — Territorial', url: gn('"San Agustín" "ordenamiento territorial" OR "licencia urbanistica" OR "plan parcial"')},
-  {id:'sa3', dep:'huila', mun:'sanagustin',icon:'🌄',label:'San Agustín — Turismo',     url: gn('"San Agustín" turismo OR patrimonio OR "parque arqueologico"')},
-  /* ──── LA PLATA ──── */
-  {id:'lp1', dep:'huila', mun:'laplata',  icon:'📰', label:'La Plata Huila — General',  url: gn('"La Plata" Huila noticias')},
-  {id:'lp2', dep:'huila', mun:'laplata',  icon:'🌿', label:'La Plata — CAM',            url: gn('"La Plata" Huila CAM OR ambiental OR "ordenamiento territorial"')},
-  /* ──── GIGANTE ──── */
-  {id:'gi1', dep:'huila', mun:'gigante',  icon:'📰', label:'Gigante Huila — Noticias',  url: gn('"Gigante" Huila noticias')},
-  /* ──── TIMANÁ ──── */
-  {id:'ti1', dep:'huila', mun:'timana',   icon:'📰', label:'Timaná — Noticias',         url: gn('Timaná OR Timana Huila noticias')},
-  /* ──── PALERMO ──── */
-  {id:'pa1', dep:'huila', mun:'palermo',  icon:'📰', label:'Palermo — Noticias',        url: gn('"Palermo" Huila noticias')},
-  /* ──── HUILA REGIONAL ──── */
-  {id:'hui1',dep:'huila', mun:null, icon:'📰', label:'Huila — Noticias Regionales',     url: gn('Huila Colombia noticias regionales')},
-  {id:'hui2',dep:'huila', mun:null, icon:'🏛', label:'Gobernación del Huila',           url: gn('"Gobernación del Huila" OR "gobernacion del huila" noticias')},
-  {id:'hui3',dep:'huila', mun:null, icon:'🌿', label:'CAM — Ambiental Huila',           url: gn('CAM Huila "corporación autónoma" OR "medida ambiental" OR resolución OR licencia')},
-  {id:'hui4',dep:'huila', mun:null, icon:'🗺', label:'Huila — Ordenamiento Territorial',url: gn('Huila "ordenamiento territorial" OR POT OR PBOT OR "plan de ordenamiento" OR "licencia urbanistica"')},
-  {id:'hui5',dep:'huila', mun:null, icon:'🏛', label:'Cámara de Comercio Huila',        url: gn('"Cámara de Comercio" Huila noticias OR actividades OR registro')},
-  {id:'hui6',dep:'huila', mun:null, icon:'📋', label:'Colombia Compra — Huila',         url: gn('"Colombia Compra" Huila OR SECOP Huila contratación')},
-  {id:'hui7',dep:'huila', mun:null, icon:'📋', label:'CNSC — Servicio Civil Huila',     url: gn('"servicio civil" Huila OR "empleo publico" Huila OR CNSC Huila')},
-  {id:'hui8',dep:'huila', mun:null, icon:'📰', label:'Diario del Huila',                url: gn('"Diario del Huila" noticias')},
-  {id:'hui9',dep:'huila', mun:null, icon:'📰', label:'Huila Noticias / Huila 7 Días',   url: gn('"Huila Noticias" OR "Huila 7 días" OR "surcolombiana noticias"')},
-  {id:'hu10',dep:'huila', mun:null, icon:'📺', label:'RCN / Caracol — Huila',           url: gn('(site:rcnradio.com OR site:caracol.com.co OR site:noticiasrcn.com) Huila')},
-  {id:'hu11',dep:'huila', mun:null, icon:'📰', label:'El Tiempo — Huila',               url: gn('site:eltiempo.com Huila OR Pitalito OR Neiva noticias')},
-  /* ──── FLORENCIA / CAQUETÁ ──── */
-  {id:'flo1',dep:'caqueta',mun:'florencia',icon:'📰',label:'Florencia — General',       url: gn('Florencia Caquetá noticias')},
-  {id:'flo2',dep:'caqueta',mun:'florencia',icon:'🏛',label:'Florencia — Alcaldía',      url: gn('"Alcaldía de Florencia" OR "alcaldia florencia" Caquetá')},
-  {id:'flo3',dep:'caqueta',mun:'florencia',icon:'🗺',label:'Florencia — Territorial',   url: gn('Florencia Caquetá "ordenamiento territorial" OR "licencia urbanistica" OR "uso de suelo"')},
-  {id:'caq1',dep:'caqueta',mun:null, icon:'🌿', label:'Corpoamazonia — Caquetá',        url: gn('Corpoamazonia Caquetá medida OR licencia OR resolución OR "plan de manejo"')},
-  {id:'caq2',dep:'caqueta',mun:null, icon:'🏛', label:'Gobernación Caquetá',            url: gn('"Gobernación del Caquetá" OR "gobernacion caqueta" noticias')},
-  {id:'caq3',dep:'caqueta',mun:null, icon:'📰', label:'Caquetá — Regional',             url: gn('Caquetá Colombia noticias regionales')},
-  {id:'caq4',dep:'caqueta',mun:null, icon:'📺', label:'La Voz de la Selva — Caquetá',   url: gn('"La Voz de la Selva" OR "florencianews" OR "caqueta noticias" noticias')},
-  {id:'caq5',dep:'caqueta',mun:null, icon:'📺', label:'RCN / Caracol — Caquetá',        url: gn('(site:rcnradio.com OR site:caracol.com.co) Caquetá OR Florencia')},
-  {id:'caq6',dep:'caqueta',mun:null, icon:'📰', label:'El Tiempo — Caquetá',            url: gn('site:eltiempo.com Caquetá OR Florencia')},
-  /* ──── ORITO ──── */
-  {id:'ori1',dep:'putumayo',mun:'orito',  icon:'📰',label:'Orito — Noticias',           url: gn('Orito Putumayo noticias')},
-  {id:'ori2',dep:'putumayo',mun:'orito',  icon:'🌿',label:'Orito — Ambiental',          url: gn('Orito Putumayo Corpoamazonia OR ambiental OR "ordenamiento territorial"')},
-  /* ──── PUERTO CAICEDO ──── */
-  {id:'pc1', dep:'putumayo',mun:'puertoC',icon:'📰',label:'Puerto Caicedo — Noticias',  url: gn('"Puerto Caicedo" Putumayo noticias')},
-  /* ──── VALLE DEL GUAMUEZ ──── */
-  {id:'vg1', dep:'putumayo',mun:'valleg', icon:'📰',label:'Valle del Guamuez — Noticias',url: gn('"Valle del Guamuez" OR "La Hormiga" Putumayo noticias')},
-  {id:'vg2', dep:'putumayo',mun:'valleg', icon:'🌿',label:'Valle del Guamuez — Ambiental',url: gn('"Valle del Guamuez" OR "La Hormiga" Corpoamazonia OR ambiental')},
-  /* ──── PUTUMAYO REGIONAL ──── */
-  {id:'put1',dep:'putumayo',mun:null, icon:'📰',label:'Putumayo — Regional',             url: gn('Putumayo Colombia noticias regionales')},
-  {id:'put2',dep:'putumayo',mun:null, icon:'🏛',label:'Gobernación Putumayo',            url: gn('"Gobernación del Putumayo" OR "gobernacion putumayo" noticias')},
-  {id:'put3',dep:'putumayo',mun:null, icon:'🌿',label:'Corpoamazonia — Putumayo',        url: gn('Corpoamazonia Putumayo medida OR licencia OR resolución OR "ordenamiento"')},
-  {id:'put4',dep:'putumayo',mun:null, icon:'🗺',label:'Putumayo — Territorial',          url: gn('Putumayo "ordenamiento territorial" OR "licencia urbanistica" OR "uso de suelo"')},
-  {id:'put5',dep:'putumayo',mun:null, icon:'📺',label:'Medios Putumayo',                 url: gn('"Putumayo Noticias" OR "putumayo hoy" OR "noticias putumayo" OR "putumayo news"')},
-  {id:'put6',dep:'putumayo',mun:null, icon:'📺',label:'RCN / Caracol — Putumayo',        url: gn('(site:rcnradio.com OR site:caracol.com.co) Putumayo')},
-  {id:'put7',dep:'putumayo',mun:null, icon:'📰',label:'El Tiempo — Putumayo',            url: gn('site:eltiempo.com Putumayo noticias')},
-  /* ──── MEDIOS NACIONALES ──── */
-  {id:'nac1',dep:null,mun:null,icon:'📰',label:'El Tiempo — Sur Colombia',               url: gn('site:eltiempo.com (Huila OR Caquetá OR Putumayo OR Pitalito OR Florencia OR Mocoa)')},
-  {id:'nac2',dep:null,mun:null,icon:'📰',label:'Semana — Sur Colombia',                  url: gn('site:semana.com (Huila OR Caquetá OR Putumayo)')},
-  {id:'nac3',dep:null,mun:null,icon:'📰',label:'El Espectador — Sur Colombia',           url: gn('site:elespectador.com (Huila OR Caquetá OR Putumayo OR Pitalito OR Florencia)')},
-  {id:'nac4',dep:null,mun:null,icon:'📰',label:'El Colombiano — Sur Colombia',           url: gn('site:elcolombiano.com (Huila OR Caquetá OR Putumayo)')},
-  {id:'nac5',dep:null,mun:null,icon:'📺',label:'RCN Radio — Sur Colombia',               url: gn('site:rcnradio.com (Huila OR Caquetá OR Putumayo OR Pitalito OR Florencia OR Mocoa)')},
-  {id:'nac6',dep:null,mun:null,icon:'📺',label:'Caracol — Sur Colombia',                 url: gn('site:caracol.com.co (Huila OR Caquetá OR Putumayo OR Pitalito OR Florencia)')},
-  {id:'nac7',dep:null,mun:null,icon:'📺',label:'Blu Radio — Sur Colombia',               url: gn('site:bluradio.com (Huila OR Caquetá OR Putumayo OR Pitalito OR Florencia)')},
-  {id:'nac8',dep:null,mun:null,icon:'📺',label:'Noticias Uno — Sur Colombia',            url: gn('site:noticiasuno.com (Huila OR Caquetá OR Putumayo)')},
-  {id:'nac9',dep:null,mun:null,icon:'📋',label:'INVIAS — Sur Colombia',                  url: gn('INVIAS (Huila OR Putumayo OR Caquetá) vías OR contrato OR proyecto')},
-  {id:'na10',dep:null,mun:null,icon:'📋',label:'DNP / Regalías — Sur Colombia',          url: gn('(DNP OR regalías OR regalias OR SGR) (Huila OR Caquetá OR Putumayo OR Pitalito)')},
-  {id:'na11',dep:null,mun:null,icon:'🌿',label:'Corpoamazonia — General',                url: gn('Corpoamazonia noticias OR resolución OR licencia OR "plan de manejo" OR medida')},
-];
-
-/* ── Secciones para la pestaña RSS ──────────────── */
-const RSS_SECS = [
-  {label:'📍 Huila — Municipal',        filter: f => f.dep==='huila' && f.mun},
-  {label:'🏛 Huila — Regional y Oficial',filter: f => f.dep==='huila' && !f.mun},
-  {label:'🌿 Caquetá',                  filter: f => f.dep==='caqueta'},
-  {label:'🌄 Putumayo',                 filter: f => f.dep==='putumayo'},
-  {label:'📰 Medios Nacionales',        filter: f => !f.dep},
-];
-
-/* ── Fetch con fallback entre proxies ───────────── */
-async function fetchRaw(url) {
-  for (const makeProxy of PROXIES) {
-    try {
-      const proxyUrl = makeProxy(url);
-      const r = await fetch(proxyUrl, {signal: AbortSignal.timeout(12000)});
-      if (!r.ok) continue;
-      // allorigins devuelve JSON {contents:...}, los demás devuelven texto directo
-      const ct = r.headers.get('content-type') || '';
-      if (ct.includes('application/json') || proxyUrl.includes('allorigins')) {
-        const j = await r.json();
-        return j.contents || j.body || null;
-      }
-      return await r.text();
-    } catch(e) { /* siguiente proxy */ }
-  }
-  return null;
-}
-
-async function fetchFeed(feed) {
-  if (CACHE[feed.id]) return CACHE[feed.id];
-  try {
-    const text = await fetchRaw(feed.url);
-    if (!text) return [];
-    const doc = new DOMParser().parseFromString(text, 'text/xml');
-    // Compatibilidad: algunos feeds usan atom:entry en lugar de item
-    const items = Array.from(doc.querySelectorAll('item, entry'));
-    const parsed = items.map(el => {
-      const g  = t => el.querySelector(t)?.textContent?.trim() || '';
-      const ga = (t, attr) => el.querySelector(t)?.getAttribute(attr)?.trim() || '';
-      // Link: RSS estándar, Atom, o GUID
-      let link = g('link') || ga('link','href') || el.querySelector('guid')?.textContent || '#';
-      // Google News envuelve el link real en la URL del item
-      if (link.includes('news.google.com') && link.includes('url=')) {
-        try { link = new URL(link).searchParams.get('url') || link; } catch(e){}
-      }
-      const pubRaw = g('pubDate') || g('published') || g('updated');
-      let date = new Date();
-      if (pubRaw) {
-        const parsed = new Date(pubRaw);
-        if (!isNaN(parsed)) date = parsed;
-      }
-      const desc = (g('description') || g('summary') || g('content'))
-        .replace(/<[^>]+>/g,'').replace(/\s+/g,' ').trim().slice(0,300);
-      const title = (g('title')).replace(/\s+/g,' ').trim();
-      return { title, link: link.trim(), desc, date,
-               feedId: feed.id, feedDep: feed.dep, feedMun: feed.mun, feedLabel: feed.label };
-    }).filter(a => a.title.length > 4);
-    CACHE[feed.id] = parsed;
-    return parsed;
-  } catch(e) { return []; }
-}
-
-/* ── Etiquetado ─────────────────────────────────── */
-function tag(a) {
-  const hay = (a.title + ' ' + a.desc).toLowerCase();
-  // Municipios
-  const muns = a.feedMun ? [a.feedMun] : [];
-  for (const [k, ws] of Object.entries(MUN_KEYS)) {
-    if (ws.some(w => hay.includes(w)) && !muns.includes(k)) muns.push(k);
-  }
-  // Departamentos
-  const deps = a.feedDep ? [a.feedDep] : [];
-  for (const [d, ws] of Object.entries(DEP_WORDS)) {
-    if (ws.some(w => hay.includes(w)) && !deps.includes(d)) deps.push(d);
-  }
-  for (const [d, ml] of Object.entries(DEP_MUN)) {
-    if (muns.some(m => ml.includes(m)) && !deps.includes(d)) deps.push(d);
-  }
-  // Temas
-  const temas = [];
-  for (const [t, ks] of Object.entries(TOPIC_KW)) {
-    if (ks.some(k => hay.includes(k))) temas.push(t);
-  }
-  return {...a, muns, deps, temas};
-}
-
-// Acepta artículos de las últimas 50h (margen de tolerancia)
-// Si la fecha es inválida o futura, se acepta igualmente
-const isRecent = d => {
-  if (!d || isNaN(d.getTime())) return true; // fecha inválida → mostrar
-  const age = Date.now() - d.getTime();
-  return age < 50*3600*1000 && age > -3600*1000; // hasta 50h atrás, no más de 1h futuro
-};
-
-/* ── Carga principal ────────────────────────────── */
-async function loadAll() {
-  const btn = document.getElementById('btnRef');
-  btn.classList.add('busy');
-  document.getElementById('pbar').style.width = '0%';
-  CACHE = {};
-  ALL_ARTICLES = [];
-  document.getElementById('newsGrid').innerHTML =
-    `<div class="empty"><div class="spin"></div><p>Consultando ${FEEDS.length} fuentes de noticias…</p></div>`;
-
-  let okFeeds = 0, totalItems = 0;
-  const BATCH = 5;
-  for (let i = 0; i < FEEDS.length; i += BATCH) {
-    const batch = FEEDS.slice(i, i+BATCH);
-    const res = await Promise.allSettled(batch.map(f => fetchFeed(f)));
-    res.forEach((r, ri) => {
-      if (r.status === 'fulfilled' && r.value.length > 0) {
-        okFeeds++;
-        totalItems += r.value.length;
-        // Incluir TODOS los items del feed, sin filtro de fecha aún
-        ALL_ARTICLES.push(...r.value.map(tag));
-      }
-    });
-    const pct = Math.round((i+BATCH)/FEEDS.length*100);
-    document.getElementById('pbar').style.width = Math.min(pct,98) + '%';
-    document.getElementById('feedStatus').textContent = `${okFeeds} feeds · ${totalItems} arts`;
-    renderNews();
-  }
-
-  // dedup por título
-  const seen = new Set();
-  ALL_ARTICLES = ALL_ARTICLES.filter(a => {
-    const k = a.title.toLowerCase().replace(/\s+/g,'').slice(0,50);
-    if (seen.has(k)) return false;
-    seen.add(k); return true;
-  }).sort((a,b) => b.date - a.date);
-
-  renderNews();
-  renderRSS();
-  document.getElementById('pbar').style.width = '100%';
-  document.getElementById('upd').textContent =
-    `Act: ${new Date().toLocaleTimeString('es-CO')} · `;
-  document.getElementById('feedStatus').textContent =
-    `${okFeeds}/${FEEDS.length} feeds · ${ALL_ARTICLES.length} artículos`;
-  btn.classList.remove('busy');
-}
-
-/* ── Render noticias ────────────────────────────── */
-const DEP_L = {huila:'Huila',caqueta:'Caquetá',putumayo:'Putumayo'};
-const MUN_L = {pitalito:'Pitalito',palestina:'Palestina',acevedo:'Acevedo',guadalupe:'Guadalupe',isnos:'Isnos',sanagustin:'S. Agustín',laplata:'La Plata',gigante:'Gigante',timana:'Timaná',palermo:'Palermo',florencia:'Florencia',puertoC:'Pto. Caicedo',orito:'Orito',valleg:'V. Guamuez'};
-const TEMA_L = {pot:'Territorial',ambiental:'Ambiental',gobierno:'Gobierno',economico:'Economía',seguridad:'Seguridad'};
-
-function renderNews() {
-  const grid = document.getElementById('newsGrid');
-  let arts = ALL_ARTICLES.filter(a => {
-    if (FILTERS.dep  !== 'all' && !a.deps.includes(FILTERS.dep))   return false;
-    if (FILTERS.tema !== 'all' && !a.temas.includes(FILTERS.tema)) return false;
-    return true;
-  });
-  document.getElementById('cnt').innerHTML = `<b>${arts.length}</b> resultado${arts.length!==1?'s':''}`;
-  if (!arts.length) {
-    // Si todavía no hay nada, mostrar spinner; si ya terminó, mostrar mensaje
-    const loading = document.querySelector('.btn-ref.busy');
-    grid.innerHTML = loading
-      ? `<div class="empty"><div class="spin"></div><p>Cargando fuentes…</p></div>`
-      : `<div class="empty"><div class="eico">🔍</div>
-         <p>Sin resultados con los filtros actuales. Prueba con "Todos" o presiona Actualizar.</p></div>`;
-    return;
-  }
-  grid.innerHTML = arts.slice(0,300).map((a,i) => {
-    let dom = '';
-    try { dom = new URL(a.link).hostname.replace(/^www\./,''); } catch(e){}
-    const dt = [...new Set(a.deps)].map(d=>`<span class="tag tag-dep">${DEP_L[d]||d}</span>`).join('');
-    const mt = [...new Set(a.muns)].slice(0,2).map(m=>`<span class="tag tag-mun">${MUN_L[m]||m}</span>`).join('');
-    const tt = a.temas.map(t=>`<span class="tag tag-tema">${TEMA_L[t]||t}</span>`).join('');
-    // Indicar si es reciente o más antiguo
-    const ageLabel = isRecent(a.date) ? ago(a.date) : `<span style="color:var(--accent2)">${ago(a.date)}</span>`;
-    return `<article class="card" style="animation-delay:${Math.min(i,25)*.025}s">
-      <div class="cbody">
-        <div class="cmeta">
-          <span class="csrc" title="${esc(a.feedLabel)}">${esc(a.feedLabel)}</span>
-          <span class="cdate">${ageLabel}</span>
-        </div>
-        <h2 class="ctit">${esc(a.title)}</h2>
-        ${a.desc?`<p class="cdesc">${esc(a.desc)}</p>`:''}
-        <div class="ctags">${dt}${mt}${tt}</div>
-      </div>
-      <div class="cfoot">
-        <span class="cdomain">${esc(dom)}</span>
-        <a class="btn-src" href="${esc(a.link)}" target="_blank" rel="noopener noreferrer">Ir a la fuente ↗</a>
-      </div>
-    </article>`;
-  }).join('');
-}
-
-/* ── Render RSS tab ─────────────────────────────── */
-function renderRSS() {
-  const out = document.getElementById('rssOut');
-  let html = '';
-  for (const sec of RSS_SECS) {
-    const feeds = FEEDS.filter(sec.filter);
-    if (!feeds.length) continue;
-    html += `<div class="rss-section"><div class="rss-sec-title">${esc(sec.label)}</div><div class="rss-grid">`;
-    for (const f of feeds) {
-      const items = (CACHE[f.id]||[]).filter(a => isRecent(a.date));
-      const itemsHtml = items.length
-        ? items.slice(0,5).map(a =>
-            `<div class="ri"><a href="${esc(a.link)}" target="_blank" rel="noopener">${esc(a.title)}</a>
-             <div class="ri-date">${ago(a.date)}</div></div>`).join('')
-        : `<div class="ri" style="color:var(--muted);font-size:.72rem">Sin artículos recientes en las últimas 48h.</div>`;
-      let qd = '';
-      try { qd = decodeURIComponent(f.url.split('q=')[1]||'').split('&')[0].slice(0,55); } catch(e){}
-      html += `<div class="rcard">
-        <div class="rcard-hdr">
-          <span class="rcard-ico">${f.icon}</span>
-          <div style="overflow:hidden;min-width:0">
-            <div class="rcard-name">${esc(f.label)}</div>
-            <div class="rcard-q" title="${esc(qd)}">${esc(qd)}</div>
-          </div>
-        </div>
-        <div class="rcard-body">${itemsHtml}</div>
-        <div class="rcard-foot">
-          <span class="rcard-count">${items.length} artículo${items.length!==1?'s':''} (48h)</span>
-          <a href="${esc(f.url)}" target="_blank" rel="noopener">Feed completo ↗</a>
-        </div>
-      </div>`;
+    // ----- TEMA OSCURO FLOTANTE -----
+    const darkBtn = document.getElementById('darkModeBtn');
+    function setTheme(isDark) {
+        if (isDark) {
+            document.body.classList.add('dark');
+            darkBtn.textContent = '☀️ Claro';
+        } else {
+            document.body.classList.remove('dark');
+            darkBtn.textContent = '🌙 Oscuro';
+        }
+        localStorage.setItem('territorioTheme', isDark ? 'dark' : 'light');
     }
-    html += `</div></div>`;
-  }
-  out.innerHTML = html || `<div class="empty"><p>Carga las noticias primero con el botón Actualizar.</p></div>`;
-}
+    const saved = localStorage.getItem('territorioTheme');
+    if (saved === 'dark') setTheme(true);
+    darkBtn.addEventListener('click', () => setTheme(!document.body.classList.contains('dark')));
 
-/* ── Filtros ────────────────────────────────────── */
-function filt(g, v, el) {
-  FILTERS[g] = v;
-  document.querySelectorAll(`[data-g="${g}"]`).forEach(b => b.classList.remove('on'));
-  el.classList.add('on');
-  renderNews();
-}
+    // ----- CONFIGURACIÓN MUNICIPIOS -----
+    const MUNICIPIOS_LIST = ['Pitalito', 'Palestina', 'San Agustín', 'Isnos', 'Palermo', 'Orito', 'Puerto Caicedo', 'Valle del Guamuez', 'Florencia'];
+    const DEPARTAMENTOS_MAP = {
+        'Huila': ['Pitalito', 'Palestina', 'San Agustín', 'Isnos', 'Palermo'],
+        'Putumayo': ['Orito', 'Puerto Caicedo', 'Valle del Guamuez'],
+        'Caqueta': ['Florencia']
+    };
+    const OT_KEYWORDS = ['ordenamiento territorial', 'pot', 'pbot', 'eot', 'planes parciales', 'plan basico', 'esquema de ordenamiento', 'revision pot', 'actualizacion pot', 'clasificacion suelo', 'usos del suelo', 'ley 388', 'ministerio de vivienda', 'conpes'];
 
-/* ── Tabs ───────────────────────────────────────── */
-function goTab(id, el) {
-  document.querySelectorAll('.tcontent').forEach(c => c.classList.remove('active'));
-  document.getElementById('tc-'+id).classList.add('active');
-  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-  el.classList.add('active');
-  document.getElementById('filtersBar').style.display = id==='noticias' ? '' : 'none';
-}
+    // ----- FUENTES DE DATOS -----
+    const MUNICIPIO_QUERIES = ['Pitalito', 'Palestina Huila', '"San Agustín" Huila', 'Isnos Huila', 'Palermo Huila', 'Orito Putumayo', '"Puerto Caicedo" Putumayo', '"Valle del Guamuez" Putumayo', 'Florencia Caquetá'];
+    const OT_QUERIES = ['"ordenamiento territorial" Colombia', 'POT Colombia', 'PBOT Colombia', 'EOT Colombia', '"planes parciales" Colombia', '"Ministerio de Vivienda" ordenamiento'];
 
-/* ── Tema ───────────────────────────────────────── */
-function toggleTheme() {
-  const d = document.documentElement;
-  const dark = d.getAttribute('data-theme') === 'dark';
-  d.setAttribute('data-theme', dark ? 'light' : 'dark');
-  document.getElementById('btnTh').textContent = dark ? '🌙' : '☀️';
-  localStorage.setItem('mr-theme', dark ? 'light' : 'dark');
-}
+    let allArticles = [];
+    let activeFeed = 'todos';
+    let urlSet = new Set();
 
-/* ── Utils ──────────────────────────────────────── */
-function esc(s=''){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;')}
-function ago(d){
-  const m=Math.round((Date.now()-d.getTime())/60000);
-  if(m<1)return'ahora';if(m<60)return m+'min';
-  const h=Math.round(m/60);if(h<24)return h+'h';return Math.round(h/24)+'d';
-}
+    // UI elements
+    const deptoSelect = document.getElementById('deptoFilter');
+    const munSelect = document.getElementById('munFilter');
+    const periodSelect = document.getElementById('periodFilter');
+    const searchInput = document.getElementById('searchInput');
+    const applyBtn = document.getElementById('applyFilters');
+    const refreshBtn = document.getElementById('refreshBtn');
+    const newsContainer = document.getElementById('newsContainer');
+    const updateTimeSpan = document.getElementById('updateTime');
 
-/* ── Init ───────────────────────────────────────── */
-(function(){
-  const sv = localStorage.getItem('mr-theme');
-  if (sv === 'light') {
-    document.documentElement.setAttribute('data-theme','light');
-    document.getElementById('btnTh').textContent = '🌙';
-  }
-  // dark es el default ya en el HTML (data-theme="dark")
-  loadAll();
-  setInterval(loadAll, 60*60*1000); // refresh cada hora
-})();
+    // helpers
+    function escapeHtml(str) { if(!str) return ''; return str.replace(/[&<>]/g, function(m){ if(m==='&') return '&amp;'; if(m==='<') return '&lt;'; if(m==='>') return '&gt;'; return m;}); }
+
+    function formatTimeAgo(hours) {
+        if (hours < 1) return 'hace minutos';
+        if (hours < 24) return `hace ${Math.floor(hours)}h`;
+        return `hace ${Math.floor(hours)}h`;
+    }
+
+    // Cargar datos
+    async function fetchRSS(query) {
+        const proxy = 'https://api.allorigins.win/raw?url=';
+        try {
+            const url = `https://news.google.com/rss/search?q=${encodeURIComponent(query + ' when:2d')}&hl=es-419&gl=CO&ceid=CO:es-419`;
+            const res = await fetch(proxy + encodeURIComponent(url));
+            const text = await res.text();
+            const items = text.split('<item>').slice(1);
+            return items.map(item => ({
+                title: (item.split('<title>')[1]?.split('</title>')[0] || '').replace(/<!\[CDATA\[|\]\]>/g, ''),
+                link: (item.split('<link>')[1]?.split('</link>')[0] || '').replace(/<!\[CDATA\[|\]\]>/g, ''),
+                description: (item.split('<description>')[1]?.split('</description>')[0] || '').replace(/<!\[CDATA\[|\]\]>/g, '').replace(/<[^>]*>/g, ''),
+                pubDate: item.split('<pubDate>')[1]?.split('</pubDate>')[0] || ''
+            }));
+        } catch(e) { return []; }
+    }
+
+    async function loadAll() {
+        newsContainer.innerHTML = '<div class="loader">Cargando información...</div>';
+        allArticles = [];
+        urlSet.clear();
+
+        // municipios
+        for (let q of MUNICIPIO_QUERIES) {
+            const items = await fetchRSS(q);
+            for (let it of items.slice(0, 6)) {
+                if (urlSet.has(it.link)) continue;
+                urlSet.add(it.link);
+                const fullText = (it.title + ' ' + it.description).toLowerCase();
+                const foundMun = MUNICIPIOS_LIST.find(m => fullText.includes(m.toLowerCase()));
+                if (!foundMun) continue;
+                const pubDate = new Date(it.pubDate);
+                const hours = isNaN(pubDate) ? 12 : (Date.now() - pubDate) / 3600000;
+                allArticles.push({
+                    id: it.link,
+                    title: it.title,
+                    summary: it.description || it.title,
+                    url: it.link,
+                    source: 'Google News',
+                    published: pubDate,
+                    hours: hours,
+                    category: 'municipio',
+                    location: foundMun,
+                    isOT: false
+                });
+            }
+        }
+
+        // ordenamiento territorial
+        for (let q of OT_QUERIES) {
+            const items = await fetchRSS(q);
+            for (let it of items.slice(0, 8)) {
+                if (urlSet.has(it.link)) continue;
+                urlSet.add(it.link);
+                const fullText = (it.title + ' ' + it.description).toLowerCase();
+                const isOT = OT_KEYWORDS.some(k => fullText.includes(k));
+                if (!isOT) continue;
+                const pubDate = new Date(it.pubDate);
+                const hours = isNaN(pubDate) ? 12 : (Date.now() - pubDate) / 3600000;
+                allArticles.push({
+                    id: it.link,
+                    title: it.title,
+                    summary: it.description || it.title,
+                    url: it.link,
+                    source: 'Google News',
+                    published: pubDate,
+                    hours: hours,
+                    category: 'ot',
+                    location: 'Colombia',
+                    isOT: true
+                });
+            }
+        }
+
+        // fallback semilla si no hay datos reales
+        if (allArticles.length === 0) {
+            allArticles = [
+                { title: 'Pitalito avanza en revisión del POT', summary: 'La administración municipal presentó avances en la actualización del Plan de Ordenamiento Territorial.', url: '#', source: 'Alcaldía', published: new Date(Date.now() - 3*3600000), hours: 3, category: 'municipio', location: 'Pitalito', isOT: true },
+                { title: 'Foro de ordenamiento territorial en el Huila', summary: 'Expertos discutieron lineamientos para municipios del sur del departamento.', url: '#', source: 'Gobernación', published: new Date(Date.now() - 12*3600000), hours: 12, category: 'ot', location: 'Colombia', isOT: true },
+                { title: 'Orito: nuevas obras de infraestructura vial', summary: 'Inician trabajos en la vía que conecta el casco urbano con la vereda El Carmen.', url: '#', source: 'Alcaldía Orito', published: new Date(Date.now() - 20*3600000), hours: 20, category: 'municipio', location: 'Orito', isOT: false }
+            ];
+        }
+
+        allArticles.sort((a,b) => b.published - a.published);
+        updateStatsAndRender();
+        updateTimeSpan.innerText = `Actualizado: ${new Date().toLocaleString('es-CO')}`;
+    }
+
+    function filterArticles() {
+        const depto = deptoSelect.value;
+        const municipio = munSelect.value;
+        const maxHours = parseInt(periodSelect.value);
+        const searchTerm = searchInput.value.trim().toLowerCase();
+
+        let filtered = allArticles.filter(a => {
+            if (a.hours > maxHours) return false;
+            const text = (a.title + ' ' + a.summary).toLowerCase();
+            if (searchTerm && !text.includes(searchTerm)) return false;
+            if (municipio) return a.location === municipio || text.includes(municipio.toLowerCase());
+            if (depto && DEPARTAMENTOS_MAP[depto]) {
+                return DEPARTAMENTOS_MAP[depto].some(m => a.location === m || text.includes(m.toLowerCase()));
+            }
+            return true;
+        });
+
+        if (activeFeed === 'municipios') filtered = filtered.filter(a => a.category === 'municipio' || (!a.isOT && a.location !== 'Colombia'));
+        if (activeFeed === 'ot') filtered = filtered.filter(a => a.isOT || a.category === 'ot');
+
+        return filtered;
+    }
+
+    function renderCards(articles) {
+        if (!articles.length) {
+            newsContainer.innerHTML = '<div class="empty-state">No hay resultados con los filtros seleccionados.</div>';
+            return;
+        }
+        newsContainer.innerHTML = articles.map(a => {
+            const isMunicipio = a.category === 'municipio' || (!a.isOT && a.location !== 'Colombia');
+            const tagClass = isMunicipio ? 'tag-municipio' : 'tag-ot';
+            const tagText = isMunicipio ? `📍 ${a.location}` : '🏛️ Ordenamiento territorial';
+            const timeText = formatTimeAgo(a.hours);
+            let urlFinal = a.url && !a.url.startsWith('http') ? 'https://' + a.url : (a.url || '#');
+            return `
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-title">${escapeHtml(a.title)}</div>
+                        <div class="card-meta">
+                            <span class="tag ${tagClass}">${tagText}</span>
+                            <span class="time-badge">${timeText}</span>
+                        </div>
+                    </div>
+                    <div class="card-body">${escapeHtml(a.summary.substring(0, 200))}${a.summary.length > 200 ? '…' : ''}</div>
+                    <div class="card-footer">
+                        <span>${a.source}</span>
+                        <a href="${urlFinal}" target="_blank" rel="noopener noreferrer" class="source-link">Ver fuente →</a>
+                    </div>
+                </div>
+            `;
+        }).join('');
+    }
+
+    function updateStatsAndRender() {
+        const filtered = filterArticles();
+        const totalMunicipios = filtered.filter(a => a.category === 'municipio' || (!a.isOT && a.location !== 'Colombia')).length;
+        const totalOT = filtered.filter(a => a.isOT || a.category === 'ot').length;
+        const now = Date.now();
+        const last24h = filtered.filter(a => a.hours <= 24).length;
+        const last48h = filtered.length;
+        document.getElementById('totalMunicipios').innerText = totalMunicipios;
+        document.getElementById('totalOT').innerText = totalOT;
+        document.getElementById('totalHoy').innerText = last24h;
+        document.getElementById('totalAyer').innerText = last48h;
+        renderCards(filtered);
+    }
+
+    function applyFiltersAndRender() {
+        updateStatsAndRender();
+    }
+
+    // eventos
+    deptoSelect.addEventListener('change', () => {
+        const depto = deptoSelect.value;
+        munSelect.innerHTML = '<option value="">Todos</option>';
+        if (depto && DEPARTAMENTOS_MAP[depto]) {
+            DEPARTAMENTOS_MAP[depto].forEach(m => {
+                const opt = document.createElement('option');
+                opt.value = m;
+                opt.textContent = m;
+                munSelect.appendChild(opt);
+            });
+        }
+        applyFiltersAndRender();
+    });
+    applyBtn.addEventListener('click', applyFiltersAndRender);
+    refreshBtn.addEventListener('click', () => { loadAll(); });
+    searchInput.addEventListener('input', applyFiltersAndRender);
+    periodSelect.addEventListener('change', applyFiltersAndRender);
+
+    document.querySelectorAll('.tab-btn').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            activeFeed = btn.getAttribute('data-feed');
+            applyFiltersAndRender();
+        });
+    });
+
+    loadAll();
+    setInterval(loadAll, 1800000);
 </script>
 </body>
 </html>
