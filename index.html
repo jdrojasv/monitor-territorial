@@ -1,0 +1,825 @@
+<!DOCTYPE html>
+<html lang="es" data-theme="light">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Monitor Territorial — Huila, Caquetá & Putumayo</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Source+Sans+3:wght@300;400;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <style>
+    /* ── TOKENS ─────────────────────────────────────────────── */
+    :root {
+      --bg:        #f4f1eb;
+      --bg2:       #eae6dc;
+      --surface:   #ffffff;
+      --border:    #d6cfc0;
+      --text:      #1c1a15;
+      --muted:     #7a7060;
+      --accent:    #2d6a2d;
+      --accent2:   #c8420e;
+      --accent3:   #1a4f7a;
+      --tag-bg:    #e8f0e8;
+      --tag-text:  #2d6a2d;
+      --shadow:    rgba(0,0,0,0.08);
+      --font-head: 'Playfair Display', Georgia, serif;
+      --font-body: 'Source Sans 3', sans-serif;
+      --font-mono: 'JetBrains Mono', monospace;
+      --radius:    6px;
+      --transition: 0.22s ease;
+    }
+    [data-theme="dark"] {
+      --bg:        #0f1108;
+      --bg2:       #171a0f;
+      --surface:   #1e2115;
+      --border:    #2e3320;
+      --text:      #e8e4d8;
+      --muted:     #8a9470;
+      --accent:    #6ab86a;
+      --accent2:   #e07040;
+      --accent3:   #5a9abf;
+      --tag-bg:    #1e2e1e;
+      --tag-text:  #6ab86a;
+      --shadow:    rgba(0,0,0,0.4);
+    }
+
+    /* ── RESET ───────────────────────────────────────────────── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: var(--font-body);
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+      transition: background var(--transition), color var(--transition);
+      min-height: 100vh;
+    }
+    a { color: inherit; text-decoration: none; }
+    img { max-width: 100%; display: block; }
+    button { cursor: pointer; border: none; background: none; font: inherit; color: inherit; }
+
+    /* ── HEADER ──────────────────────────────────────────────── */
+    header {
+      position: sticky; top: 0; z-index: 100;
+      background: var(--surface);
+      border-bottom: 2px solid var(--accent);
+      box-shadow: 0 2px 12px var(--shadow);
+      transition: background var(--transition), border-color var(--transition);
+    }
+    .header-inner {
+      max-width: 1280px; margin: 0 auto;
+      padding: 0 1.5rem;
+      display: flex; align-items: center; justify-content: space-between;
+      gap: 1rem; height: 60px;
+    }
+    .logo {
+      display: flex; align-items: baseline; gap: 0.5rem;
+    }
+    .logo-main {
+      font-family: var(--font-head);
+      font-size: 1.3rem; font-weight: 900;
+      color: var(--accent);
+      letter-spacing: -0.02em;
+    }
+    .logo-sub {
+      font-family: var(--font-mono);
+      font-size: 0.65rem; color: var(--muted);
+      text-transform: uppercase; letter-spacing: 0.08em;
+      display: none;
+    }
+    @media(min-width:600px){ .logo-sub { display: block; } }
+
+    .header-actions { display: flex; align-items: center; gap: 0.75rem; }
+
+    .btn-theme {
+      width: 38px; height: 38px;
+      border-radius: 50%;
+      border: 1.5px solid var(--border);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.1rem;
+      transition: border-color var(--transition), transform 0.15s;
+    }
+    .btn-theme:hover { border-color: var(--accent); transform: rotate(20deg); }
+
+    .btn-refresh {
+      padding: 0.4rem 0.9rem;
+      background: var(--accent);
+      color: #fff;
+      border-radius: var(--radius);
+      font-size: 0.8rem; font-weight: 600;
+      letter-spacing: 0.04em;
+      display: flex; align-items: center; gap: 0.4rem;
+      transition: opacity 0.15s;
+    }
+    .btn-refresh:hover { opacity: 0.85; }
+    .btn-refresh.loading { opacity: 0.6; pointer-events: none; }
+
+    /* ── TABS ────────────────────────────────────────────────── */
+    .tabs-bar {
+      background: var(--bg2);
+      border-bottom: 1px solid var(--border);
+      transition: background var(--transition);
+    }
+    .tabs-inner {
+      max-width: 1280px; margin: 0 auto;
+      padding: 0 1.5rem;
+      display: flex; gap: 0;
+    }
+    .tab {
+      padding: 0.75rem 1.2rem;
+      font-size: 0.82rem; font-weight: 600;
+      letter-spacing: 0.05em; text-transform: uppercase;
+      border-bottom: 3px solid transparent;
+      color: var(--muted);
+      transition: color var(--transition), border-color var(--transition);
+      white-space: nowrap;
+    }
+    .tab:hover { color: var(--text); }
+    .tab.active { color: var(--accent); border-color: var(--accent); }
+
+    /* ── FILTERS PANEL ───────────────────────────────────────── */
+    .filters-panel {
+      max-width: 1280px; margin: 0 auto;
+      padding: 1rem 1.5rem 0.5rem;
+      display: flex; flex-wrap: wrap; gap: 0.5rem; align-items: center;
+    }
+    .filter-label {
+      font-size: 0.72rem; font-weight: 600;
+      text-transform: uppercase; letter-spacing: 0.08em;
+      color: var(--muted); margin-right: 0.25rem;
+    }
+    .filter-chip {
+      padding: 0.25rem 0.7rem;
+      border: 1.5px solid var(--border);
+      border-radius: 20px;
+      font-size: 0.75rem; font-weight: 600;
+      background: var(--surface);
+      color: var(--muted);
+      transition: all 0.15s;
+    }
+    .filter-chip:hover, .filter-chip.active {
+      background: var(--accent); border-color: var(--accent);
+      color: #fff;
+    }
+    .divider-v {
+      width: 1px; height: 22px;
+      background: var(--border); margin: 0 0.25rem;
+    }
+
+    /* ── MAIN LAYOUT ─────────────────────────────────────────── */
+    .main { max-width: 1280px; margin: 0 auto; padding: 1.5rem 1.5rem 3rem; }
+
+    /* ── STATUS BAR ──────────────────────────────────────────── */
+    .status-bar {
+      display: flex; align-items: center; justify-content: space-between;
+      flex-wrap: wrap; gap: 0.5rem;
+      padding: 0.6rem 0; margin-bottom: 1rem;
+      border-bottom: 1px solid var(--border);
+    }
+    .status-info { font-size: 0.78rem; color: var(--muted); font-family: var(--font-mono); }
+    .status-info b { color: var(--text); }
+    .live-dot {
+      display: inline-block; width: 7px; height: 7px;
+      border-radius: 50%; background: var(--accent);
+      margin-right: 5px;
+      animation: pulse 2s ease-in-out infinite;
+    }
+    @keyframes pulse {
+      0%,100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.5; transform: scale(0.8); }
+    }
+
+    /* ── NEWS GRID ───────────────────────────────────────────── */
+    .news-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 1.25rem;
+    }
+
+    /* ── NEWS CARD ───────────────────────────────────────────── */
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      display: flex; flex-direction: column;
+      overflow: hidden;
+      transition: box-shadow 0.2s, transform 0.2s, border-color 0.2s;
+      animation: fadeUp 0.35s ease both;
+    }
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(14px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    .card:hover {
+      box-shadow: 0 6px 24px var(--shadow);
+      transform: translateY(-2px);
+      border-color: var(--accent);
+    }
+    .card-body { padding: 1rem 1.1rem; flex: 1; display: flex; flex-direction: column; gap: 0.5rem; }
+    .card-meta {
+      display: flex; align-items: center; justify-content: space-between;
+      flex-wrap: wrap; gap: 0.3rem;
+    }
+    .card-source {
+      font-family: var(--font-mono); font-size: 0.68rem;
+      font-weight: 500; color: var(--accent3);
+      text-transform: uppercase; letter-spacing: 0.06em;
+    }
+    .card-date {
+      font-size: 0.68rem; color: var(--muted);
+      font-family: var(--font-mono);
+    }
+    .card-title {
+      font-family: var(--font-head);
+      font-size: 1rem; font-weight: 700;
+      line-height: 1.35;
+      color: var(--text);
+    }
+    .card-desc {
+      font-size: 0.82rem; color: var(--muted);
+      line-height: 1.55;
+      display: -webkit-box;
+      -webkit-line-clamp: 3;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+    .card-tags {
+      display: flex; flex-wrap: wrap; gap: 0.35rem; margin-top: 0.25rem;
+    }
+    .tag {
+      background: var(--tag-bg); color: var(--tag-text);
+      font-size: 0.65rem; font-weight: 600;
+      padding: 0.2rem 0.5rem; border-radius: 3px;
+      text-transform: uppercase; letter-spacing: 0.04em;
+    }
+    .tag.mun { background: #e8eef5; color: var(--accent3); }
+    .tag.env { background: #f5ebe8; color: var(--accent2); }
+    .card-footer {
+      padding: 0.65rem 1.1rem;
+      border-top: 1px solid var(--border);
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    .btn-source {
+      display: inline-flex; align-items: center; gap: 0.35rem;
+      padding: 0.35rem 0.75rem;
+      background: var(--accent); color: #fff;
+      border-radius: var(--radius);
+      font-size: 0.72rem; font-weight: 600;
+      text-transform: uppercase; letter-spacing: 0.05em;
+      transition: opacity 0.15s;
+    }
+    .btn-source:hover { opacity: 0.82; }
+    .source-domain {
+      font-size: 0.68rem; color: var(--muted); font-family: var(--font-mono);
+    }
+
+    /* ── RSS / FEEDS TAB ─────────────────────────────────────── */
+    .rss-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+      gap: 1.25rem;
+    }
+    .rss-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      overflow: hidden;
+      animation: fadeUp 0.35s ease both;
+    }
+    .rss-header {
+      padding: 0.7rem 1rem;
+      background: var(--bg2);
+      border-bottom: 1px solid var(--border);
+      display: flex; align-items: center; gap: 0.6rem;
+    }
+    .rss-icon { font-size: 1.1rem; }
+    .rss-title { font-family: var(--font-mono); font-size: 0.78rem; font-weight: 500; color: var(--text); }
+    .rss-url { font-size: 0.65rem; color: var(--muted); margin-top: 1px; word-break: break-all; }
+    .rss-body { padding: 0.8rem 1rem; display: flex; flex-direction: column; gap: 0.6rem; }
+    .rss-item {
+      padding-bottom: 0.6rem;
+      border-bottom: 1px dashed var(--border);
+      font-size: 0.8rem; line-height: 1.45;
+    }
+    .rss-item:last-child { border-bottom: none; padding-bottom: 0; }
+    .rss-item a { color: var(--accent3); font-weight: 600; }
+    .rss-item a:hover { text-decoration: underline; }
+    .rss-open {
+      display: flex; align-items: center; justify-content: flex-end;
+      padding: 0.5rem 1rem;
+      border-top: 1px solid var(--border);
+    }
+    .rss-open a {
+      font-size: 0.72rem; font-weight: 600; color: var(--accent3);
+      display: flex; align-items: center; gap: 0.3rem;
+    }
+    .rss-open a:hover { text-decoration: underline; }
+
+    /* ── EMPTY / LOADING STATES ──────────────────────────────── */
+    .state-box {
+      grid-column: 1 / -1;
+      text-align: center; padding: 4rem 2rem;
+      color: var(--muted);
+    }
+    .state-box .icon { font-size: 3rem; margin-bottom: 1rem; opacity: 0.5; }
+    .state-box p { font-size: 0.9rem; max-width: 400px; margin: 0 auto; line-height: 1.6; }
+    .spinner {
+      width: 36px; height: 36px;
+      border: 3px solid var(--border);
+      border-top-color: var(--accent);
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+      margin: 0 auto 1rem;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    /* ── FOOTER ──────────────────────────────────────────────── */
+    footer {
+      border-top: 1px solid var(--border);
+      background: var(--bg2);
+      padding: 1.5rem;
+      text-align: center;
+      font-size: 0.72rem; color: var(--muted);
+      line-height: 1.8;
+      transition: background var(--transition);
+    }
+    footer a { color: var(--accent3); }
+
+    /* ── ABOUT PANEL ─────────────────────────────────────────── */
+    .about-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+      gap: 1rem;
+    }
+    .about-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 1.1rem;
+    }
+    .about-card h3 {
+      font-family: var(--font-head);
+      font-size: 0.95rem; font-weight: 700;
+      color: var(--accent); margin-bottom: 0.6rem;
+    }
+    .about-card ul {
+      list-style: none; display: flex; flex-direction: column; gap: 0.3rem;
+    }
+    .about-card ul li {
+      font-size: 0.78rem; color: var(--muted);
+      padding-left: 1rem; position: relative;
+    }
+    .about-card ul li::before {
+      content: '›'; position: absolute; left: 0;
+      color: var(--accent); font-weight: 700;
+    }
+    .section-title {
+      font-family: var(--font-head);
+      font-size: 1.15rem; font-weight: 900;
+      color: var(--text); margin-bottom: 1rem;
+      padding-bottom: 0.5rem;
+      border-bottom: 2px solid var(--accent);
+      display: inline-block;
+    }
+
+    /* ── RESPONSIVE ──────────────────────────────────────────── */
+    @media (max-width: 600px) {
+      .header-inner { height: 52px; }
+      .logo-main { font-size: 1.05rem; }
+      .news-grid { grid-template-columns: 1fr; }
+      .tab { padding: 0.65rem 0.75rem; font-size: 0.72rem; }
+    }
+
+    /* ── HIDDEN ──────────────────────────────────────────────── */
+    .tab-content { display: none; }
+    .tab-content.active { display: block; }
+  </style>
+</head>
+<body>
+
+<!-- ═══════════════ HEADER ═══════════════ -->
+<header>
+  <div class="header-inner">
+    <div class="logo">
+      <span class="logo-main">🗺 Monitor Territorial</span>
+      <span class="logo-sub">Huila · Caquetá · Putumayo</span>
+    </div>
+    <div class="header-actions">
+      <button class="btn-refresh" id="btnRefresh" onclick="loadAllFeeds()">
+        <span id="refreshIcon">⟳</span> Actualizar
+      </button>
+      <button class="btn-theme" id="btnTheme" title="Cambiar tema" onclick="toggleTheme()">🌙</button>
+    </div>
+  </div>
+</header>
+
+<!-- ═══════════════ TABS ═══════════════ -->
+<nav class="tabs-bar" role="tablist">
+  <div class="tabs-inner">
+    <button class="tab active" onclick="switchTab('noticias',this)" role="tab">📰 Noticias</button>
+    <button class="tab" onclick="switchTab('rss',this)" role="tab">📡 Feeds RSS</button>
+    <button class="tab" onclick="switchTab('acerca',this)" role="tab">ℹ️ Acerca</button>
+  </div>
+</nav>
+
+<!-- ═══════════════ FILTERS ═══════════════ -->
+<div class="filters-panel" id="filtersPanel">
+  <span class="filter-label">Dpto</span>
+  <button class="filter-chip active" data-filter="dep" data-val="todos" onclick="setFilter('dep','todos',this)">Todos</button>
+  <button class="filter-chip" data-filter="dep" data-val="huila" onclick="setFilter('dep','huila',this)">Huila</button>
+  <button class="filter-chip" data-filter="dep" data-val="caqueta" onclick="setFilter('dep','caqueta',this)">Caquetá</button>
+  <button class="filter-chip" data-filter="dep" data-val="putumayo" onclick="setFilter('dep','putumayo',this)">Putumayo</button>
+  <div class="divider-v"></div>
+  <span class="filter-label">Tema</span>
+  <button class="filter-chip active" data-filter="tema" data-val="todos" onclick="setFilter('tema','todos',this)">Todos</button>
+  <button class="filter-chip" data-filter="tema" data-val="pot" onclick="setFilter('tema','pot',this)">POT</button>
+  <button class="filter-chip" data-filter="tema" data-val="licencias" onclick="setFilter('tema','licencias',this)">Licencias</button>
+  <button class="filter-chip" data-filter="tema" data-val="suelo" onclick="setFilter('tema','suelo',this)">Uso de Suelo</button>
+  <button class="filter-chip" data-filter="tema" data-val="ambiental" onclick="setFilter('tema','ambiental',this)">Ambiental</button>
+</div>
+
+<!-- ═══════════════ MAIN ═══════════════ -->
+<main class="main">
+
+  <!-- TAB: NOTICIAS -->
+  <div class="tab-content active" id="tab-noticias">
+    <div class="status-bar">
+      <div class="status-info">
+        <span class="live-dot"></span>
+        Últimas <b>48 horas</b> · <span id="countInfo">cargando…</span>
+      </div>
+      <div class="status-info" id="lastUpdate">—</div>
+    </div>
+    <div class="news-grid" id="newsGrid">
+      <div class="state-box">
+        <div class="spinner"></div>
+        <p>Consultando fuentes de noticias…</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- TAB: RSS / FEEDS -->
+  <div class="tab-content" id="tab-rss">
+    <p class="section-title">Feeds RSS & Google News</p>
+    <div class="rss-grid" id="rssGrid">
+      <!-- generado por JS -->
+    </div>
+  </div>
+
+  <!-- TAB: ACERCA -->
+  <div class="tab-content" id="tab-acerca">
+    <p class="section-title">Acerca del Monitor</p>
+    <div class="about-grid">
+      <div class="about-card">
+        <h3>🏙 Municipios — Huila</h3>
+        <ul>
+          <li>Pitalito</li><li>Palestina</li><li>Acevedo</li>
+          <li>Guadalupe</li><li>San José de Isnos</li><li>San Agustín</li>
+          <li>La Plata</li><li>Gigante</li><li>Timaná</li><li>Palermo</li>
+        </ul>
+      </div>
+      <div class="about-card">
+        <h3>🌿 Municipios — Caquetá & Putumayo</h3>
+        <ul>
+          <li>Florencia (Caquetá)</li>
+          <li>Puerto Caicedo (Putumayo)</li>
+          <li>Orito (Putumayo)</li>
+          <li>Valle del Guamuez (Putumayo)</li>
+        </ul>
+      </div>
+      <div class="about-card">
+        <h3>📋 Temas Monitoreados</h3>
+        <ul>
+          <li>Ordenamiento Territorial (POT / PBOT / EOT)</li>
+          <li>Planes Parciales</li>
+          <li>Licencias Urbanísticas</li>
+          <li>Uso del Suelo</li>
+          <li>Medidas Ambientales CAM</li>
+          <li>Medidas Ambientales Corpoamazonia</li>
+        </ul>
+      </div>
+      <div class="about-card">
+        <h3>🏛 Fuentes Monitoreadas</h3>
+        <ul>
+          <li>Gobernación del Huila</li>
+          <li>Alcaldías municipales</li>
+          <li>Cámara de Comercio</li>
+          <li>Colombia Compra Eficiente</li>
+          <li>CNSC</li>
+          <li>CAM · Corpoamazonia</li>
+          <li>Medios locales y regionales</li>
+        </ul>
+      </div>
+      <div class="about-card">
+        <h3>⚙️ Cómo funciona</h3>
+        <ul>
+          <li>Agrega RSS de fuentes oficiales</li>
+          <li>Google News via RSS (sin API)</li>
+          <li>Filtro automático 48h</li>
+          <li>Funciona 100% en GitHub Pages</li>
+          <li>Sin base de datos ni servidor</li>
+          <li>Actualización manual o automática</li>
+        </ul>
+      </div>
+      <div class="about-card">
+        <h3>🔗 Repositorio</h3>
+        <ul>
+          <li>Publicar en GitHub Pages</li>
+          <li>Subir index.html al repositorio</li>
+          <li>Activar Pages en rama main</li>
+          <li>URL: usuario.github.io/repo</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+</main>
+
+<!-- ═══════════════ FOOTER ═══════════════ -->
+<footer>
+  <div>Monitor Territorial · Noticias Regionales · Huila, Caquetá & Putumayo</div>
+  <div>Temas: Ordenamiento Territorial · Licencias Urbanísticas · Uso de Suelo · Medidas Ambientales CAM · Corpoamazonia</div>
+  <div>Las noticias enlazan directamente a sus fuentes originales. Este sitio no almacena contenido.</div>
+</footer>
+
+<script>
+/* ══════════════════════════════════════════════════
+   MONITOR TERRITORIAL — JS ENGINE
+   ══════════════════════════════════════════════════ */
+
+/* ── 1. ESTADO ───────────────────────────────────── */
+let activeFilters = { dep: 'todos', tema: 'todos' };
+let allArticles   = [];
+let currentTab    = 'noticias';
+
+/* ── 2. DATOS DE CONFIGURACIÓN ───────────────────── */
+const MUNICIPIOS = {
+  huila: ['pitalito','palestina','acevedo','guadalupe','isnos','san agustín','san agustin','la plata','gigante','timaná','timana','palermo'],
+  caqueta: ['florencia'],
+  putumayo: ['puerto caicedo','orito','valle del guamuez','la hormiga'],
+};
+const ALL_MUN = [...MUNICIPIOS.huila, ...MUNICIPIOS.caqueta, ...MUNICIPIOS.putumayo];
+
+const KEYWORDS_TEMA = {
+  pot:       ['ordenamiento territorial','pot ','pbot','eot','plan de ordenamiento','plan basico','esquema de ordenamiento'],
+  licencias: ['licencia urbanística','licencia urbanistica','licencias de construcción','licencia de construccion','curaduría','curaduria','curadur'],
+  suelo:     ['uso de suelo','uso del suelo','cambio de uso','clasificación del suelo','zonificación','zonificacion'],
+  ambiental: ['cam ','corpoamazonia','medida ambiental','plan de manejo ambiental','pma ','resolución ambiental','resolucion ambiental','permiso ambiental','licencia ambiental'],
+};
+const ALL_KEYWORDS = [...KEYWORDS_TEMA.pot,...KEYWORDS_TEMA.licencias,...KEYWORDS_TEMA.suelo,...KEYWORDS_TEMA.ambiental];
+
+/* ── 3. FEEDS RSS ────────────────────────────────── */
+// Google News RSS (sin API Key — funciona públicamente)
+// Se usa allorigins como proxy CORS para leer los feeds desde el browser.
+const PROXY = 'https://api.allorigins.win/get?url=';
+
+function gnews(q) {
+  return `https://news.google.com/rss/search?q=${encodeURIComponent(q)}&hl=es-419&gl=CO&ceid=CO:es`;
+}
+
+const FEED_DEFS = [
+  // ── Google News por municipio + tema ──────────────
+  { id:'gn-pitalito-pot',   label:'Pitalito · Ordenamiento',   icon:'🗺', dep:'huila',   url: gnews('Pitalito ordenamiento territorial OR licencia urbanistica OR uso de suelo') },
+  { id:'gn-acevedo',        label:'Acevedo · Territorial',     icon:'🗺', dep:'huila',   url: gnews('Acevedo Huila ordenamiento territorial OR licencia urbanistica') },
+  { id:'gn-sanagustin',     label:'San Agustín · Territorial', icon:'🗺', dep:'huila',   url: gnews('San Agustin Huila ordenamiento territorial OR licencia OR uso suelo') },
+  { id:'gn-laplata',        label:'La Plata · Ambiental',      icon:'🌿', dep:'huila',   url: gnews('La Plata Huila CAM ambiental OR ordenamiento territorial') },
+  { id:'gn-gigante',        label:'Gigante · Territorial',     icon:'🗺', dep:'huila',   url: gnews('Gigante Huila ordenamiento territorial OR licencia') },
+  { id:'gn-timana',         label:'Timaná · Territorial',      icon:'🗺', dep:'huila',   url: gnews('Timaná Huila ordenamiento territorial') },
+  { id:'gn-palermo',        label:'Palermo · Territorial',     icon:'🗺', dep:'huila',   url: gnews('Palermo Huila ordenamiento territorial OR licencia') },
+  { id:'gn-florencia',      label:'Florencia · Territorial',   icon:'🗺', dep:'caqueta', url: gnews('Florencia Caqueta ordenamiento territorial OR licencia urbanistica OR Corpoamazonia') },
+  { id:'gn-orito',          label:'Orito · Ambiental',         icon:'🌿', dep:'putumayo',url: gnews('Orito Putumayo ordenamiento territorial OR Corpoamazonia OR licencia') },
+  { id:'gn-puertoC',        label:'Puerto Caicedo · Territorial',icon:'🗺',dep:'putumayo',url: gnews('Puerto Caicedo Putumayo ordenamiento territorial') },
+  { id:'gn-valleg',         label:'Valle Guamuez · Ambiental', icon:'🌿', dep:'putumayo',url: gnews('Valle del Guamuez ordenamiento territorial OR Corpoamazonia') },
+  // ── Temas generales ──────────────────────────────
+  { id:'gn-cam',            label:'CAM · Medidas Ambientales', icon:'🌿', dep:'huila',   url: gnews('CAM Huila medida ambiental OR licencia ambiental OR resolucion') },
+  { id:'gn-corpoamazonia',  label:'Corpoamazonia · Ambiente',  icon:'🌿', dep:'caqueta', url: gnews('Corpoamazonia medida ambiental OR licencia OR ordenamiento') },
+  { id:'gn-gobhuila',       label:'Gobernación Huila',         icon:'🏛', dep:'huila',   url: gnews('Gobernacion Huila ordenamiento territorial OR licencia urbanistica') },
+  { id:'gn-cchuila',        label:'Cámara Comercio Huila',     icon:'🏛', dep:'huila',   url: gnews('Camara de Comercio Huila ordenamiento territorial') },
+  { id:'gn-colombiacompra', label:'Colombia Compra · Huila',   icon:'🏛', dep:'huila',   url: gnews('Colombia Compra Eficiente Huila licencia urbanistica OR ordenamiento') },
+  // ── Medios locales ────────────────────────────────
+  { id:'gn-diariodelhui',   label:'Diario del Huila · Regional',icon:'📰',dep:'huila',  url: gnews('site:diariodelhuila.com ordenamiento territorial OR licencia urbanistica') },
+  { id:'gn-huila7',         label:'Huila 7 Días · Regional',   icon:'📰', dep:'huila',   url: gnews('Huila 7 dias ordenamiento territorial OR licencia OR CAM') },
+];
+
+/* ── 4. PROXY CORS + RSS PARSER ──────────────────── */
+async function fetchFeed(url) {
+  try {
+    const proxyUrl = PROXY + encodeURIComponent(url);
+    const r = await fetch(proxyUrl);
+    if (!r.ok) throw new Error('proxy error');
+    const json = await r.json();
+    const parser = new DOMParser();
+    const doc = parser.parseFromString(json.contents, 'text/xml');
+    const items = Array.from(doc.querySelectorAll('item'));
+    return items.map(el => {
+      const get = tag => el.querySelector(tag)?.textContent?.trim() || '';
+      const link = get('link') || el.querySelector('guid')?.textContent || '#';
+      const pubDate = get('pubDate');
+      const date = pubDate ? new Date(pubDate) : new Date();
+      return {
+        title:   get('title'),
+        link,
+        desc:    get('description').replace(/<[^>]+>/g,'').slice(0,220),
+        date,
+        source:  get('source') || new URL(url.startsWith('http') ? url : 'https://'+url).hostname,
+      };
+    });
+  } catch(e) {
+    return [];
+  }
+}
+
+/* ── 5. ETIQUETADO DE ARTÍCULOS ──────────────────── */
+function tagArticle(art) {
+  const hay = (art.title + ' ' + art.desc).toLowerCase();
+  const temas = Object.entries(KEYWORDS_TEMA)
+    .filter(([, kws]) => kws.some(k => hay.includes(k)))
+    .map(([t]) => t);
+  const muns = Object.entries(MUNICIPIOS)
+    .filter(([, list]) => list.some(m => hay.includes(m)))
+    .map(([dep]) => dep);
+  return { ...art, temas, deps: muns };
+}
+
+function isRecent(date) {
+  return (Date.now() - date.getTime()) < 48 * 3600 * 1000;
+}
+
+function isRelevant(art) {
+  const hay = (art.title + ' ' + art.desc).toLowerCase();
+  const hasMun  = ALL_MUN.some(m => hay.includes(m));
+  const hasTema = ALL_KEYWORDS.some(k => hay.includes(k));
+  return hasMun && hasTema;
+}
+
+/* ── 6. CARGAR TODOS LOS FEEDS ───────────────────── */
+async function loadAllFeeds() {
+  const btn = document.getElementById('btnRefresh');
+  btn.classList.add('loading');
+  document.getElementById('refreshIcon').textContent = '⟳';
+
+  const grid = document.getElementById('newsGrid');
+  grid.innerHTML = '<div class="state-box"><div class="spinner"></div><p>Consultando fuentes de noticias…</p></div>';
+
+  const promises = FEED_DEFS.map(f => fetchFeed(f.url).then(items => items.map(a => ({...a, feedDep: f.dep, feedLabel: f.label}))));
+  const results  = await Promise.allSettled(promises);
+
+  const raw = results.flatMap(r => r.status === 'fulfilled' ? r.value : []);
+  const tagged = raw
+    .filter(a => isRecent(a.date))
+    .map(tagArticle)
+    .filter(isRelevant);
+
+  // dedup by title
+  const seen = new Set();
+  allArticles = tagged.filter(a => {
+    const k = a.title.slice(0,60).toLowerCase();
+    if (seen.has(k)) return false;
+    seen.add(k); return true;
+  });
+
+  allArticles.sort((a,b) => b.date - a.date);
+  renderNews();
+  renderRSSCards();
+
+  const now = new Date();
+  document.getElementById('lastUpdate').textContent =
+    `Actualizado: ${now.toLocaleTimeString('es-CO')}`;
+  btn.classList.remove('loading');
+}
+
+/* ── 7. RENDERIZADO DE NOTICIAS ──────────────────── */
+function renderNews() {
+  const grid = document.getElementById('newsGrid');
+  const fd = activeFilters.dep;
+  const ft = activeFilters.tema;
+
+  let arts = allArticles.filter(a => {
+    const depOk  = fd === 'todos' || a.deps.includes(fd) || a.feedDep === fd;
+    const temaOk = ft === 'todos' || a.temas.includes(ft);
+    return depOk && temaOk;
+  });
+
+  document.getElementById('countInfo').textContent =
+    `${arts.length} resultado${arts.length!==1?'s':''} encontrados`;
+
+  if (arts.length === 0) {
+    grid.innerHTML = `<div class="state-box">
+      <div class="icon">🔍</div>
+      <p>No se encontraron noticias de las últimas 48 horas con los filtros actuales.<br>
+      Intenta cambiar los filtros o actualizar manualmente.</p>
+    </div>`;
+    return;
+  }
+
+  grid.innerHTML = arts.map((a, i) => {
+    let domain = '#';
+    try { domain = new URL(a.link).hostname.replace('www.',''); } catch(e){}
+    const age = timeSince(a.date);
+    const depLabel = { huila:'Huila', caqueta:'Caquetá', putumayo:'Putumayo' };
+    const depTags = a.deps.map(d => `<span class="tag mun">${depLabel[d]||d}</span>`).join('');
+    const temaTags = a.temas.map(t => `<span class="tag ${t==='ambiental'?'env':''}">${t.toUpperCase()}</span>`).join('');
+    return `
+    <article class="card" style="animation-delay:${i*0.04}s">
+      <div class="card-body">
+        <div class="card-meta">
+          <span class="card-source">${escHtml(a.feedLabel||a.source)}</span>
+          <span class="card-date">⏱ ${age}</span>
+        </div>
+        <h2 class="card-title">${escHtml(a.title)}</h2>
+        ${a.desc ? `<p class="card-desc">${escHtml(a.desc)}</p>` : ''}
+        <div class="card-tags">${depTags}${temaTags}</div>
+      </div>
+      <div class="card-footer">
+        <span class="source-domain">${escHtml(domain)}</span>
+        <a class="btn-source" href="${escHtml(a.link)}" target="_blank" rel="noopener noreferrer">
+          Ir a la fuente ↗
+        </a>
+      </div>
+    </article>`;
+  }).join('');
+}
+
+/* ── 8. RENDERIZADO RSS CARDS ────────────────────── */
+function renderRSSCards() {
+  const grid = document.getElementById('rssGrid');
+  grid.innerHTML = FEED_DEFS.map(f => {
+    const feedArticles = allArticles
+      .filter(a => a.feedLabel === f.label)
+      .slice(0, 5);
+    const items = feedArticles.length
+      ? feedArticles.map(a => `<div class="rss-item"><a href="${escHtml(a.link)}" target="_blank" rel="noopener">${escHtml(a.title)}</a><br><span style="color:var(--muted);font-size:0.68rem">${timeSince(a.date)}</span></div>`).join('')
+      : `<div class="rss-item" style="color:var(--muted)">Sin resultados recientes en este feed.</div>`;
+    return `
+    <div class="rss-card">
+      <div class="rss-header">
+        <span class="rss-icon">${f.icon}</span>
+        <div>
+          <div class="rss-title">${escHtml(f.label)}</div>
+          <div class="rss-url">${truncate(decodeURIComponent(f.url.split('q=')[1]||f.url),60)}</div>
+        </div>
+      </div>
+      <div class="rss-body">${items}</div>
+      <div class="rss-open">
+        <a href="${escHtml(f.url)}" target="_blank" rel="noopener">Abrir feed completo ↗</a>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+/* ── 9. FILTROS ──────────────────────────────────── */
+function setFilter(key, val, el) {
+  activeFilters[key] = val;
+  document.querySelectorAll(`[data-filter="${key}"]`).forEach(b => b.classList.remove('active'));
+  el.classList.add('active');
+  renderNews();
+}
+
+/* ── 10. TABS ────────────────────────────────────── */
+function switchTab(id, el) {
+  currentTab = id;
+  document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+  document.getElementById('tab-'+id).classList.add('active');
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  el.classList.add('active');
+  document.getElementById('filtersPanel').style.display = id==='noticias' ? '' : 'none';
+}
+
+/* ── 11. TEMA ────────────────────────────────────── */
+function toggleTheme() {
+  const html = document.documentElement;
+  const isDark = html.getAttribute('data-theme') === 'dark';
+  html.setAttribute('data-theme', isDark ? 'light' : 'dark');
+  document.getElementById('btnTheme').textContent = isDark ? '🌙' : '☀️';
+  localStorage.setItem('mt-theme', isDark ? 'light' : 'dark');
+}
+
+/* ── 12. UTILS ───────────────────────────────────── */
+function escHtml(s='') {
+  return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+function truncate(s='', n) { return s.length>n ? s.slice(0,n)+'…' : s; }
+function timeSince(date) {
+  const mins = Math.round((Date.now() - date.getTime()) / 60000);
+  if (mins < 60) return `hace ${mins} min`;
+  const hrs = Math.round(mins/60);
+  if (hrs < 24) return `hace ${hrs}h`;
+  return `hace ${Math.round(hrs/24)}d`;
+}
+
+/* ── 13. INIT ────────────────────────────────────── */
+(function init() {
+  // Restaurar tema
+  const saved = localStorage.getItem('mt-theme');
+  if (saved) {
+    document.documentElement.setAttribute('data-theme', saved);
+    document.getElementById('btnTheme').textContent = saved==='dark' ? '☀️' : '🌙';
+  }
+  // Cargar feeds al inicio
+  loadAllFeeds();
+  // Auto-refresh cada 30 min
+  setInterval(loadAllFeeds, 30 * 60 * 1000);
+})();
+</script>
+</body>
+</html>
