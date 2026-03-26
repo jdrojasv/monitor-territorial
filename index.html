@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>📰 Monitoreo Municipios + OT + Tweets</title>
     <style>
+        /* (el mismo CSS que antes, sin cambios) */
         * {
             margin: 0;
             padding: 0;
@@ -320,10 +321,10 @@
             <button class="tab-btn" data-feed="tweets">🐦 tweets</button>
         </div>
 
-        <!-- Contenedor noticias (todos/municipios/ot) -->
+        <!-- Contenedor noticias -->
         <div id="newsContainer" class="news-grid"></div>
         
-        <!-- Contenedor tweets (solo para pestaña tweets) -->
+        <!-- Contenedor tweets -->
         <div id="tweetsContainer" style="display: none;">
             <div class="filters" style="margin-bottom: 1rem;">
                 <div class="filter-group">
@@ -341,7 +342,7 @@
 
         <div class="footer">
             <p>📍 municipios: Pitalito, Palestina, San Agustín, Isnos, Palermo, Orito, Puerto Caicedo, Valle del Guamuez, Florencia<br>
-            🏛️ OT: cualquier lugar de Colombia · 🐦 Tweets: búsqueda por #municipio (vía Nitter)</p>
+            🏛️ OT: cualquier lugar de Colombia · 🐦 Tweets: búsqueda por #municipio (vía Nitter.net)</p>
             <p id="lastUpdate">⏱️ actualizado: --</p>
         </div>
     </div>
@@ -359,8 +360,9 @@
         const MUNICIPIO_SEARCHES = ALLOWED_MUNICIPIOS.map(m => `${m} Colombia after:2d`); 
         const OT_SEARCHES = ['"ordenamiento territorial" Colombia after:2d', 'POT Colombia after:2d', 'planes parciales Colombia after:2d', 'Ministerio de Vivienda ordenamiento after:2d'];
 
-        const NITTER_INSTANCE = 'https://nitter.poast.org';
-        const PROXY = 'https://api.allorigins.win/raw?url=';
+        // CAMBIADO: instancia de Nitter que sí funciona + proxy más robusto
+        const NITTER_INSTANCE = 'https://nitter.net';
+        const PROXY = 'https://corsproxy.io/?';
 
         // ---------- GLOBAL STATE ----------
         let allNews = [];
@@ -394,7 +396,7 @@
             });
         }
 
-        // NEW: Normalizar URL para enlaces correctos
+        // Normalizar URL (absoluta)
         function normalizarUrl(url) {
             if (!url) return '#';
             if (url.startsWith('//')) return 'https:' + url;
@@ -413,6 +415,16 @@
                 return items.map(item => {
                     let titulo = (item.split('<title>')[1]?.split('</title>')[0] || '').replace(/<!\[CDATA\[|\]\]>/g, '');
                     let link = (item.split('<link>')[1]?.split('</link>')[0] || '').replace(/<!\[CDATA\[|\]\]>/g, '');
+                    // Si link está vacío, intentar con guid
+                    if (!link) {
+                        link = (item.split('<guid>')[1]?.split('</guid>')[0] || '').replace(/<!\[CDATA\[|\]\]>/g, '');
+                    }
+                    // Si sigue vacío, extraer de la descripción (último recurso)
+                    if (!link) {
+                        let desc = (item.split('<description>')[1]?.split('</description>')[0] || '').replace(/<!\[CDATA\[|\]\]>/g, '');
+                        let match = desc.match(/<a href="([^"]+)"/);
+                        if (match) link = match[1];
+                    }
                     let desc = (item.split('<description>')[1]?.split('</description>')[0] || '').replace(/<!\[CDATA\[|\]\]>/g, '').replace(/<[^>]*>/g, '');
                     let fechaStr = item.split('<pubDate>')[1]?.split('</pubDate>')[0] || '';
                     let fecha = new Date(fechaStr);
@@ -475,7 +487,7 @@
             }
         }
 
-        // ---------- TWEETS LOADER ----------
+        // ---------- TWEETS LOADER (Nitter con proxy) ----------
         async function loadTweetsForMunicipio(municipio) {
             if (!municipio) return [];
             const hashtag = `#${municipio.replace(/\s+/g, '')}`;
@@ -483,6 +495,8 @@
             try {
                 const response = await fetch(PROXY + encodeURIComponent(nitterUrl), { signal: AbortSignal.timeout(10000) });
                 const text = await response.text();
+                // Si el proxy devuelve error o texto vacío, mostramos warning
+                if (!text.trim()) throw new Error('Respuesta vacía');
                 const items = text.split('<item>').slice(1, 10);
                 const tweets = [];
                 for (let item of items) {
@@ -500,8 +514,11 @@
                         author = parts[0];
                         tweetText = parts.slice(1).join(':').trim();
                     }
+                    // Si no se pudo extraer autor, usar la descripción como texto
+                    if (!tweetText && description) tweetText = description;
+                    
                     tweets.push({
-                        author,
+                        author: author || 'usuario',
                         text: tweetText,
                         url: link,
                         date: fecha,
@@ -521,10 +538,10 @@
                 tweetsGrid.innerHTML = '<div class="loader">Selecciona un municipio</div>';
                 return;
             }
-            tweetsGrid.innerHTML = '<div class="loader">Cargando tweets...</div>';
+            tweetsGrid.innerHTML = '<div class="loader">Cargando tweets desde Nitter...</div>';
             const tweets = await loadTweetsForMunicipio(mun);
             if (!tweets.length) {
-                tweetsGrid.innerHTML = '<div class="loader">No se encontraron tweets recientes con #' + mun.replace(/\s+/g, '') + '</div>';
+                tweetsGrid.innerHTML = '<div class="loader">No se encontraron tweets recientes con #' + mun.replace(/\s+/g, '') + '<br>Intenta con otro municipio o más tarde.</div>';
                 return;
             }
             tweetsGrid.innerHTML = tweets.map(t => {
@@ -536,8 +553,8 @@
                             <div class="tweet-author">
                                 <div class="tweet-avatar"></div>
                                 <div>
-                                    <div class="tweet-name">${escapeHtml(t.author || 'Anónimo')}</div>
-                                    <div class="tweet-username">@${escapeHtml(t.author?.split(' ')[0] || 'usuario')}</div>
+                                    <div class="tweet-name">${escapeHtml(t.author)}</div>
+                                    <div class="tweet-username">@${escapeHtml(t.author.split(' ')[0])}</div>
                                 </div>
                             </div>
                             <div class="meta">
@@ -616,7 +633,7 @@
                 const horasAgo = Math.round(n.horas);
                 const badgeTiempo = horasAgo < 24 ? '🟡 hoy' : '🟢 ayer';
                 const fechaStr = n.fecha.toLocaleDateString('es-CO');
-                const urlFinal = normalizarUrl(n.url);  // FIXED: usa normalizarUrl
+                const urlFinal = normalizarUrl(n.url);
                 
                 return `
                     <div class="card">
