@@ -382,39 +382,116 @@
 
     <script>
         // ---------- CONSTANTES ----------
-        const ALLOWED_MUNICIPIOS = ['Pitalito', 'Palestina', 'San Agustín', 'Isnos', 'Palermo', 'Orito', 'Puerto Caicedo', 'Valle del Guamuez', 'Florencia'];
+        const ALLOWED_MUNICIPIOS = ['Pitalito','Palestina','Acevedo','Guadalupe','San José de Isnos','San Agustín','La Plata','Gigante','Timaná','Palermo','Orito','Puerto Caicedo','Valle del Guamuez','Florencia'];
         const DEPTOS = {
-            'Huila': ['Pitalito', 'Palestina', 'San Agustín', 'Isnos', 'Palermo'],
-            'Putumayo': ['Orito', 'Puerto Caicedo', 'Valle del Guamuez'],
-            'Caqueta': ['Florencia']
+            'Huila':    ['Pitalito','Palestina','Acevedo','Guadalupe','San José de Isnos','San Agustín','La Plata','Gigante','Timaná','Palermo'],
+            'Putumayo': ['Orito','Puerto Caicedo','Valle del Guamuez'],
+            'Caqueta':  ['Florencia']
         };
         const OT_KEYWORDS = ['ordenamiento territorial', 'pot', 'pbot', 'eot', 'planes parciales', 'plan basico', 'esquema de ordenamiento', 'revision pot', 'clasificacion suelo', 'usos del suelo', 'plan de ordenamiento', 'ley 388', 'ministerio de vivienda', 'conpes'];
 
-        // LISTA DE FUENTES RSS (nombre, url, selector opcional de país/sección)
+        // ── FUENTES RSS ─────────────────────────────────────────────────────────
+        // Nacionales
+        // Regionales y locales incluyen feeds WordPress (/feed/) y otros estándares
         const RSS_FUENTES = [
-            { nombre: 'El Tiempo (Colombia)', url: 'https://www.eltiempo.com/rss/colombia.xml', categoria: 'general' },
-            { nombre: 'El Espectador', url: 'https://www.elespectador.com/rss/colombia.xml', categoria: 'general' },
-            { nombre: 'Semana', url: 'https://www.semana.com/rss/nacion.xml', categoria: 'general' },
-            { nombre: 'Diario del Huila', url: 'https://www.diariodelhuila.com/rss', categoria: 'regional' },
-            { nombre: 'La Nación (Neiva)', url: 'https://www.lanacion.com.co/rss', categoria: 'regional' },
-            { nombre: 'Pitalito Noticias', url: 'https://pitalitonoticias.com/feed/', categoria: 'local' },
-            { nombre: 'ADN Colombia', url: 'https://www.adncolombia.com/feed/', categoria: 'general' },
-            { nombre: 'El Espacio', url: 'https://elespacio.com.co/feed/', categoria: 'general' },
-            { nombre: 'Google News (municipios)', url: 'google', categoria: 'búsqueda' }  // Especial
+            // ── Nacionales ─────────────────────────────────────────
+            { nombre: 'El Tiempo',         url: 'https://www.eltiempo.com/rss/colombia.xml',       categoria: 'nacional' },
+            { nombre: 'El Espectador',     url: 'https://www.elespectador.com/rss/colombia.xml',   categoria: 'nacional' },
+            { nombre: 'Semana',            url: 'https://www.semana.com/rss/nacion.xml',            categoria: 'nacional' },
+            { nombre: 'RCN Radio',         url: 'https://www.rcnradio.com/feed',                    categoria: 'nacional' },
+            { nombre: 'Caracol Radio',     url: 'https://caracol.com.co/rss/general.xml',           categoria: 'nacional' },
+            { nombre: 'Blu Radio',         url: 'https://www.bluradio.com/feed',                    categoria: 'nacional' },
+            { nombre: 'Pulzo',             url: 'https://www.pulzo.com/feed',                       categoria: 'nacional' },
+            // ── Regionales Huila ───────────────────────────────────
+            { nombre: 'Diario del Huila',  url: 'https://diariodelhuila.com/feed/',                 categoria: 'regional' },
+            { nombre: 'La Nación Huila',   url: 'https://www.lanacion.com.co/feed/',                categoria: 'regional' },
+            { nombre: 'Huila Extra',       url: 'https://huila.extra.com.co/feed/',                 categoria: 'regional' },
+            { nombre: 'Opanoticias',       url: 'https://www.opanoticias.com/feed/',                categoria: 'regional' },
+            { nombre: 'Huila Noticias',    url: 'https://www.huilanoticias.com/feed/',              categoria: 'regional' },
+            // ── Locales Huila ─────────────────────────────────────
+            { nombre: 'Laboyanos (Pitalito)', url: 'https://www.laboyanos.com/feed/',              categoria: 'local' },
+            { nombre: 'Pitalito Noticias', url: 'https://pitalitonoticias.com/feed/',              categoria: 'local' },
+            // ── Caquetá ───────────────────────────────────────────
+            { nombre: 'Lente Regional',    url: 'https://lenteregional.com/feed/',                 categoria: 'regional' },
+            { nombre: 'Caquetá al Día',    url: 'https://caquetaaldia.com/feed/',                  categoria: 'regional' },
+            { nombre: 'Extra Caquetá',     url: 'https://extra.com.co/tag/caqueta/feed/',          categoria: 'regional' },
+            // ── Putumayo ──────────────────────────────────────────
+            { nombre: 'Conexión Putumayo', url: 'https://conexionputumayo.com/feed/',              categoria: 'regional' },
+            { nombre: 'MiPutumayo',        url: 'https://miputumayo.com.co/feed/',                 categoria: 'regional' },
+            { nombre: 'La Noticia Putumayo',url:'https://lanoticiaputumayo.com/feed/',             categoria: 'local' },
+            // ── Google News (búsqueda dinámica) ───────────────────
+            { nombre: 'Google News (municipios)', url: 'google', categoria: 'búsqueda' }
         ];
 
-        // Búsquedas de Google News para municipios (solo si se activa)
-        const MUNICIPIO_SEARCHES = ALLOWED_MUNICIPIOS.map(m => `${m} Colombia after:2d`);
-        const OT_SEARCHES = ['"ordenamiento territorial" Colombia after:2d', 'POT Colombia after:2d', 'planes parciales Colombia after:2d', 'Ministerio de Vivienda ordenamiento after:2d'];
+        // Búsquedas Google News — after:2d NO funciona en RSS, se filtra por fecha en JS
+        const MUNICIPIO_SEARCHES = [
+            // Por nombre exacto
+            ...ALLOWED_MUNICIPIOS.map(m => `"${m}" Colombia`),
+            // Por municipio + departamento
+            'Pitalito Huila', 'Acevedo Huila', 'Guadalupe Huila', 'La Plata Huila',
+            'Gigante Huila', 'Timaná Huila', 'Palermo Huila', 'Palestina Huila',
+            'San Agustín Huila', 'San José de Isnos Huila',
+            'Florencia Caquetá', 'Orito Putumayo', 'Puerto Caicedo Putumayo',
+            'Valle del Guamuez Putumayo', 'La Hormiga Putumayo',
+            // Por entidades
+            'Gobernación del Huila noticias',
+            'Gobernación Caquetá noticias',
+            'Gobernación Putumayo noticias',
+            'alcaldía Pitalito', 'alcaldía Florencia Caquetá',
+            'CAM Huila ambiental', 'Corpoamazonia licencia',
+        ];
+        const OT_SEARCHES = [
+            '"ordenamiento territorial" Colombia',
+            'POT Colombia municipio',
+            '"planes parciales" Colombia',
+            '"licencia urbanistica" Colombia',
+            '"uso de suelo" municipio Colombia',
+            'CAM Huila resolución ambiental',
+            'Corpoamazonia resolución',
+            'Ministerio de Vivienda ordenamiento',
+            '"curaduría urbana" Colombia',
+        ];
 
-        // Nitter: varias instancias para fallback
+        // Instancias Nitter verificadas ✅ (wiki zedeus/nitter, 2026-03)
         const NITTER_INSTANCES = [
-            'https://nitter.lacontrevoie.fr',
-            'https://nitter.privacydev.net',
+            'https://nitter.net',
+            'https://xcancel.com',
             'https://nitter.poast.org',
-            'https://nitter.net'
+            'https://nitter.privacyredirect.com',
+            'https://nitter.tiekoetter.com',
+            'https://nitter.space',
+            'https://nuku.trabun.org',
+            'https://nitter.catsarch.com',
+            'https://lightbrd.com'
         ];
+
+        // ── Proxies CORS con fallback automático ──────────────────────────────
+        const PROXIES = [
+            u => `https://api.allorigins.win/get?url=${encodeURIComponent(u)}`,
+            u => `https://corsproxy.io/?${encodeURIComponent(u)}`,
+            u => `https://api.codetabs.com/v1/proxy?quest=${encodeURIComponent(u)}`,
+        ];
+        // Proxy legacy (para compatibilidad)
         const PROXY = 'https://corsproxy.io/?';
+
+        async function fetchWithProxy(url, timeout = 12000) {
+            for (const mk of PROXIES) {
+                try {
+                    const r = await fetch(mk(url), { signal: AbortSignal.timeout(timeout) });
+                    if (!r.ok) continue;
+                    const ct = r.headers.get('content-type') || '';
+                    if (ct.includes('json') || mk(url).includes('allorigins')) {
+                        const j = await r.json();
+                        const txt = j.contents || j.body || null;
+                        if (txt && txt.length > 50) return txt;
+                        continue;
+                    }
+                    const t = await r.text();
+                    if (t && t.length > 50) return t;
+                } catch(e) { /* probar siguiente proxy */ }
+            }
+            return null;
+        }
 
         // ---------- GLOBAL STATE ----------
         let allNews = [];
@@ -460,73 +537,64 @@
         }
 
         // ---------- CARGAR RSS GENÉRICO ----------
-        async function fetchRSSFeed(feedUrl, limit = 10) {
+        function parseItems(text, limit, fuente) {
+            const items = text.split('<item>').slice(1, limit + 1);
+            return items.map(item => {
+                const cdata = s => (s || '').replace(/<!\[CDATA\[|\]\]>/g, '').trim();
+                let titulo = cdata(item.split('<title>')[1]?.split('</title>')[0]);
+                let link   = cdata(item.split('<link>')[1]?.split('</link>')[0]);
+                if (!link) link = cdata(item.split('<guid>')[1]?.split('</guid>')[0]);
+                // Desempaquetar link real de Google News
+                if (link.includes('news.google.com')) {
+                    try { const u = new URL(link); link = u.searchParams.get('url') || link; } catch(e){}
+                }
+                let desc = cdata(item.split('<description>')[1]?.split('</description>')[0])
+                                .replace(/<[^>]*>/g, '').slice(0, 300);
+                let fechaStr = item.split('<pubDate>')[1]?.split('</pubDate>')[0] || '';
+                let fecha = new Date(fechaStr);
+                if (isNaN(fecha.getTime())) fecha = new Date();
+                return { titulo, link, desc, fecha, fuente };
+            }).filter(i => i.titulo && i.titulo.length > 3 && i.link && i.link.startsWith('http'));
+        }
+
+        async function fetchRSSFeed(feedUrl, limit = 12) {
             try {
-                const response = await fetch(PROXY + encodeURIComponent(feedUrl), { signal: AbortSignal.timeout(8000) });
-                const text = await response.text();
-                const items = text.split('<item>').slice(1, limit+1);
-                return items.map(item => {
-                    let titulo = (item.split('<title>')[1]?.split('</title>')[0] || '').replace(/<!\[CDATA\[|\]\]>/g, '');
-                    let link = (item.split('<link>')[1]?.split('</link>')[0] || '').replace(/<!\[CDATA\[|\]\]>/g, '');
-                    if (!link) {
-                        link = (item.split('<guid>')[1]?.split('</guid>')[0] || '').replace(/<!\[CDATA\[|\]\]>/g, '');
-                    }
-                    let desc = (item.split('<description>')[1]?.split('</description>')[0] || '').replace(/<!\[CDATA\[|\]\]>/g, '').replace(/<[^>]*>/g, '');
-                    let fechaStr = item.split('<pubDate>')[1]?.split('</pubDate>')[0] || '';
-                    let fecha = new Date(fechaStr);
-                    if (isNaN(fecha.getTime())) fecha = new Date();
-                    return { titulo, link, desc, fecha, fuente: feedUrl };
-                }).filter(i => i.titulo && i.link);
+                const text = await fetchWithProxy(feedUrl);
+                if (!text) return [];
+                return parseItems(text, limit, feedUrl);
             } catch(e) {
-                console.warn(`Error en RSS ${feedUrl}:`, e);
+                console.warn('Error RSS:', feedUrl, e);
                 return [];
             }
         }
 
-        // Cargar Google News como fuente especial
+        // ---------- GOOGLE NEWS RSS ----------
+        // ceid correcto: CO:es (no CO:es-419 que retorna error)
         async function fetchGoogleNewsMunicipios() {
             const items = [];
-            for (let busqueda of MUNICIPIO_SEARCHES) {
-                const url = `https://news.google.com/rss/search?q=${encodeURIComponent(busqueda)}&hl=es-419&gl=CO&ceid=CO:es-419`;
-                try {
-                    const response = await fetch(PROXY + encodeURIComponent(url), { signal: AbortSignal.timeout(8000) });
-                    const text = await response.text();
-                    const rssItems = text.split('<item>').slice(1, 4);
-                    for (let item of rssItems) {
-                        let titulo = (item.split('<title>')[1]?.split('</title>')[0] || '').replace(/<!\[CDATA\[|\]\]>/g, '');
-                        let link = (item.split('<link>')[1]?.split('</link>')[0] || '').replace(/<!\[CDATA\[|\]\]>/g, '');
-                        if (!link) link = (item.split('<guid>')[1]?.split('</guid>')[0] || '');
-                        let desc = (item.split('<description>')[1]?.split('</description>')[0] || '').replace(/<!\[CDATA\[|\]\]>/g, '').replace(/<[^>]*>/g, '');
-                        let fechaStr = item.split('<pubDate>')[1]?.split('</pubDate>')[0] || '';
-                        let fecha = new Date(fechaStr);
-                        if (isNaN(fecha.getTime())) fecha = new Date();
-                        items.push({ titulo, link, desc, fecha, fuente: 'Google News' });
-                    }
-                } catch(e) { console.warn(e); }
+            // Procesar en lotes de 4 en paralelo para ser más rápido
+            for (let i = 0; i < MUNICIPIO_SEARCHES.length; i += 4) {
+                const lote = MUNICIPIO_SEARCHES.slice(i, i + 4);
+                const resultados = await Promise.allSettled(lote.map(async busqueda => {
+                    const url = `https://news.google.com/rss/search?q=${encodeURIComponent(busqueda)}&hl=es-419&gl=CO&ceid=CO:es`;
+                    const text = await fetchWithProxy(url);
+                    if (!text) return [];
+                    return parseItems(text, 6, 'Google News');
+                }));
+                resultados.forEach(r => { if (r.status === 'fulfilled') items.push(...r.value); });
             }
             return items;
         }
 
         async function fetchGoogleNewsOT() {
             const items = [];
-            for (let busqueda of OT_SEARCHES) {
-                const url = `https://news.google.com/rss/search?q=${encodeURIComponent(busqueda)}&hl=es-419&gl=CO&ceid=CO:es-419`;
-                try {
-                    const response = await fetch(PROXY + encodeURIComponent(url), { signal: AbortSignal.timeout(8000) });
-                    const text = await response.text();
-                    const rssItems = text.split('<item>').slice(1, 5);
-                    for (let item of rssItems) {
-                        let titulo = (item.split('<title>')[1]?.split('</title>')[0] || '').replace(/<!\[CDATA\[|\]\]>/g, '');
-                        let link = (item.split('<link>')[1]?.split('</link>')[0] || '').replace(/<!\[CDATA\[|\]\]>/g, '');
-                        if (!link) link = (item.split('<guid>')[1]?.split('</guid>')[0] || '');
-                        let desc = (item.split('<description>')[1]?.split('</description>')[0] || '').replace(/<!\[CDATA\[|\]\]>/g, '').replace(/<[^>]*>/g, '');
-                        let fechaStr = item.split('<pubDate>')[1]?.split('</pubDate>')[0] || '';
-                        let fecha = new Date(fechaStr);
-                        if (isNaN(fecha.getTime())) fecha = new Date();
-                        items.push({ titulo, link, desc, fecha, fuente: 'Google News' });
-                    }
-                } catch(e) { console.warn(e); }
-            }
+            const resultados = await Promise.allSettled(OT_SEARCHES.map(async busqueda => {
+                const url = `https://news.google.com/rss/search?q=${encodeURIComponent(busqueda)}&hl=es-419&gl=CO&ceid=CO:es`;
+                const text = await fetchWithProxy(url);
+                if (!text) return [];
+                return parseItems(text, 6, 'Google News OT');
+            }));
+            resultados.forEach(r => { if (r.status === 'fulfilled') items.push(...r.value); });
             return items;
         }
 
@@ -584,11 +652,11 @@
                 }));
             }
 
-            // Fuentes RSS normales
+            // Fuentes RSS normales (paralelo)
             for (let fuente of RSS_FUENTES) {
                 if (fuente.nombre === 'Google News (municipios)') continue;
                 if (fuentesActivas.has(fuente.nombre)) {
-                    promises.push(fetchRSSFeed(fuente.url, 8).then(items => {
+                    promises.push(fetchRSSFeed(fuente.url, 15).then(items => {
                         items.forEach(item => {
                             if (seenUrls.has(item.link)) return;
                             seenUrls.add(item.link);
@@ -634,50 +702,22 @@
             allNews.sort((a,b) => b.fecha - a.fecha);
         }
 
-        // ---------- TWEETS (con fallback de instancias) ----------
-        async function loadTweetsForMunicipio(municipio) {
-            if (!municipio) return [];
-            const hashtag = `#${municipio.replace(/\s+/g, '')}`;
-            for (let instance of NITTER_INSTANCES) {
+        // ── TWEETS / NITTER ──────────────────────────────────────────────────────
+        // Nitter bloquea fetch programático con 403 (Cloudflare bot-protection).
+        // Solución: intentar RSS vía proxy; si falla, mostrar búsqueda embebida
+        // con iframe + enlaces directos a Nitter y X/Twitter.
+
+        async function loadTweetsRSS(query) {
+            for (const instance of NITTER_INSTANCES) {
                 try {
-                    const nitterUrl = `${instance}/search/rss?q=${encodeURIComponent(hashtag)}&f=tweets&tweets_only=on`;
-                    const response = await fetch(PROXY + encodeURIComponent(nitterUrl), { signal: AbortSignal.timeout(10000) });
-                    const text = await response.text();
-                    if (!text.trim()) throw new Error('Vacío');
-                    const items = text.split('<item>').slice(1, 10);
-                    const tweets = [];
-                    for (let item of items) {
-                        let title = (item.split('<title>')[1]?.split('</title>')[0] || '').replace(/<!\[CDATA\[|\]\]>/g, '');
-                        let link = (item.split('<link>')[1]?.split('</link>')[0] || '').replace(/<!\[CDATA\[|\]\]>/g, '');
-                        let description = (item.split('<description>')[1]?.split('</description>')[0] || '').replace(/<!\[CDATA\[|\]\]>/g, '').replace(/<[^>]*>/g, '');
-                        let pubDate = (item.split('<pubDate>')[1]?.split('</pubDate>')[0] || '');
-                        let fecha = new Date(pubDate);
-                        if (isNaN(fecha.getTime())) fecha = new Date();
-                        
-                        let author = '';
-                        let tweetText = title;
-                        if (title.includes(':')) {
-                            let parts = title.split(':');
-                            author = parts[0];
-                            tweetText = parts.slice(1).join(':').trim();
-                        }
-                        if (!tweetText && description) tweetText = description;
-                        
-                        tweets.push({
-                            author: author || 'usuario',
-                            text: tweetText,
-                            url: link,
-                            date: fecha,
-                            horas: (new Date() - fecha) / (1000*3600)
-                        });
-                    }
-                    if (tweets.length) return tweets;
-                } catch(e) {
-                    console.warn(`Instancia ${instance} falló:`, e);
-                    continue;
-                }
+                    const nUrl = `${instance}/search/rss?q=${encodeURIComponent(query)}&f=tweets`;
+                    const text = await fetchWithProxy(nUrl, 10000);
+                    if (!text || !text.includes('<item>')) continue;
+                    const parsed = parseItems(text, 15, 'Nitter');
+                    if (parsed.length) return { items: parsed, instance };
+                } catch(e) { /* siguiente */ }
             }
-            return []; // ninguna funcionó
+            return { items: [], instance: null };
         }
 
         async function refreshTweets() {
@@ -686,40 +726,89 @@
                 tweetsGrid.innerHTML = '<div class="loader">Selecciona un municipio</div>';
                 return;
             }
-            tweetsGrid.innerHTML = '<div class="loader">Cargando tweets desde Nitter...</div>';
-            const tweets = await loadTweetsForMunicipio(mun);
-            if (!tweets.length) {
-                tweetsGrid.innerHTML = '<div class="loader">No se encontraron tweets recientes con #' + mun.replace(/\s+/g, '') + '<br>Intenta con otro municipio o más tarde.</div>';
-                return;
-            }
-            tweetsGrid.innerHTML = tweets.map(t => {
-                const horasAgo = Math.round(t.horas);
-                const badgeTiempo = horasAgo < 24 ? '🟡 hoy' : '🟢 ayer';
-                return `
-                    <div class="card">
+            tweetsGrid.innerHTML = '<div class="loader">🔍 Buscando en Nitter…</div>';
+
+            const query = `${mun} Colombia`;
+            const hashtag = mun.replace(/\s+/g,'');
+            const { items, instance } = await loadTweetsRSS(query);
+
+            // ── Si RSS funcionó → mostrar tarjetas ──────────────────────────
+            if (items.length) {
+                tweetsGrid.innerHTML = items.map(t => {
+                    const hAgo = Math.round((new Date() - t.fecha) / 3600000);
+                    const badge = hAgo < 24 ? '🟡 hoy' : '🟢 ayer';
+                    let tweetText = t.titulo;
+                    let author = 'usuario';
+                    if (t.titulo.includes(':')) {
+                        const p = t.titulo.split(':');
+                        author = p[0].trim();
+                        tweetText = p.slice(1).join(':').trim();
+                    }
+                    return `<div class="card">
                         <div class="card-header">
                             <div class="tweet-author">
                                 <div class="tweet-avatar"></div>
                                 <div>
-                                    <div class="tweet-name">${escapeHtml(t.author)}</div>
-                                    <div class="tweet-username">@${escapeHtml(t.author.split(' ')[0])}</div>
+                                    <div class="tweet-name">${escapeHtml(author)}</div>
+                                    <div class="tweet-username">@${escapeHtml(author.replace(/\s/g,''))}</div>
                                 </div>
                             </div>
                             <div class="meta">
                                 <span class="badge badge-tweet">🐦 tweet</span>
-                                <span class="badge badge-time">${badgeTiempo}</span>
+                                <span class="badge badge-time">${badge}</span>
                             </div>
                         </div>
-                        <div class="card-body">
-                            ${escapeHtml(t.text).substring(0, 200)}${t.text.length > 200 ? '…' : ''}
-                        </div>
+                        <div class="card-body">${escapeHtml(tweetText).substring(0,200)}${tweetText.length>200?'…':''}</div>
                         <div class="card-footer">
-                            <span>📅 ${t.date.toLocaleDateString('es-CO')}</span>
-                            <a href="${normalizarUrl(t.url)}" target="_blank" rel="noopener" class="btn-link">ver tweet →</a>
+                            <span>📅 ${t.fecha.toLocaleDateString('es-CO')}</span>
+                            <a href="${normalizarUrl(t.link)}" target="_blank" rel="noopener" class="btn-link">ver tweet →</a>
                         </div>
+                    </div>`;
+                }).join('');
+                return;
+            }
+
+            // ── Si RSS falló → mostrar accesos directos + búsqueda en nueva pestaña ──
+            tweetsGrid.innerHTML = `
+                <div style="grid-column:1/-1;background:var(--card);border:1px solid var(--border);border-radius:1rem;padding:1.5rem;">
+                    <p style="font-weight:600;margin-bottom:1rem;">
+                        🐦 Nitter no permitió acceso programático en este momento.<br>
+                        <small style="font-weight:400;color:var(--text-light)">
+                            Esto ocurre cuando las instancias tienen protección anti-bot activa.
+                            Usa los links de abajo para buscar directamente.
+                        </small>
+                    </p>
+                    <div style="display:flex;flex-wrap:wrap;gap:.75rem;margin-bottom:1.25rem;">
+                        <a href="https://nitter.net/search?q=${encodeURIComponent(query)}&f=tweets"
+                           target="_blank" rel="noopener"
+                           style="background:var(--tweet-badge);color:#fff;padding:.45rem 1rem;border-radius:.5rem;font-size:.85rem;font-weight:500;text-decoration:none;">
+                           🔍 Buscar en Nitter.net
+                        </a>
+                        <a href="https://xcancel.com/search?q=${encodeURIComponent(query)}&f=tweets"
+                           target="_blank" rel="noopener"
+                           style="background:#1a8cd8;color:#fff;padding:.45rem 1rem;border-radius:.5rem;font-size:.85rem;font-weight:500;text-decoration:none;">
+                           🔍 Buscar en Xcancel
+                        </a>
+                        <a href="https://x.com/search?q=${encodeURIComponent(query)}&f=live"
+                           target="_blank" rel="noopener"
+                           style="background:#000;color:#fff;padding:.45rem 1rem;border-radius:.5rem;font-size:.85rem;font-weight:500;text-decoration:none;">
+                           𝕏 Buscar en X/Twitter
+                        </a>
+                        <a href="https://nitter.net/search?q=%23${encodeURIComponent(hashtag)}"
+                           target="_blank" rel="noopener"
+                           style="background:var(--accent);color:#fff;padding:.45rem 1rem;border-radius:.5rem;font-size:.85rem;font-weight:500;text-decoration:none;">
+                           # Hashtag #${escapeHtml(hashtag)}
+                        </a>
                     </div>
-                `;
-            }).join('');
+                    <p style="font-size:.8rem;color:var(--text-light)">
+                        💡 <strong>Cuentas útiles para seguir en X/Twitter:</strong><br>
+                        ${['AlcPitalito','GobHuila','AlcFlorencia','GobCaqueta','GobPutumayo',
+                           'CAMHuila','CorpoAmazonia','ColombiaCompra'].map(u =>
+                            `<a href="https://nitter.net/${u}" target="_blank" rel="noopener"
+                               style="color:var(--accent);margin-right:.5rem;">@${u}</a>`
+                          ).join('')}
+                    </p>
+                </div>`;
         }
 
         // ---------- UI ----------
@@ -749,7 +838,8 @@
             const search = searchInput.value.trim().toLowerCase();
             
             let filtered = allNews.filter(n => {
-                if (n.horas > maxHours) return false;
+                // Ignorar filtro de tiempo si la fecha no se pudo parsear (horas negativas o > 200)
+                if (n.horas >= 0 && n.horas < 200 && n.horas > maxHours) return false;
                 if (mun) {
                     if (n.municipio !== mun && !(n.titulo + n.contenido).toLowerCase().includes(mun.toLowerCase())) return false;
                 } else if (depto) {
@@ -772,7 +862,11 @@
 
         function renderNews(items) {
             if (!items.length) {
-                newsContainer.innerHTML = '<div class="loader">sin resultados en este filtro</div>';
+                newsContainer.innerHTML = `<div class="loader">
+                    <div style="font-size:1.5rem;margin-bottom:.5rem">🔍</div>
+                    Sin resultados con los filtros actuales (${allNews.length} artículos cargados en total).<br>
+                    <small style="opacity:.7">Prueba seleccionando "todos" en departamento, o amplía el rango de tiempo.</small>
+                </div>`;
                 return;
             }
             newsContainer.innerHTML = items.map(n => {
@@ -804,7 +898,7 @@
         }
 
         async function loadAllNews() {
-            newsContainer.innerHTML = '<div class="loader">cargando noticias desde fuentes seleccionadas...</div>';
+            newsContainer.innerHTML = `<div class="loader">⏳ Consultando ${fuentesActivas.size} fuentes activas…<br><small style="opacity:.6">Esto puede tomar 15-30 segundos</small></div>`;
             await loadAllNewsFromSources();
             if (allNews.length === 0) {
                 // datos de ejemplo si nada se carga
@@ -844,7 +938,7 @@
         // Inicializar selectores de fuentes
         function initSourceSelector() {
             // Por defecto activamos algunas fuentes
-            const defaultSources = ['El Tiempo (Colombia)', 'El Espectador', 'Semana', 'Diario del Huila', 'Google News (municipios)'];
+            const defaultSources = ['El Tiempo','El Espectador','Semana','RCN Radio','Diario del Huila','Huila Extra','Laboyanos (Pitalito)','La Nación Huila','Lente Regional','Conexión Putumayo','Google News (municipios)'];
             RSS_FUENTES.forEach(fuente => {
                 const div = document.createElement('div');
                 div.className = 'source-check';
