@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>📰 Monitoreo Municipios + OT + Tweets</title>
     <style>
-        /* (el mismo CSS que antes, sin cambios) */
+        /* ========== ESTILOS MINIMALISTAS ========== */
         * {
             margin: 0;
             padding: 0;
@@ -92,7 +92,7 @@
             background: var(--card);
             border-radius: 1rem;
             padding: 1rem;
-            margin-bottom: 1.5rem;
+            margin-bottom: 1rem;
             display: flex;
             flex-wrap: wrap;
             gap: 0.75rem;
@@ -136,6 +136,32 @@
         }
         .refresh-btn:hover {
             background: #1a202c;
+        }
+        .source-selector {
+            background: var(--card);
+            border-radius: 1rem;
+            padding: 0.75rem 1rem;
+            margin-bottom: 1.5rem;
+            border: 1px solid var(--border);
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            align-items: center;
+        }
+        .source-group {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+        .source-check {
+            display: flex;
+            align-items: center;
+            gap: 0.3rem;
+            font-size: 0.8rem;
+        }
+        .source-check input {
+            width: auto;
+            margin: 0;
         }
         .tabs {
             display: flex;
@@ -273,6 +299,7 @@
         @media (max-width: 640px) {
             .filters { flex-direction: column; align-items: stretch; }
             .filter-group { min-width: auto; }
+            .source-selector { flex-direction: column; align-items: flex-start; }
             .tabs { justify-content: center; }
         }
     </style>
@@ -314,6 +341,12 @@
             </div>
         </div>
 
+        <!-- Selector de fuentes -->
+        <div class="source-selector">
+            <span style="font-size:0.8rem; font-weight:500;">📡 Fuentes:</span>
+            <div class="source-group" id="sourceCheckboxes"></div>
+        </div>
+
         <div class="tabs">
             <button class="tab-btn active" data-feed="todos">🔀 todas</button>
             <button class="tab-btn" data-feed="municipios">🏙️ municipios</button>
@@ -342,13 +375,13 @@
 
         <div class="footer">
             <p>📍 municipios: Pitalito, Palestina, San Agustín, Isnos, Palermo, Orito, Puerto Caicedo, Valle del Guamuez, Florencia<br>
-            🏛️ OT: cualquier lugar de Colombia · 🐦 Tweets: búsqueda por #municipio (vía Nitter.net)</p>
+            🏛️ OT: cualquier lugar de Colombia · 🐦 Tweets: búsqueda por #municipio (vía Nitter)</p>
             <p id="lastUpdate">⏱️ actualizado: --</p>
         </div>
     </div>
 
     <script>
-        // ---------- CONSTANTS ----------
+        // ---------- CONSTANTES ----------
         const ALLOWED_MUNICIPIOS = ['Pitalito', 'Palestina', 'San Agustín', 'Isnos', 'Palermo', 'Orito', 'Puerto Caicedo', 'Valle del Guamuez', 'Florencia'];
         const DEPTOS = {
             'Huila': ['Pitalito', 'Palestina', 'San Agustín', 'Isnos', 'Palermo'],
@@ -356,12 +389,31 @@
             'Caqueta': ['Florencia']
         };
         const OT_KEYWORDS = ['ordenamiento territorial', 'pot', 'pbot', 'eot', 'planes parciales', 'plan basico', 'esquema de ordenamiento', 'revision pot', 'clasificacion suelo', 'usos del suelo', 'plan de ordenamiento', 'ley 388', 'ministerio de vivienda', 'conpes'];
-        
-        const MUNICIPIO_SEARCHES = ALLOWED_MUNICIPIOS.map(m => `${m} Colombia after:2d`); 
+
+        // LISTA DE FUENTES RSS (nombre, url, selector opcional de país/sección)
+        const RSS_FUENTES = [
+            { nombre: 'El Tiempo (Colombia)', url: 'https://www.eltiempo.com/rss/colombia.xml', categoria: 'general' },
+            { nombre: 'El Espectador', url: 'https://www.elespectador.com/rss/colombia.xml', categoria: 'general' },
+            { nombre: 'Semana', url: 'https://www.semana.com/rss/nacion.xml', categoria: 'general' },
+            { nombre: 'Diario del Huila', url: 'https://www.diariodelhuila.com/rss', categoria: 'regional' },
+            { nombre: 'La Nación (Neiva)', url: 'https://www.lanacion.com.co/rss', categoria: 'regional' },
+            { nombre: 'Pitalito Noticias', url: 'https://pitalitonoticias.com/feed/', categoria: 'local' },
+            { nombre: 'ADN Colombia', url: 'https://www.adncolombia.com/feed/', categoria: 'general' },
+            { nombre: 'El Espacio', url: 'https://elespacio.com.co/feed/', categoria: 'general' },
+            { nombre: 'Google News (municipios)', url: 'google', categoria: 'búsqueda' }  // Especial
+        ];
+
+        // Búsquedas de Google News para municipios (solo si se activa)
+        const MUNICIPIO_SEARCHES = ALLOWED_MUNICIPIOS.map(m => `${m} Colombia after:2d`);
         const OT_SEARCHES = ['"ordenamiento territorial" Colombia after:2d', 'POT Colombia after:2d', 'planes parciales Colombia after:2d', 'Ministerio de Vivienda ordenamiento after:2d'];
 
-        // CAMBIADO: instancia de Nitter que sí funciona + proxy más robusto
-        const NITTER_INSTANCE = 'https://nitter.net';
+        // Nitter: varias instancias para fallback
+        const NITTER_INSTANCES = [
+            'https://nitter.lacontrevoie.fr',
+            'https://nitter.privacydev.net',
+            'https://nitter.poast.org',
+            'https://nitter.net'
+        ];
         const PROXY = 'https://corsproxy.io/?';
 
         // ---------- GLOBAL STATE ----------
@@ -369,6 +421,7 @@
         let activeFeed = 'todos';
         let currentFiltered = [];
         let seenUrls = new Set();
+        let fuentesActivas = new Set(); // almacenará nombres de fuentes seleccionadas
 
         // DOM elements
         const deptoSelect = document.getElementById('deptoFilter');
@@ -384,6 +437,7 @@
         const loadTweetsBtn = document.getElementById('loadTweetsBtn');
         const lastUpdateSpan = document.getElementById('lastUpdate');
         const themeToggle = document.getElementById('themeToggle');
+        const sourceCheckboxesDiv = document.getElementById('sourceCheckboxes');
 
         // Helper: escape HTML
         function escapeHtml(str) {
@@ -396,7 +450,7 @@
             });
         }
 
-        // Normalizar URL (absoluta)
+        // Normalizar URL
         function normalizarUrl(url) {
             if (!url) return '#';
             if (url.startsWith('//')) return 'https:' + url;
@@ -405,131 +459,225 @@
             return '#';
         }
 
-        // ---------- RSS LOADERS (noticias) ----------
-        async function fetchRSS(query, limit = 6) {
-            const url = `https://news.google.com/rss/search?q=${encodeURIComponent(query)}&hl=es-419&gl=CO&ceid=CO:es-419`;
+        // ---------- CARGAR RSS GENÉRICO ----------
+        async function fetchRSSFeed(feedUrl, limit = 10) {
             try {
-                const response = await fetch(PROXY + encodeURIComponent(url), { signal: AbortSignal.timeout(8000) });
+                const response = await fetch(PROXY + encodeURIComponent(feedUrl), { signal: AbortSignal.timeout(8000) });
                 const text = await response.text();
                 const items = text.split('<item>').slice(1, limit+1);
                 return items.map(item => {
                     let titulo = (item.split('<title>')[1]?.split('</title>')[0] || '').replace(/<!\[CDATA\[|\]\]>/g, '');
                     let link = (item.split('<link>')[1]?.split('</link>')[0] || '').replace(/<!\[CDATA\[|\]\]>/g, '');
-                    // Si link está vacío, intentar con guid
                     if (!link) {
                         link = (item.split('<guid>')[1]?.split('</guid>')[0] || '').replace(/<!\[CDATA\[|\]\]>/g, '');
-                    }
-                    // Si sigue vacío, extraer de la descripción (último recurso)
-                    if (!link) {
-                        let desc = (item.split('<description>')[1]?.split('</description>')[0] || '').replace(/<!\[CDATA\[|\]\]>/g, '');
-                        let match = desc.match(/<a href="([^"]+)"/);
-                        if (match) link = match[1];
                     }
                     let desc = (item.split('<description>')[1]?.split('</description>')[0] || '').replace(/<!\[CDATA\[|\]\]>/g, '').replace(/<[^>]*>/g, '');
                     let fechaStr = item.split('<pubDate>')[1]?.split('</pubDate>')[0] || '';
                     let fecha = new Date(fechaStr);
                     if (isNaN(fecha.getTime())) fecha = new Date();
-                    return { titulo, link, desc, fecha };
+                    return { titulo, link, desc, fecha, fuente: feedUrl };
                 }).filter(i => i.titulo && i.link);
             } catch(e) {
-                console.warn('Error en RSS:', query, e);
+                console.warn(`Error en RSS ${feedUrl}:`, e);
                 return [];
             }
         }
 
-        async function loadMunicipioNews() {
-            const promises = MUNICIPIO_SEARCHES.map(q => fetchRSS(q, 4));
-            const results = await Promise.all(promises);
-            const flat = results.flat();
-            for (let item of flat) {
-                if (seenUrls.has(item.link)) continue;
-                seenUrls.add(item.link);
-                const fullText = (item.titulo + ' ' + item.desc).toLowerCase();
-                const matchedMun = ALLOWED_MUNICIPIOS.find(m => fullText.includes(m.toLowerCase()));
-                if (matchedMun) {
-                    const horas = (new Date() - item.fecha) / (1000*3600);
-                    allNews.push({
-                        titulo: item.titulo,
-                        contenido: item.desc || item.titulo,
-                        url: item.link,
-                        fecha: item.fecha,
-                        horas,
-                        tipo: 'municipio',
-                        municipio: matchedMun,
-                        esOT: false
-                    });
-                }
+        // Cargar Google News como fuente especial
+        async function fetchGoogleNewsMunicipios() {
+            const items = [];
+            for (let busqueda of MUNICIPIO_SEARCHES) {
+                const url = `https://news.google.com/rss/search?q=${encodeURIComponent(busqueda)}&hl=es-419&gl=CO&ceid=CO:es-419`;
+                try {
+                    const response = await fetch(PROXY + encodeURIComponent(url), { signal: AbortSignal.timeout(8000) });
+                    const text = await response.text();
+                    const rssItems = text.split('<item>').slice(1, 4);
+                    for (let item of rssItems) {
+                        let titulo = (item.split('<title>')[1]?.split('</title>')[0] || '').replace(/<!\[CDATA\[|\]\]>/g, '');
+                        let link = (item.split('<link>')[1]?.split('</link>')[0] || '').replace(/<!\[CDATA\[|\]\]>/g, '');
+                        if (!link) link = (item.split('<guid>')[1]?.split('</guid>')[0] || '');
+                        let desc = (item.split('<description>')[1]?.split('</description>')[0] || '').replace(/<!\[CDATA\[|\]\]>/g, '').replace(/<[^>]*>/g, '');
+                        let fechaStr = item.split('<pubDate>')[1]?.split('</pubDate>')[0] || '';
+                        let fecha = new Date(fechaStr);
+                        if (isNaN(fecha.getTime())) fecha = new Date();
+                        items.push({ titulo, link, desc, fecha, fuente: 'Google News' });
+                    }
+                } catch(e) { console.warn(e); }
             }
+            return items;
         }
 
-        async function loadOTNews() {
-            const promises = OT_SEARCHES.map(q => fetchRSS(q, 6));
-            const results = await Promise.all(promises);
-            const flat = results.flat();
-            for (let item of flat) {
-                if (seenUrls.has(item.link)) continue;
-                seenUrls.add(item.link);
-                const fullText = (item.titulo + ' ' + item.desc).toLowerCase();
-                const esOT = OT_KEYWORDS.some(kw => fullText.includes(kw));
-                if (esOT) {
-                    const horas = (new Date() - item.fecha) / (1000*3600);
-                    allNews.push({
-                        titulo: item.titulo,
-                        contenido: item.desc || item.titulo,
-                        url: item.link,
-                        fecha: item.fecha,
-                        horas,
-                        tipo: 'ot',
-                        municipio: 'Nacional',
-                        esOT: true
-                    });
-                }
+        async function fetchGoogleNewsOT() {
+            const items = [];
+            for (let busqueda of OT_SEARCHES) {
+                const url = `https://news.google.com/rss/search?q=${encodeURIComponent(busqueda)}&hl=es-419&gl=CO&ceid=CO:es-419`;
+                try {
+                    const response = await fetch(PROXY + encodeURIComponent(url), { signal: AbortSignal.timeout(8000) });
+                    const text = await response.text();
+                    const rssItems = text.split('<item>').slice(1, 5);
+                    for (let item of rssItems) {
+                        let titulo = (item.split('<title>')[1]?.split('</title>')[0] || '').replace(/<!\[CDATA\[|\]\]>/g, '');
+                        let link = (item.split('<link>')[1]?.split('</link>')[0] || '').replace(/<!\[CDATA\[|\]\]>/g, '');
+                        if (!link) link = (item.split('<guid>')[1]?.split('</guid>')[0] || '');
+                        let desc = (item.split('<description>')[1]?.split('</description>')[0] || '').replace(/<!\[CDATA\[|\]\]>/g, '').replace(/<[^>]*>/g, '');
+                        let fechaStr = item.split('<pubDate>')[1]?.split('</pubDate>')[0] || '';
+                        let fecha = new Date(fechaStr);
+                        if (isNaN(fecha.getTime())) fecha = new Date();
+                        items.push({ titulo, link, desc, fecha, fuente: 'Google News' });
+                    }
+                } catch(e) { console.warn(e); }
             }
+            return items;
         }
 
-        // ---------- TWEETS LOADER (Nitter con proxy) ----------
+        // Cargar todas las fuentes seleccionadas
+        async function loadAllNewsFromSources() {
+            allNews = [];
+            seenUrls.clear();
+            const promises = [];
+
+            if (fuentesActivas.has('Google News (municipios)')) {
+                promises.push(fetchGoogleNewsMunicipios().then(items => {
+                    items.forEach(item => {
+                        if (seenUrls.has(item.link)) return;
+                        seenUrls.add(item.link);
+                        const fullText = (item.titulo + ' ' + item.desc).toLowerCase();
+                        const matchedMun = ALLOWED_MUNICIPIOS.find(m => fullText.includes(m.toLowerCase()));
+                        if (matchedMun) {
+                            const horas = (new Date() - item.fecha) / (1000*3600);
+                            allNews.push({
+                                titulo: item.titulo,
+                                contenido: item.desc || item.titulo,
+                                url: item.link,
+                                fecha: item.fecha,
+                                horas,
+                                tipo: 'municipio',
+                                municipio: matchedMun,
+                                esOT: false,
+                                fuente: item.fuente
+                            });
+                        }
+                    });
+                }));
+                // OT también desde Google News
+                promises.push(fetchGoogleNewsOT().then(items => {
+                    items.forEach(item => {
+                        if (seenUrls.has(item.link)) return;
+                        seenUrls.add(item.link);
+                        const fullText = (item.titulo + ' ' + item.desc).toLowerCase();
+                        const esOT = OT_KEYWORDS.some(kw => fullText.includes(kw));
+                        if (esOT) {
+                            const horas = (new Date() - item.fecha) / (1000*3600);
+                            allNews.push({
+                                titulo: item.titulo,
+                                contenido: item.desc || item.titulo,
+                                url: item.link,
+                                fecha: item.fecha,
+                                horas,
+                                tipo: 'ot',
+                                municipio: 'Nacional',
+                                esOT: true,
+                                fuente: item.fuente
+                            });
+                        }
+                    });
+                }));
+            }
+
+            // Fuentes RSS normales
+            for (let fuente of RSS_FUENTES) {
+                if (fuente.nombre === 'Google News (municipios)') continue;
+                if (fuentesActivas.has(fuente.nombre)) {
+                    promises.push(fetchRSSFeed(fuente.url, 8).then(items => {
+                        items.forEach(item => {
+                            if (seenUrls.has(item.link)) return;
+                            seenUrls.add(item.link);
+                            const fullText = (item.titulo + ' ' + item.desc).toLowerCase();
+                            // Verificar si es municipio específico
+                            const matchedMun = ALLOWED_MUNICIPIOS.find(m => fullText.includes(m.toLowerCase()));
+                            if (matchedMun) {
+                                const horas = (new Date() - item.fecha) / (1000*3600);
+                                allNews.push({
+                                    titulo: item.titulo,
+                                    contenido: item.desc || item.titulo,
+                                    url: item.link,
+                                    fecha: item.fecha,
+                                    horas,
+                                    tipo: 'municipio',
+                                    municipio: matchedMun,
+                                    esOT: false,
+                                    fuente: fuente.nombre
+                                });
+                            }
+                            // Verificar si es OT
+                            const esOT = OT_KEYWORDS.some(kw => fullText.includes(kw));
+                            if (esOT && !matchedMun) { // Evitar duplicar si ya se agregó como municipio
+                                const horas = (new Date() - item.fecha) / (1000*3600);
+                                allNews.push({
+                                    titulo: item.titulo,
+                                    contenido: item.desc || item.titulo,
+                                    url: item.link,
+                                    fecha: item.fecha,
+                                    horas,
+                                    tipo: 'ot',
+                                    municipio: 'Nacional',
+                                    esOT: true,
+                                    fuente: fuente.nombre
+                                });
+                            }
+                        });
+                    }));
+                }
+            }
+
+            await Promise.all(promises);
+            allNews.sort((a,b) => b.fecha - a.fecha);
+        }
+
+        // ---------- TWEETS (con fallback de instancias) ----------
         async function loadTweetsForMunicipio(municipio) {
             if (!municipio) return [];
             const hashtag = `#${municipio.replace(/\s+/g, '')}`;
-            const nitterUrl = `${NITTER_INSTANCE}/search/rss?q=${encodeURIComponent(hashtag)}&f=tweets&tweets_only=on`;
-            try {
-                const response = await fetch(PROXY + encodeURIComponent(nitterUrl), { signal: AbortSignal.timeout(10000) });
-                const text = await response.text();
-                // Si el proxy devuelve error o texto vacío, mostramos warning
-                if (!text.trim()) throw new Error('Respuesta vacía');
-                const items = text.split('<item>').slice(1, 10);
-                const tweets = [];
-                for (let item of items) {
-                    let title = (item.split('<title>')[1]?.split('</title>')[0] || '').replace(/<!\[CDATA\[|\]\]>/g, '');
-                    let link = (item.split('<link>')[1]?.split('</link>')[0] || '').replace(/<!\[CDATA\[|\]\]>/g, '');
-                    let description = (item.split('<description>')[1]?.split('</description>')[0] || '').replace(/<!\[CDATA\[|\]\]>/g, '').replace(/<[^>]*>/g, '');
-                    let pubDate = (item.split('<pubDate>')[1]?.split('</pubDate>')[0] || '');
-                    let fecha = new Date(pubDate);
-                    if (isNaN(fecha.getTime())) fecha = new Date();
-                    
-                    let author = '';
-                    let tweetText = title;
-                    if (title.includes(':')) {
-                        let parts = title.split(':');
-                        author = parts[0];
-                        tweetText = parts.slice(1).join(':').trim();
+            for (let instance of NITTER_INSTANCES) {
+                try {
+                    const nitterUrl = `${instance}/search/rss?q=${encodeURIComponent(hashtag)}&f=tweets&tweets_only=on`;
+                    const response = await fetch(PROXY + encodeURIComponent(nitterUrl), { signal: AbortSignal.timeout(10000) });
+                    const text = await response.text();
+                    if (!text.trim()) throw new Error('Vacío');
+                    const items = text.split('<item>').slice(1, 10);
+                    const tweets = [];
+                    for (let item of items) {
+                        let title = (item.split('<title>')[1]?.split('</title>')[0] || '').replace(/<!\[CDATA\[|\]\]>/g, '');
+                        let link = (item.split('<link>')[1]?.split('</link>')[0] || '').replace(/<!\[CDATA\[|\]\]>/g, '');
+                        let description = (item.split('<description>')[1]?.split('</description>')[0] || '').replace(/<!\[CDATA\[|\]\]>/g, '').replace(/<[^>]*>/g, '');
+                        let pubDate = (item.split('<pubDate>')[1]?.split('</pubDate>')[0] || '');
+                        let fecha = new Date(pubDate);
+                        if (isNaN(fecha.getTime())) fecha = new Date();
+                        
+                        let author = '';
+                        let tweetText = title;
+                        if (title.includes(':')) {
+                            let parts = title.split(':');
+                            author = parts[0];
+                            tweetText = parts.slice(1).join(':').trim();
+                        }
+                        if (!tweetText && description) tweetText = description;
+                        
+                        tweets.push({
+                            author: author || 'usuario',
+                            text: tweetText,
+                            url: link,
+                            date: fecha,
+                            horas: (new Date() - fecha) / (1000*3600)
+                        });
                     }
-                    // Si no se pudo extraer autor, usar la descripción como texto
-                    if (!tweetText && description) tweetText = description;
-                    
-                    tweets.push({
-                        author: author || 'usuario',
-                        text: tweetText,
-                        url: link,
-                        date: fecha,
-                        horas: (new Date() - fecha) / (1000*3600)
-                    });
+                    if (tweets.length) return tweets;
+                } catch(e) {
+                    console.warn(`Instancia ${instance} falló:`, e);
+                    continue;
                 }
-                return tweets;
-            } catch(e) {
-                console.warn('Error cargando tweets:', e);
-                return [];
             }
+            return []; // ninguna funcionó
         }
 
         async function refreshTweets() {
@@ -574,7 +722,7 @@
             }).join('');
         }
 
-        // ---------- UI MANAGEMENT ----------
+        // ---------- UI ----------
         function setActiveFeed(feed) {
             activeFeed = feed;
             document.querySelectorAll('.tab-btn').forEach(btn => {
@@ -634,6 +782,7 @@
                 const badgeTiempo = horasAgo < 24 ? '🟡 hoy' : '🟢 ayer';
                 const fechaStr = n.fecha.toLocaleDateString('es-CO');
                 const urlFinal = normalizarUrl(n.url);
+                const fuenteTexto = n.fuente ? `📰 ${n.fuente}` : '';
                 
                 return `
                     <div class="card">
@@ -646,7 +795,7 @@
                         </div>
                         <div class="card-body">${escapeHtml(n.contenido.substring(0, 180))}${n.contenido.length > 180 ? '…' : ''}</div>
                         <div class="card-footer">
-                            <span>📅 ${fechaStr}</span>
+                            <span>📅 ${fechaStr} ${fuenteTexto}</span>
                             <a href="${urlFinal}" target="_blank" rel="noopener" class="btn-link">leer más →</a>
                         </div>
                     </div>
@@ -655,14 +804,10 @@
         }
 
         async function loadAllNews() {
-            newsContainer.innerHTML = '<div class="loader">cargando noticias...</div>';
-            allNews = [];
-            seenUrls.clear();
-            
-            await Promise.all([loadMunicipioNews(), loadOTNews()]);
-            allNews.sort((a,b) => b.fecha - a.fecha);
-            
+            newsContainer.innerHTML = '<div class="loader">cargando noticias desde fuentes seleccionadas...</div>';
+            await loadAllNewsFromSources();
             if (allNews.length === 0) {
+                // datos de ejemplo si nada se carga
                 allNews.push({
                     titulo: 'Pitalito: avances en vivienda social',
                     contenido: 'Entrega de 25 viviendas en zona urbana.',
@@ -671,7 +816,8 @@
                     horas: 3,
                     tipo: 'municipio',
                     municipio: 'Pitalito',
-                    esOT: false
+                    esOT: false,
+                    fuente: 'Ejemplo'
                 });
                 allNews.push({
                     titulo: 'Minvivienda presenta lineamientos para la actualización del POT',
@@ -681,10 +827,10 @@
                     horas: 10,
                     tipo: 'ot',
                     municipio: 'Nacional',
-                    esOT: true
+                    esOT: true,
+                    fuente: 'Ejemplo'
                 });
             }
-            
             applyFilters();
             lastUpdateSpan.textContent = `⏱️ actualizado: ${new Date().toLocaleString('es-CO')}`;
         }
@@ -693,6 +839,33 @@
             const depto = deptoSelect.value;
             let muns = depto ? DEPTOS[depto] || [] : ALLOWED_MUNICIPIOS;
             munSelect.innerHTML = '<option value="">todos</option>' + muns.map(m => `<option value="${m}">${m}</option>`).join('');
+        }
+
+        // Inicializar selectores de fuentes
+        function initSourceSelector() {
+            // Por defecto activamos algunas fuentes
+            const defaultSources = ['El Tiempo (Colombia)', 'El Espectador', 'Semana', 'Diario del Huila', 'Google News (municipios)'];
+            RSS_FUENTES.forEach(fuente => {
+                const div = document.createElement('div');
+                div.className = 'source-check';
+                const cb = document.createElement('input');
+                cb.type = 'checkbox';
+                cb.value = fuente.nombre;
+                cb.id = `src_${fuente.nombre.replace(/\s/g, '_')}`;
+                cb.checked = defaultSources.includes(fuente.nombre);
+                const label = document.createElement('label');
+                label.htmlFor = cb.id;
+                label.textContent = fuente.nombre;
+                div.appendChild(cb);
+                div.appendChild(label);
+                sourceCheckboxesDiv.appendChild(div);
+                cb.addEventListener('change', () => {
+                    if (cb.checked) fuentesActivas.add(fuente.nombre);
+                    else fuentesActivas.delete(fuente.nombre);
+                    loadAllNews();
+                });
+                if (cb.checked) fuentesActivas.add(fuente.nombre);
+            });
         }
 
         function initTheme() {
@@ -739,6 +912,7 @@
         async function init() {
             initTheme();
             bindEvents();
+            initSourceSelector();
             updateMunicipiosDropdown();
             await loadAllNews();
             setActiveFeed('todos');
