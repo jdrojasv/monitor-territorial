@@ -5,229 +5,41 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>🐦 Monitoreo Municipios + OT (Twitter)</title>
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-        :root {
-            --bg: #f4f5f7;
-            --card: #ffffff;
-            --text: #1e2a3a;
-            --text-light: #5a6874;
-            --border: #e2e8f0;
-            --accent: #1da1f2;
-            --accent-hover: #0c8bd9;
-            --time-badge: #718096;
-        }
-        body.dark {
-            --bg: #0f172a;
-            --card: #1e293b;
-            --text: #e2e8f0;
-            --text-light: #94a3b8;
-            --border: #334155;
-            --accent: #1e88e5;
-            --accent-hover: #0c6eb3;
-            --time-badge: #a0aec0;
-        }
-        body {
-            font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
-            background: var(--bg);
-            color: var(--text);
-            padding: 1rem;
-            transition: background 0.2s, color 0.2s;
-            line-height: 1.5;
-        }
-        .container {
-            max-width: 1000px;
-            margin: 0 auto;
-        }
-        .theme-toggle {
-            position: fixed;
-            bottom: 1.5rem;
-            right: 1.5rem;
-            background: var(--card);
-            border: 1px solid var(--border);
-            border-radius: 2rem;
-            padding: 0.5rem 1rem;
-            cursor: pointer;
-            font-size: 0.9rem;
-            display: flex;
-            gap: 0.5rem;
-            align-items: center;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-            z-index: 100;
-            transition: all 0.2s;
-        }
-        .theme-toggle:hover {
-            transform: scale(1.02);
-            border-color: var(--accent);
-        }
-        .header {
-            margin-bottom: 2rem;
-            text-align: center;
-        }
-        .header h1 {
-            font-size: 1.8rem;
-            font-weight: 600;
-            background: linear-gradient(135deg, var(--accent), #5a67d8);
-            -webkit-background-clip: text;
-            background-clip: text;
-            color: transparent;
-            margin-bottom: 0.25rem;
-        }
-        .sub {
-            color: var(--text-light);
-            font-size: 0.85rem;
-            margin-top: 0.25rem;
-        }
-        .filters {
-            background: var(--card);
-            border-radius: 1rem;
-            padding: 1rem;
-            margin-bottom: 1.5rem;
-            display: flex;
-            flex-wrap: wrap;
-            gap: 0.75rem;
-            align-items: flex-end;
-            border: 1px solid var(--border);
-        }
-        .filter-group {
-            flex: 1;
-            min-width: 180px;
-        }
-        .filter-group label {
-            display: block;
-            font-size: 0.7rem;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            color: var(--text-light);
-            margin-bottom: 0.25rem;
-        }
-        select, input, button {
-            width: 100%;
-            padding: 0.5rem;
-            border-radius: 0.5rem;
-            border: 1px solid var(--border);
-            background: var(--bg);
-            color: var(--text);
-            font-size: 0.85rem;
-            transition: all 0.15s;
-        }
-        button {
-            background: var(--accent);
-            color: white;
-            border: none;
-            cursor: pointer;
-            font-weight: 500;
-        }
-        button:hover {
-            background: var(--accent-hover);
-        }
-        .tweets-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-            gap: 1rem;
-        }
-        .card {
-            background: var(--card);
-            border-radius: 1rem;
-            overflow: hidden;
-            border: 1px solid var(--border);
-            transition: transform 0.1s ease, box-shadow 0.1s;
-        }
-        .card:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 20px rgba(0,0,0,0.08);
-        }
-        .card-header {
-            padding: 1rem;
-            border-bottom: 1px solid var(--border);
-        }
-        .tweet-author {
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            margin-bottom: 0.5rem;
-        }
-        .tweet-avatar {
-            width: 32px;
-            height: 32px;
-            border-radius: 50%;
-            background: var(--accent);
-            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="white"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>');
-            background-size: 60%;
-            background-position: center;
-            background-repeat: no-repeat;
-        }
-        .tweet-name {
-            font-weight: 600;
-            font-size: 0.9rem;
-            color: var(--text);
-        }
-        .tweet-username {
-            font-size: 0.7rem;
-            color: var(--text-light);
-        }
-        .meta {
-            display: flex;
-            gap: 0.5rem;
-            flex-wrap: wrap;
-            margin-top: 0.5rem;
-        }
-        .badge {
-            font-size: 0.7rem;
-            padding: 0.2rem 0.6rem;
-            border-radius: 1rem;
-            font-weight: 500;
-        }
-        .badge-time {
-            background: var(--time-badge);
-            color: white;
-        }
-        .card-body {
-            padding: 1rem;
-            color: var(--text-light);
-            font-size: 0.85rem;
-        }
-        .card-footer {
-            padding: 0.8rem 1rem;
-            border-top: 1px solid var(--border);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            font-size: 0.75rem;
-            color: var(--text-light);
-        }
-        .btn-link {
-            background: transparent;
-            color: var(--accent);
-            padding: 0;
-            font-weight: 500;
-            width: auto;
-            text-decoration: none;
-        }
-        .btn-link:hover {
-            background: transparent;
-            text-decoration: underline;
-        }
-        .loader {
-            text-align: center;
-            padding: 3rem;
-            color: var(--text-light);
-        }
-        .footer {
-            margin-top: 2rem;
-            text-align: center;
-            font-size: 0.75rem;
-            color: var(--text-light);
-            border-top: 1px solid var(--border);
-            padding-top: 1rem;
-        }
-        @media (max-width: 640px) {
-            .filters { flex-direction: column; align-items: stretch; }
-            .filter-group { min-width: auto; }
-        }
+        /* (mismo CSS que antes, se omite por brevedad) */
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        :root { --bg: #f4f5f7; --card: #ffffff; --text: #1e2a3a; --text-light: #5a6874; --border: #e2e8f0; --accent: #1da1f2; --accent-hover: #0c8bd9; --time-badge: #718096; }
+        body.dark { --bg: #0f172a; --card: #1e293b; --text: #e2e8f0; --text-light: #94a3b8; --border: #334155; --accent: #1e88e5; --accent-hover: #0c6eb3; --time-badge: #a0aec0; }
+        body { font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif; background: var(--bg); color: var(--text); padding: 1rem; transition: background 0.2s, color 0.2s; line-height: 1.5; }
+        .container { max-width: 1000px; margin: 0 auto; }
+        .theme-toggle { position: fixed; bottom: 1.5rem; right: 1.5rem; background: var(--card); border: 1px solid var(--border); border-radius: 2rem; padding: 0.5rem 1rem; cursor: pointer; font-size: 0.9rem; display: flex; gap: 0.5rem; align-items: center; box-shadow: 0 2px 8px rgba(0,0,0,0.1); z-index: 100; transition: all 0.2s; }
+        .theme-toggle:hover { transform: scale(1.02); border-color: var(--accent); }
+        .header { margin-bottom: 2rem; text-align: center; }
+        .header h1 { font-size: 1.8rem; font-weight: 600; background: linear-gradient(135deg, var(--accent), #5a67d8); -webkit-background-clip: text; background-clip: text; color: transparent; margin-bottom: 0.25rem; }
+        .sub { color: var(--text-light); font-size: 0.85rem; margin-top: 0.25rem; }
+        .filters { background: var(--card); border-radius: 1rem; padding: 1rem; margin-bottom: 1.5rem; display: flex; flex-wrap: wrap; gap: 0.75rem; align-items: flex-end; border: 1px solid var(--border); }
+        .filter-group { flex: 1; min-width: 180px; }
+        .filter-group label { display: block; font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.5px; color: var(--text-light); margin-bottom: 0.25rem; }
+        select, input, button { width: 100%; padding: 0.5rem; border-radius: 0.5rem; border: 1px solid var(--border); background: var(--bg); color: var(--text); font-size: 0.85rem; transition: all 0.15s; }
+        button { background: var(--accent); color: white; border: none; cursor: pointer; font-weight: 500; }
+        button:hover { background: var(--accent-hover); }
+        .tweets-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 1rem; }
+        .card { background: var(--card); border-radius: 1rem; overflow: hidden; border: 1px solid var(--border); transition: transform 0.1s ease, box-shadow 0.1s; }
+        .card:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(0,0,0,0.08); }
+        .card-header { padding: 1rem; border-bottom: 1px solid var(--border); }
+        .tweet-author { display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.5rem; }
+        .tweet-avatar { width: 32px; height: 32px; border-radius: 50%; background: var(--accent); background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="white"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>'); background-size: 60%; background-position: center; background-repeat: no-repeat; }
+        .tweet-name { font-weight: 600; font-size: 0.9rem; color: var(--text); }
+        .tweet-username { font-size: 0.7rem; color: var(--text-light); }
+        .meta { display: flex; gap: 0.5rem; flex-wrap: wrap; margin-top: 0.5rem; }
+        .badge { font-size: 0.7rem; padding: 0.2rem 0.6rem; border-radius: 1rem; font-weight: 500; }
+        .badge-time { background: var(--time-badge); color: white; }
+        .card-body { padding: 1rem; color: var(--text-light); font-size: 0.85rem; }
+        .card-footer { padding: 0.8rem 1rem; border-top: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; font-size: 0.75rem; color: var(--text-light); }
+        .btn-link { background: transparent; color: var(--accent); padding: 0; font-weight: 500; width: auto; text-decoration: none; }
+        .btn-link:hover { background: transparent; text-decoration: underline; }
+        .loader { text-align: center; padding: 3rem; color: var(--text-light); }
+        .footer { margin-top: 2rem; text-align: center; font-size: 0.75rem; color: var(--text-light); border-top: 1px solid var(--border); padding-top: 1rem; }
+        @media (max-width: 640px) { .filters { flex-direction: column; align-items: stretch; } .filter-group { min-width: auto; } }
     </style>
 </head>
 <body>
@@ -272,14 +84,23 @@
     <script>
         // ---------- CONFIGURACIÓN ----------
         const MUNICIPIOS = ['Pitalito', 'Palestina', 'San Agustín', 'Isnos', 'Palermo', 'Orito', 'Puerto Caicedo', 'Valle del Guamuez', 'Florencia'];
+        
         // Lista de instancias de Nitter (en orden de preferencia)
         const NITTER_INSTANCES = [
             'https://nitter.net',
             'https://nitter.lacontrevoie.fr',
             'https://nitter.privacydev.net',
-            'https://nitter.poast.org'
+            'https://nitter.poast.org',
+            'https://nitter.space',
+            'https://nitter.mint.lgbt'
         ];
-        const PROXY = 'https://corsproxy.io/?';
+        
+        // Lista de proxies públicos (fallback)
+        const PROXIES = [
+            'https://corsproxy.io/?',
+            'https://api.allorigins.win/raw?url=',
+            'https://cors-anywhere.herokuapp.com/'
+        ];
 
         // Elementos DOM
         const municipioSelect = document.getElementById('municipioSelect');
@@ -329,7 +150,16 @@
             return null;
         }
 
-        // Función principal: buscar tweets para un municipio y palabra clave opcional
+        // Función que intenta fetch con un proxy y una instancia
+        async function fetchWithProxyAndInstance(proxy, instance, query) {
+            const url = `${instance}/search/rss?q=${encodeURIComponent(query)}&f=tweets&tweets_only=on`;
+            const fullUrl = proxy + encodeURIComponent(url);
+            const response = await fetch(fullUrl, { signal: AbortSignal.timeout(10000) });
+            if (!response.ok) throw new Error(`HTTP ${response.status}`);
+            return await response.text();
+        }
+
+        // Búsqueda principal con múltiples proxies e instancias
         async function buscarTweets(municipio, keyword) {
             if (!municipio) return [];
 
@@ -339,63 +169,70 @@
                 query += ` ${keyword.trim()}`;
             }
 
-            // Intentar con cada instancia de Nitter hasta que funcione
-            for (let instance of NITTER_INSTANCES) {
-                try {
-                    const nitterUrl = `${instance}/search/rss?q=${encodeURIComponent(query)}&f=tweets&tweets_only=on`;
-                    const response = await fetch(PROXY + encodeURIComponent(nitterUrl), { signal: AbortSignal.timeout(12000) });
-                    const text = await response.text();
+            // Recorrer todos los proxies e instancias en orden
+            for (let proxy of PROXIES) {
+                for (let instance of NITTER_INSTANCES) {
+                    try {
+                        console.log(`Intentando: ${proxy} → ${instance} con query: ${query}`);
+                        const text = await fetchWithProxyAndInstance(proxy, instance, query);
 
-                    // Detectar errores comunes (whitelist, rate limit)
-                    if (text.includes('not yet whitelisted') || text.includes('rate limit') || text.includes('blocked') || text.includes('too many requests')) {
-                        console.warn(`Instancia ${instance} bloqueada, probando siguiente...`);
+                        // Detectar errores comunes en el contenido
+                        if (text.includes('not yet whitelisted') || 
+                            text.includes('rate limit') || 
+                            text.includes('blocked') || 
+                            text.includes('too many requests')) {
+                            console.warn(`Instancia ${instance} bloqueada (texto de error)`);
+                            continue;
+                        }
+                        if (!text.trim()) continue;
+
+                        const items = text.split('<item>').slice(1, 15);
+                        if (items.length === 0) continue;
+
+                        const tweets = [];
+                        for (let item of items) {
+                            let title = (item.split('<title>')[1]?.split('</title>')[0] || '').replace(/<!\[CDATA\[|\]\]>/g, '');
+                            let link = (item.split('<link>')[1]?.split('</link>')[0] || '').replace(/<!\[CDATA\[|\]\]>/g, '');
+                            let description = (item.split('<description>')[1]?.split('</description>')[0] || '').replace(/<!\[CDATA\[|\]\]>/g, '').replace(/<[^>]*>/g, '');
+                            let pubDate = (item.split('<pubDate>')[1]?.split('</pubDate>')[0] || '');
+                            let fecha = parseDate(pubDate);
+                            if (!fecha || isNaN(fecha.getTime())) fecha = new Date();
+
+                            // Extraer autor y texto del título (formato "Autor: texto")
+                            let author = '';
+                            let tweetText = title;
+                            if (title.includes(':')) {
+                                let parts = title.split(':');
+                                author = parts[0];
+                                tweetText = parts.slice(1).join(':').trim();
+                            }
+                            if (!tweetText && description) tweetText = description;
+
+                            tweets.push({
+                                author: author || 'usuario',
+                                text: tweetText,
+                                url: link,
+                                date: fecha,
+                                horas: (new Date() - fecha) / (1000 * 3600)
+                            });
+                        }
+                        if (tweets.length) {
+                            console.log(`Éxito con proxy=${proxy} instancia=${instance}`);
+                            return tweets;
+                        }
+                    } catch(e) {
+                        console.warn(`Error con proxy=${proxy} instancia=${instance}:`, e.message);
                         continue;
                     }
-                    if (!text.trim()) continue;
-
-                    const items = text.split('<item>').slice(1, 15); // máximo 15 tweets
-                    if (items.length === 0) continue;
-
-                    const tweets = [];
-                    for (let item of items) {
-                        let title = (item.split('<title>')[1]?.split('</title>')[0] || '').replace(/<!\[CDATA\[|\]\]>/g, '');
-                        let link = (item.split('<link>')[1]?.split('</link>')[0] || '').replace(/<!\[CDATA\[|\]\]>/g, '');
-                        let description = (item.split('<description>')[1]?.split('</description>')[0] || '').replace(/<!\[CDATA\[|\]\]>/g, '').replace(/<[^>]*>/g, '');
-                        let pubDate = (item.split('<pubDate>')[1]?.split('</pubDate>')[0] || '');
-                        let fecha = parseDate(pubDate);
-                        if (!fecha || isNaN(fecha.getTime())) fecha = new Date();
-
-                        // Extraer autor y texto del título (formato "Autor: texto")
-                        let author = '';
-                        let tweetText = title;
-                        if (title.includes(':')) {
-                            let parts = title.split(':');
-                            author = parts[0];
-                            tweetText = parts.slice(1).join(':').trim();
-                        }
-                        if (!tweetText && description) tweetText = description;
-
-                        tweets.push({
-                            author: author || 'usuario',
-                            text: tweetText,
-                            url: link,
-                            date: fecha,
-                            horas: (new Date() - fecha) / (1000 * 3600)
-                        });
-                    }
-                    if (tweets.length) return tweets; // éxito
-                } catch(e) {
-                    console.warn(`Error con instancia ${instance}:`, e);
-                    continue;
                 }
             }
-            return []; // ninguna instancia devolvió resultados
+            return []; // ninguna combinación funcionó
         }
 
         // Renderizar tweets en el contenedor
         function renderTweets(tweets, municipio, keyword) {
             if (!tweets.length) {
-                tweetsContainer.innerHTML = `<div class="loader">⚠️ No se encontraron tweets para "${municipio}${keyword ? ' + ' + keyword : ''}".<br>Intenta con otro municipio o más tarde.</div>`;
+                tweetsContainer.innerHTML = `<div class="loader">⚠️ No se encontraron tweets para "${municipio}${keyword ? ' + ' + keyword : ''}".<br>Revisa la consola del navegador (F12) para ver más detalles.</div>`;
                 return;
             }
 
@@ -431,7 +268,7 @@
             lastUpdateSpan.textContent = `⏱️ última búsqueda: ${new Date().toLocaleString('es-CO')}`;
         }
 
-        // Manejador de búsqueda
+        // Manejador de búsqueda con logs en consola
         async function onSearch() {
             const municipio = municipioSelect.value;
             if (!municipio) {
@@ -441,13 +278,14 @@
             const keyword = keywordInput.value.trim();
 
             tweetsContainer.innerHTML = '<div class="loader">Buscando tweets en Nitter...</div>';
+            console.log(`Buscando: municipio=${municipio}, keyword=${keyword}`);
             const tweets = await buscarTweets(municipio, keyword);
             renderTweets(tweets, municipio, keyword);
         }
 
         searchBtn.addEventListener('click', onSearch);
 
-        // Modo oscuro (igual que antes)
+        // Modo oscuro
         function initTheme() {
             const isDark = localStorage.getItem('darkMode') === 'enabled';
             if (isDark) {
@@ -465,8 +303,6 @@
         }
 
         initTheme();
-
-        // Opcional: buscar al cargar la página con algún ejemplo? No, mejor dejar que el usuario elija.
     </script>
 </body>
 </html>
