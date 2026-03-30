@@ -3,43 +3,279 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>🐦 Monitoreo Municipios + OT (Twitter)</title>
+    <title>📰 Monitoreo Municipios + OT + Tweets</title>
     <style>
-        /* (mismo CSS que antes, se omite por brevedad) */
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        :root { --bg: #f4f5f7; --card: #ffffff; --text: #1e2a3a; --text-light: #5a6874; --border: #e2e8f0; --accent: #1da1f2; --accent-hover: #0c8bd9; --time-badge: #718096; }
-        body.dark { --bg: #0f172a; --card: #1e293b; --text: #e2e8f0; --text-light: #94a3b8; --border: #334155; --accent: #1e88e5; --accent-hover: #0c6eb3; --time-badge: #a0aec0; }
-        body { font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif; background: var(--bg); color: var(--text); padding: 1rem; transition: background 0.2s, color 0.2s; line-height: 1.5; }
-        .container { max-width: 1000px; margin: 0 auto; }
-        .theme-toggle { position: fixed; bottom: 1.5rem; right: 1.5rem; background: var(--card); border: 1px solid var(--border); border-radius: 2rem; padding: 0.5rem 1rem; cursor: pointer; font-size: 0.9rem; display: flex; gap: 0.5rem; align-items: center; box-shadow: 0 2px 8px rgba(0,0,0,0.1); z-index: 100; transition: all 0.2s; }
-        .theme-toggle:hover { transform: scale(1.02); border-color: var(--accent); }
-        .header { margin-bottom: 2rem; text-align: center; }
-        .header h1 { font-size: 1.8rem; font-weight: 600; background: linear-gradient(135deg, var(--accent), #5a67d8); -webkit-background-clip: text; background-clip: text; color: transparent; margin-bottom: 0.25rem; }
-        .sub { color: var(--text-light); font-size: 0.85rem; margin-top: 0.25rem; }
-        .filters { background: var(--card); border-radius: 1rem; padding: 1rem; margin-bottom: 1.5rem; display: flex; flex-wrap: wrap; gap: 0.75rem; align-items: flex-end; border: 1px solid var(--border); }
-        .filter-group { flex: 1; min-width: 180px; }
-        .filter-group label { display: block; font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.5px; color: var(--text-light); margin-bottom: 0.25rem; }
-        select, input, button { width: 100%; padding: 0.5rem; border-radius: 0.5rem; border: 1px solid var(--border); background: var(--bg); color: var(--text); font-size: 0.85rem; transition: all 0.15s; }
-        button { background: var(--accent); color: white; border: none; cursor: pointer; font-weight: 500; }
-        button:hover { background: var(--accent-hover); }
-        .tweets-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 1rem; }
-        .card { background: var(--card); border-radius: 1rem; overflow: hidden; border: 1px solid var(--border); transition: transform 0.1s ease, box-shadow 0.1s; }
-        .card:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(0,0,0,0.08); }
-        .card-header { padding: 1rem; border-bottom: 1px solid var(--border); }
-        .tweet-author { display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.5rem; }
-        .tweet-avatar { width: 32px; height: 32px; border-radius: 50%; background: var(--accent); background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="white"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>'); background-size: 60%; background-position: center; background-repeat: no-repeat; }
-        .tweet-name { font-weight: 600; font-size: 0.9rem; color: var(--text); }
-        .tweet-username { font-size: 0.7rem; color: var(--text-light); }
-        .meta { display: flex; gap: 0.5rem; flex-wrap: wrap; margin-top: 0.5rem; }
-        .badge { font-size: 0.7rem; padding: 0.2rem 0.6rem; border-radius: 1rem; font-weight: 500; }
-        .badge-time { background: var(--time-badge); color: white; }
-        .card-body { padding: 1rem; color: var(--text-light); font-size: 0.85rem; }
-        .card-footer { padding: 0.8rem 1rem; border-top: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; font-size: 0.75rem; color: var(--text-light); }
-        .btn-link { background: transparent; color: var(--accent); padding: 0; font-weight: 500; width: auto; text-decoration: none; }
-        .btn-link:hover { background: transparent; text-decoration: underline; }
-        .loader { text-align: center; padding: 3rem; color: var(--text-light); }
-        .footer { margin-top: 2rem; text-align: center; font-size: 0.75rem; color: var(--text-light); border-top: 1px solid var(--border); padding-top: 1rem; }
-        @media (max-width: 640px) { .filters { flex-direction: column; align-items: stretch; } .filter-group { min-width: auto; } }
+        /* ========== ESTILOS MINIMALISTAS ========== */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        :root {
+            --bg: #f4f5f7;
+            --card: #ffffff;
+            --text: #1e2a3a;
+            --text-light: #5a6874;
+            --border: #e2e8f0;
+            --accent: #3182ce;
+            --accent-hover: #2c5282;
+            --badge-mun: #2b6e4f;
+            --badge-ot: #c05621;
+            --time-badge: #718096;
+            --tweet-badge: #1da1f2;
+        }
+        body.dark {
+            --bg: #0f172a;
+            --card: #1e293b;
+            --text: #e2e8f0;
+            --text-light: #94a3b8;
+            --border: #334155;
+            --accent: #3b82f6;
+            --accent-hover: #2563eb;
+            --badge-mun: #48bb78;
+            --badge-ot: #ed8936;
+            --time-badge: #a0aec0;
+            --tweet-badge: #1e88e5;
+        }
+        body {
+            font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            padding: 1rem;
+            transition: background 0.2s, color 0.2s;
+            line-height: 1.5;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        .theme-toggle {
+            position: fixed;
+            bottom: 1.5rem;
+            right: 1.5rem;
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 2rem;
+            padding: 0.5rem 1rem;
+            cursor: pointer;
+            font-size: 0.9rem;
+            display: flex;
+            gap: 0.5rem;
+            align-items: center;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            z-index: 100;
+            transition: all 0.2s;
+        }
+        .theme-toggle:hover {
+            transform: scale(1.02);
+            border-color: var(--accent);
+        }
+        .header {
+            margin-bottom: 2rem;
+            text-align: center;
+        }
+        .header h1 {
+            font-size: 1.8rem;
+            font-weight: 600;
+            background: linear-gradient(135deg, var(--accent), #5a67d8);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            margin-bottom: 0.25rem;
+        }
+        .sub {
+            color: var(--text-light);
+            font-size: 0.85rem;
+            margin-top: 0.25rem;
+        }
+        .filters {
+            background: var(--card);
+            border-radius: 1rem;
+            padding: 1rem;
+            margin-bottom: 1rem;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.75rem;
+            align-items: flex-end;
+            border: 1px solid var(--border);
+        }
+        .filter-group {
+            flex: 1;
+            min-width: 140px;
+        }
+        .filter-group label {
+            display: block;
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: var(--text-light);
+            margin-bottom: 0.25rem;
+        }
+        select, input, button {
+            width: 100%;
+            padding: 0.5rem;
+            border-radius: 0.5rem;
+            border: 1px solid var(--border);
+            background: var(--bg);
+            color: var(--text);
+            font-size: 0.85rem;
+            transition: all 0.15s;
+        }
+        button {
+            background: var(--accent);
+            color: white;
+            border: none;
+            cursor: pointer;
+            font-weight: 500;
+        }
+        button:hover {
+            background: var(--accent-hover);
+        }
+        .refresh-btn {
+            background: #2d3748;
+        }
+        .refresh-btn:hover {
+            background: #1a202c;
+        }
+
+        .tabs {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 1.5rem;
+            border-bottom: 1px solid var(--border);
+            padding-bottom: 0.5rem;
+            flex-wrap: wrap;
+        }
+        .tab-btn {
+            background: transparent;
+            color: var(--text-light);
+            padding: 0.5rem 1.2rem;
+            border-radius: 2rem;
+            font-weight: 500;
+            width: auto;
+        }
+        .tab-btn.active {
+            background: var(--accent);
+            color: white;
+        }
+        .news-grid, .tweets-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 1rem;
+        }
+        .card {
+            background: var(--card);
+            border-radius: 1rem;
+            overflow: hidden;
+            border: 1px solid var(--border);
+            transition: transform 0.1s ease, box-shadow 0.1s;
+        }
+        .card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.08);
+        }
+        .card-header {
+            padding: 1rem;
+            border-bottom: 1px solid var(--border);
+        }
+        .card-title {
+            font-size: 1rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            line-height: 1.4;
+        }
+        .meta {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+        }
+        .badge {
+            font-size: 0.7rem;
+            padding: 0.2rem 0.6rem;
+            border-radius: 1rem;
+            font-weight: 500;
+        }
+        .badge-mun {
+            background: var(--badge-mun);
+            color: white;
+        }
+        .badge-ot {
+            background: var(--badge-ot);
+            color: white;
+        }
+        .badge-time {
+            background: var(--time-badge);
+            color: white;
+        }
+        .badge-tweet {
+            background: var(--tweet-badge);
+            color: white;
+        }
+        .card-body {
+            padding: 1rem;
+            color: var(--text-light);
+            font-size: 0.85rem;
+        }
+        .card-footer {
+            padding: 0.8rem 1rem;
+            border-top: 1px solid var(--border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.75rem;
+            color: var(--text-light);
+        }
+        .btn-link {
+            background: transparent;
+            color: var(--accent);
+            padding: 0;
+            font-weight: 500;
+            width: auto;
+            text-decoration: none;
+        }
+        .btn-link:hover {
+            background: transparent;
+            text-decoration: underline;
+        }
+        .loader {
+            text-align: center;
+            padding: 3rem;
+            color: var(--text-light);
+        }
+        .footer {
+            margin-top: 2rem;
+            text-align: center;
+            font-size: 0.75rem;
+            color: var(--text-light);
+            border-top: 1px solid var(--border);
+            padding-top: 1rem;
+        }
+        .tweet-author {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 0.5rem;
+        }
+        .tweet-avatar {
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            background: var(--accent);
+        }
+        .tweet-name {
+            font-weight: 600;
+            font-size: 0.85rem;
+            color: var(--text);
+        }
+        .tweet-username {
+            font-size: 0.7rem;
+            color: var(--text-light);
+        }
+        @media (max-width: 640px) {
+            .filters { flex-direction: column; align-items: stretch; }
+            .filter-group { min-width: auto; }
+            .tabs { justify-content: center; }
+        }
     </style>
 </head>
 <body>
@@ -50,73 +286,126 @@
 
     <div class="container">
         <div class="header">
-            <h1>🐦 monitoreo</h1>
-            <div class="sub">búsqueda de tweets por municipio + tema (vía Nitter)</div>
+            <h1>📰 monitoreo</h1>
+            <div class="sub">municipios específicos + ordenamiento territorial + tweets locales</div>
         </div>
 
         <div class="filters">
             <div class="filter-group">
+                <label>📍 departamento</label>
+                <select id="deptoFilter"><option value="">todos</option><option value="Huila">Huila</option><option value="Putumayo">Putumayo</option><option value="Caqueta">Caquetá</option></select>
+            </div>
+            <div class="filter-group">
                 <label>🏙️ municipio</label>
-                <select id="municipioSelect">
-                    <option value="">selecciona un municipio</option>
-                </select>
+                <select id="munFilter"><option value="">todos</option></select>
             </div>
             <div class="filter-group">
-                <label>🔍 palabra clave adicional (opcional)</label>
-                <input type="text" id="keywordInput" placeholder="ej: ordenamiento territorial">
+                <label>⏱️ rango</label>
+                <select id="timeFilter"><option value="48">últimas 48h</option><option value="24">últimas 24h</option><option value="12">últimas 12h</option></select>
             </div>
             <div class="filter-group">
-                <button id="searchBtn">buscar tweets</button>
+                <label>🔍 buscar</label>
+                <input type="text" id="searchInput" placeholder="palabra clave...">
+            </div>
+            <div class="filter-group">
+                <button id="applyFilters">filtrar</button>
+            </div>
+            <div class="filter-group">
+                <button id="refreshBtn" class="refresh-btn">⟳ actualizar</button>
             </div>
         </div>
 
-        <div id="tweetsContainer">
-            <div class="loader">Selecciona un municipio y haz clic en buscar</div>
+        <div class="tabs">
+            <button class="tab-btn active" data-feed="todos">🔀 todas</button>
+            <button class="tab-btn" data-feed="municipios">🏙️ municipios</button>
+            <button class="tab-btn" data-feed="ot">🏛️ ordenamiento</button>
+            <button class="tab-btn" data-feed="tweets">🐦 tweets</button>
+        </div>
+
+        <!-- Contenedor noticias -->
+        <div id="newsContainer" class="news-grid"></div>
+        
+        <!-- Contenedor tweets -->
+        <div id="tweetsContainer" style="display: none;">
+            <div class="filters" style="margin-bottom: 1rem;">
+                <div class="filter-group">
+                    <label>🏷️ Hashtag #</label>
+                    <select id="tweetMunicipioSelect">
+                        <option value="">selecciona municipio</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <button id="loadTweetsBtn">cargar tweets</button>
+                </div>
+            </div>
+            <div id="tweetsGrid" class="tweets-grid"></div>
         </div>
 
         <div class="footer">
             <p>📍 municipios: Pitalito, Palestina, San Agustín, Isnos, Palermo, Orito, Puerto Caicedo, Valle del Guamuez, Florencia<br>
-            🐦 Búsqueda en Twitter mediante instancias públicas de Nitter · resultados de los últimos días</p>
-            <p id="lastUpdate"></p>
+            🏛️ OT: cualquier lugar de Colombia · 🐦 Tweets: búsqueda por #municipio (vía Nitter)</p>
+            <p id="lastUpdate">⏱️ actualizado: --</p>
         </div>
     </div>
 
     <script>
-        // ---------- CONFIGURACIÓN ----------
-        const MUNICIPIOS = ['Pitalito', 'Palestina', 'San Agustín', 'Isnos', 'Palermo', 'Orito', 'Puerto Caicedo', 'Valle del Guamuez', 'Florencia'];
-        
-        // Lista de instancias de Nitter (en orden de preferencia)
+        // ---------- CONSTANTES ----------
+        const ALLOWED_MUNICIPIOS = ['Pitalito', 'Palestina', 'San Agustín', 'Isnos', 'Palermo', 'Orito', 'Puerto Caicedo', 'Valle del Guamuez', 'Florencia'];
+        const DEPTOS = {
+            'Huila': ['Pitalito', 'Palestina', 'San Agustín', 'Isnos', 'Palermo'],
+            'Putumayo': ['Orito', 'Puerto Caicedo', 'Valle del Guamuez'],
+            'Caqueta': ['Florencia']
+        };
+        const OT_KEYWORDS = ['ordenamiento territorial', 'pot', 'pbot', 'eot', 'planes parciales', 'plan basico', 'esquema de ordenamiento', 'revision pot', 'clasificacion suelo', 'usos del suelo', 'plan de ordenamiento', 'ley 388', 'ministerio de vivienda', 'conpes'];
+
+        // LISTA DE FUENTES RSS (nombre, url, selector opcional de país/sección)
+        const RSS_FUENTES = [
+            { nombre: 'El Tiempo (Colombia)', url: 'https://www.eltiempo.com/rss/colombia.xml', categoria: 'general' },
+            { nombre: 'El Espectador', url: 'https://www.elespectador.com/rss/colombia.xml', categoria: 'general' },
+            { nombre: 'Semana', url: 'https://www.semana.com/rss/nacion.xml', categoria: 'general' },
+            { nombre: 'Diario del Huila', url: 'https://www.diariodelhuila.com/rss', categoria: 'regional' },
+            { nombre: 'La Nación (Neiva)', url: 'https://www.lanacion.com.co/rss', categoria: 'regional' },
+            { nombre: 'Pitalito Noticias', url: 'https://pitalitonoticias.com/feed/', categoria: 'local' },
+            { nombre: 'ADN Colombia', url: 'https://www.adncolombia.com/feed/', categoria: 'general' },
+            { nombre: 'El Espacio', url: 'https://elespacio.com.co/feed/', categoria: 'general' },
+            { nombre: 'Google News (municipios)', url: 'google', categoria: 'búsqueda' }  // Especial
+        ];
+
+        // Búsquedas de Google News para municipios (solo si se activa)
+        const MUNICIPIO_SEARCHES = ALLOWED_MUNICIPIOS.map(m => `${m} Colombia after:2d`);
+        const OT_SEARCHES = ['"ordenamiento territorial" Colombia after:2d', 'POT Colombia after:2d', 'planes parciales Colombia after:2d', 'Ministerio de Vivienda ordenamiento after:2d'];
+
+        // Nitter: varias instancias para fallback
         const NITTER_INSTANCES = [
-            'https://nitter.net',
             'https://nitter.lacontrevoie.fr',
             'https://nitter.privacydev.net',
             'https://nitter.poast.org',
-            'https://nitter.space',
-            'https://nitter.mint.lgbt'
+            'https://nitter.net'
         ];
-        
-        // Lista de proxies públicos (fallback)
-        const PROXIES = [
-            'https://corsproxy.io/?',
-            'https://api.allorigins.win/raw?url=',
-            'https://cors-anywhere.herokuapp.com/'
-        ];
+        const PROXY = 'https://corsproxy.io/?';
 
-        // Elementos DOM
-        const municipioSelect = document.getElementById('municipioSelect');
-        const keywordInput = document.getElementById('keywordInput');
-        const searchBtn = document.getElementById('searchBtn');
+        // ---------- GLOBAL STATE ----------
+        let allNews = [];
+        let activeFeed = 'todos';
+        let currentFiltered = [];
+        let seenUrls = new Set();
+        let fuentesActivas = new Set(); // almacenará nombres de fuentes seleccionadas
+
+        // DOM elements
+        const deptoSelect = document.getElementById('deptoFilter');
+        const munSelect = document.getElementById('munFilter');
+        const timeSelect = document.getElementById('timeFilter');
+        const searchInput = document.getElementById('searchInput');
+        const applyBtn = document.getElementById('applyFilters');
+        const refreshBtn = document.getElementById('refreshBtn');
+        const newsContainer = document.getElementById('newsContainer');
         const tweetsContainer = document.getElementById('tweetsContainer');
+        const tweetsGrid = document.getElementById('tweetsGrid');
+        const tweetMunicipioSelect = document.getElementById('tweetMunicipioSelect');
+        const loadTweetsBtn = document.getElementById('loadTweetsBtn');
         const lastUpdateSpan = document.getElementById('lastUpdate');
         const themeToggle = document.getElementById('themeToggle');
 
-        // Llenar dropdown de municipios
-        MUNICIPIOS.forEach(m => {
-            const option = document.createElement('option');
-            option.value = m;
-            option.textContent = m;
-            municipioSelect.appendChild(option);
-        });
 
         // Helper: escape HTML
         function escapeHtml(str) {
@@ -129,7 +418,7 @@
             });
         }
 
-        // Normalizar URL (para enlaces de Nitter)
+        // Normalizar URL
         function normalizarUrl(url) {
             if (!url) return '#';
             if (url.startsWith('//')) return 'https:' + url;
@@ -138,105 +427,240 @@
             return '#';
         }
 
-        // Extraer fecha de pubDate
-        function parseDate(dateStr) {
-            if (!dateStr) return null;
-            let d = new Date(dateStr);
-            if (!isNaN(d.getTime())) return d;
-            // intentar limpiar
-            let cleaned = dateStr.replace(/(\d+)(?:st|nd|rd|th)/, '$1');
-            d = new Date(cleaned);
-            if (!isNaN(d.getTime())) return d;
-            return null;
-        }
-
-        // Función que intenta fetch con un proxy y una instancia
-        async function fetchWithProxyAndInstance(proxy, instance, query) {
-            const url = `${instance}/search/rss?q=${encodeURIComponent(query)}&f=tweets&tweets_only=on`;
-            const fullUrl = proxy + encodeURIComponent(url);
-            const response = await fetch(fullUrl, { signal: AbortSignal.timeout(10000) });
-            if (!response.ok) throw new Error(`HTTP ${response.status}`);
-            return await response.text();
-        }
-
-        // Búsqueda principal con múltiples proxies e instancias
-        async function buscarTweets(municipio, keyword) {
-            if (!municipio) return [];
-
-            // Construir la consulta: #Municipio + keyword si existe
-            let query = `#${municipio.replace(/\s+/g, '')}`;
-            if (keyword && keyword.trim()) {
-                query += ` ${keyword.trim()}`;
+        // ---------- CARGAR RSS GENÉRICO ----------
+        async function fetchRSSFeed(feedUrl, limit = 10) {
+            try {
+                const response = await fetch(PROXY + encodeURIComponent(feedUrl), { signal: AbortSignal.timeout(8000) });
+                const text = await response.text();
+                const items = text.split('<item>').slice(1, limit+1);
+                return items.map(item => {
+                    let titulo = (item.split('<title>')[1]?.split('</title>')[0] || '').replace(/<!\[CDATA\[|\]\]>/g, '');
+                    let link = (item.split('<link>')[1]?.split('</link>')[0] || '').replace(/<!\[CDATA\[|\]\]>/g, '');
+                    if (!link) {
+                        link = (item.split('<guid>')[1]?.split('</guid>')[0] || '').replace(/<!\[CDATA\[|\]\]>/g, '');
+                    }
+                    let desc = (item.split('<description>')[1]?.split('</description>')[0] || '').replace(/<!\[CDATA\[|\]\]>/g, '').replace(/<[^>]*>/g, '');
+                    let fechaStr = item.split('<pubDate>')[1]?.split('</pubDate>')[0] || '';
+                    let fecha = new Date(fechaStr);
+                    if (isNaN(fecha.getTime())) fecha = new Date();
+                    return { titulo, link, desc, fecha, fuente: feedUrl };
+                }).filter(i => i.titulo && i.link);
+            } catch(e) {
+                console.warn(`Error en RSS ${feedUrl}:`, e);
+                return [];
             }
+        }
 
-            // Recorrer todos los proxies e instancias en orden
-            for (let proxy of PROXIES) {
-                for (let instance of NITTER_INSTANCES) {
-                    try {
-                        console.log(`Intentando: ${proxy} → ${instance} con query: ${query}`);
-                        const text = await fetchWithProxyAndInstance(proxy, instance, query);
+        // Cargar Google News como fuente especial
+        async function fetchGoogleNewsMunicipios() {
+            const items = [];
+            for (let busqueda of MUNICIPIO_SEARCHES) {
+                const url = `https://news.google.com/rss/search?q=${encodeURIComponent(busqueda)}&hl=es-419&gl=CO&ceid=CO:es-419`;
+                try {
+                    const response = await fetch(PROXY + encodeURIComponent(url), { signal: AbortSignal.timeout(8000) });
+                    const text = await response.text();
+                    const rssItems = text.split('<item>').slice(1, 4);
+                    for (let item of rssItems) {
+                        let titulo = (item.split('<title>')[1]?.split('</title>')[0] || '').replace(/<!\[CDATA\[|\]\]>/g, '');
+                        let link = (item.split('<link>')[1]?.split('</link>')[0] || '').replace(/<!\[CDATA\[|\]\]>/g, '');
+                        if (!link) link = (item.split('<guid>')[1]?.split('</guid>')[0] || '');
+                        let desc = (item.split('<description>')[1]?.split('</description>')[0] || '').replace(/<!\[CDATA\[|\]\]>/g, '').replace(/<[^>]*>/g, '');
+                        let fechaStr = item.split('<pubDate>')[1]?.split('</pubDate>')[0] || '';
+                        let fecha = new Date(fechaStr);
+                        if (isNaN(fecha.getTime())) fecha = new Date();
+                        items.push({ titulo, link, desc, fecha, fuente: 'Google News' });
+                    }
+                } catch(e) { console.warn(e); }
+            }
+            return items;
+        }
 
-                        // Detectar errores comunes en el contenido
-                        if (text.includes('not yet whitelisted') || 
-                            text.includes('rate limit') || 
-                            text.includes('blocked') || 
-                            text.includes('too many requests')) {
-                            console.warn(`Instancia ${instance} bloqueada (texto de error)`);
-                            continue;
-                        }
-                        if (!text.trim()) continue;
+        async function fetchGoogleNewsOT() {
+            const items = [];
+            for (let busqueda of OT_SEARCHES) {
+                const url = `https://news.google.com/rss/search?q=${encodeURIComponent(busqueda)}&hl=es-419&gl=CO&ceid=CO:es-419`;
+                try {
+                    const response = await fetch(PROXY + encodeURIComponent(url), { signal: AbortSignal.timeout(8000) });
+                    const text = await response.text();
+                    const rssItems = text.split('<item>').slice(1, 5);
+                    for (let item of rssItems) {
+                        let titulo = (item.split('<title>')[1]?.split('</title>')[0] || '').replace(/<!\[CDATA\[|\]\]>/g, '');
+                        let link = (item.split('<link>')[1]?.split('</link>')[0] || '').replace(/<!\[CDATA\[|\]\]>/g, '');
+                        if (!link) link = (item.split('<guid>')[1]?.split('</guid>')[0] || '');
+                        let desc = (item.split('<description>')[1]?.split('</description>')[0] || '').replace(/<!\[CDATA\[|\]\]>/g, '').replace(/<[^>]*>/g, '');
+                        let fechaStr = item.split('<pubDate>')[1]?.split('</pubDate>')[0] || '';
+                        let fecha = new Date(fechaStr);
+                        if (isNaN(fecha.getTime())) fecha = new Date();
+                        items.push({ titulo, link, desc, fecha, fuente: 'Google News' });
+                    }
+                } catch(e) { console.warn(e); }
+            }
+            return items;
+        }
 
-                        const items = text.split('<item>').slice(1, 15);
-                        if (items.length === 0) continue;
+        // Cargar todas las fuentes seleccionadas
+        async function loadAllNewsFromSources() {
+            allNews = [];
+            seenUrls.clear();
+            const promises = [];
 
-                        const tweets = [];
-                        for (let item of items) {
-                            let title = (item.split('<title>')[1]?.split('</title>')[0] || '').replace(/<!\[CDATA\[|\]\]>/g, '');
-                            let link = (item.split('<link>')[1]?.split('</link>')[0] || '').replace(/<!\[CDATA\[|\]\]>/g, '');
-                            let description = (item.split('<description>')[1]?.split('</description>')[0] || '').replace(/<!\[CDATA\[|\]\]>/g, '').replace(/<[^>]*>/g, '');
-                            let pubDate = (item.split('<pubDate>')[1]?.split('</pubDate>')[0] || '');
-                            let fecha = parseDate(pubDate);
-                            if (!fecha || isNaN(fecha.getTime())) fecha = new Date();
-
-                            // Extraer autor y texto del título (formato "Autor: texto")
-                            let author = '';
-                            let tweetText = title;
-                            if (title.includes(':')) {
-                                let parts = title.split(':');
-                                author = parts[0];
-                                tweetText = parts.slice(1).join(':').trim();
-                            }
-                            if (!tweetText && description) tweetText = description;
-
-                            tweets.push({
-                                author: author || 'usuario',
-                                text: tweetText,
-                                url: link,
-                                date: fecha,
-                                horas: (new Date() - fecha) / (1000 * 3600)
+            if (fuentesActivas.has('Google News (municipios)')) {
+                promises.push(fetchGoogleNewsMunicipios().then(items => {
+                    items.forEach(item => {
+                        if (seenUrls.has(item.link)) return;
+                        seenUrls.add(item.link);
+                        const fullText = (item.titulo + ' ' + item.desc).toLowerCase();
+                        const matchedMun = ALLOWED_MUNICIPIOS.find(m => fullText.includes(m.toLowerCase()));
+                        if (matchedMun) {
+                            const horas = (new Date() - item.fecha) / (1000*3600);
+                            allNews.push({
+                                titulo: item.titulo,
+                                contenido: item.desc || item.titulo,
+                                url: item.link,
+                                fecha: item.fecha,
+                                horas,
+                                tipo: 'municipio',
+                                municipio: matchedMun,
+                                esOT: false,
+                                fuente: item.fuente
                             });
                         }
-                        if (tweets.length) {
-                            console.log(`Éxito con proxy=${proxy} instancia=${instance}`);
-                            return tweets;
+                    });
+                }));
+                // OT también desde Google News
+                promises.push(fetchGoogleNewsOT().then(items => {
+                    items.forEach(item => {
+                        if (seenUrls.has(item.link)) return;
+                        seenUrls.add(item.link);
+                        const fullText = (item.titulo + ' ' + item.desc).toLowerCase();
+                        const esOT = OT_KEYWORDS.some(kw => fullText.includes(kw));
+                        if (esOT) {
+                            const horas = (new Date() - item.fecha) / (1000*3600);
+                            allNews.push({
+                                titulo: item.titulo,
+                                contenido: item.desc || item.titulo,
+                                url: item.link,
+                                fecha: item.fecha,
+                                horas,
+                                tipo: 'ot',
+                                municipio: 'Nacional',
+                                esOT: true,
+                                fuente: item.fuente
+                            });
                         }
-                    } catch(e) {
-                        console.warn(`Error con proxy=${proxy} instancia=${instance}:`, e.message);
-                        continue;
-                    }
+                    });
+                }));
+            }
+
+            // Fuentes RSS normales
+            for (let fuente of RSS_FUENTES) {
+                if (fuente.nombre === 'Google News (municipios)') continue;
+                if (fuentesActivas.has(fuente.nombre)) {
+                    promises.push(fetchRSSFeed(fuente.url, 8).then(items => {
+                        items.forEach(item => {
+                            if (seenUrls.has(item.link)) return;
+                            seenUrls.add(item.link);
+                            const fullText = (item.titulo + ' ' + item.desc).toLowerCase();
+                            // Verificar si es municipio específico
+                            const matchedMun = ALLOWED_MUNICIPIOS.find(m => fullText.includes(m.toLowerCase()));
+                            if (matchedMun) {
+                                const horas = (new Date() - item.fecha) / (1000*3600);
+                                allNews.push({
+                                    titulo: item.titulo,
+                                    contenido: item.desc || item.titulo,
+                                    url: item.link,
+                                    fecha: item.fecha,
+                                    horas,
+                                    tipo: 'municipio',
+                                    municipio: matchedMun,
+                                    esOT: false,
+                                    fuente: fuente.nombre
+                                });
+                            }
+                            // Verificar si es OT
+                            const esOT = OT_KEYWORDS.some(kw => fullText.includes(kw));
+                            if (esOT && !matchedMun) { // Evitar duplicar si ya se agregó como municipio
+                                const horas = (new Date() - item.fecha) / (1000*3600);
+                                allNews.push({
+                                    titulo: item.titulo,
+                                    contenido: item.desc || item.titulo,
+                                    url: item.link,
+                                    fecha: item.fecha,
+                                    horas,
+                                    tipo: 'ot',
+                                    municipio: 'Nacional',
+                                    esOT: true,
+                                    fuente: fuente.nombre
+                                });
+                            }
+                        });
+                    }));
                 }
             }
-            return []; // ninguna combinación funcionó
+
+            await Promise.all(promises);
+            allNews.sort((a,b) => b.fecha - a.fecha);
         }
 
-        // Renderizar tweets en el contenedor
-        function renderTweets(tweets, municipio, keyword) {
-            if (!tweets.length) {
-                tweetsContainer.innerHTML = `<div class="loader">⚠️ No se encontraron tweets para "${municipio}${keyword ? ' + ' + keyword : ''}".<br>Revisa la consola del navegador (F12) para ver más detalles.</div>`;
+        // ---------- TWEETS (con fallback de instancias) ----------
+        async function loadTweetsForMunicipio(municipio) {
+            if (!municipio) return [];
+            const hashtag = `#${municipio.replace(/\s+/g, '')}`;
+            for (let instance of NITTER_INSTANCES) {
+                try {
+                    const nitterUrl = `${instance}/search/rss?q=${encodeURIComponent(hashtag)}&f=tweets&tweets_only=on`;
+                    const response = await fetch(PROXY + encodeURIComponent(nitterUrl), { signal: AbortSignal.timeout(10000) });
+                    const text = await response.text();
+                    if (!text.trim()) throw new Error('Vacío');
+                    const items = text.split('<item>').slice(1, 10);
+                    const tweets = [];
+                    for (let item of items) {
+                        let title = (item.split('<title>')[1]?.split('</title>')[0] || '').replace(/<!\[CDATA\[|\]\]>/g, '');
+                        let link = (item.split('<link>')[1]?.split('</link>')[0] || '').replace(/<!\[CDATA\[|\]\]>/g, '');
+                        let description = (item.split('<description>')[1]?.split('</description>')[0] || '').replace(/<!\[CDATA\[|\]\]>/g, '').replace(/<[^>]*>/g, '');
+                        let pubDate = (item.split('<pubDate>')[1]?.split('</pubDate>')[0] || '');
+                        let fecha = new Date(pubDate);
+                        if (isNaN(fecha.getTime())) fecha = new Date();
+                        
+                        let author = '';
+                        let tweetText = title;
+                        if (title.includes(':')) {
+                            let parts = title.split(':');
+                            author = parts[0];
+                            tweetText = parts.slice(1).join(':').trim();
+                        }
+                        if (!tweetText && description) tweetText = description;
+                        
+                        tweets.push({
+                            author: author || 'usuario',
+                            text: tweetText,
+                            url: link,
+                            date: fecha,
+                            horas: (new Date() - fecha) / (1000*3600)
+                        });
+                    }
+                    if (tweets.length) return tweets;
+                } catch(e) {
+                    console.warn(`Instancia ${instance} falló:`, e);
+                    continue;
+                }
+            }
+            return []; // ninguna funcionó
+        }
+
+        async function refreshTweets() {
+            const mun = tweetMunicipioSelect.value;
+            if (!mun) {
+                tweetsGrid.innerHTML = '<div class="loader">Selecciona un municipio</div>';
                 return;
             }
-
-            const html = tweets.map(t => {
+            tweetsGrid.innerHTML = '<div class="loader">Cargando tweets desde Nitter...</div>';
+            const tweets = await loadTweetsForMunicipio(mun);
+            if (!tweets.length) {
+                tweetsGrid.innerHTML = '<div class="loader">No se encontraron tweets recientes con #' + mun.replace(/\s+/g, '') + '<br>Intenta con otro municipio o más tarde.</div>';
+                return;
+            }
+            tweetsGrid.innerHTML = tweets.map(t => {
                 const horasAgo = Math.round(t.horas);
                 const badgeTiempo = horasAgo < 24 ? '🟡 hoy' : '🟢 ayer';
                 return `
@@ -250,42 +674,146 @@
                                 </div>
                             </div>
                             <div class="meta">
+                                <span class="badge badge-tweet">🐦 tweet</span>
                                 <span class="badge badge-time">${badgeTiempo}</span>
                             </div>
                         </div>
                         <div class="card-body">
-                            ${escapeHtml(t.text).substring(0, 220)}${t.text.length > 220 ? '…' : ''}
+                            ${escapeHtml(t.text).substring(0, 200)}${t.text.length > 200 ? '…' : ''}
                         </div>
                         <div class="card-footer">
                             <span>📅 ${t.date.toLocaleDateString('es-CO')}</span>
-                            <a href="${normalizarUrl(t.url)}" target="_blank" rel="noopener" class="btn-link">ver en Twitter →</a>
+                            <a href="${normalizarUrl(t.url)}" target="_blank" rel="noopener" class="btn-link">ver tweet →</a>
                         </div>
                     </div>
                 `;
             }).join('');
-
-            tweetsContainer.innerHTML = `<div class="tweets-grid">${html}</div>`;
-            lastUpdateSpan.textContent = `⏱️ última búsqueda: ${new Date().toLocaleString('es-CO')}`;
         }
 
-        // Manejador de búsqueda con logs en consola
-        async function onSearch() {
-            const municipio = municipioSelect.value;
-            if (!municipio) {
-                tweetsContainer.innerHTML = '<div class="loader">Selecciona un municipio primero</div>';
+        // ---------- UI ----------
+        function setActiveFeed(feed) {
+            activeFeed = feed;
+            document.querySelectorAll('.tab-btn').forEach(btn => {
+                if (btn.dataset.feed === feed) btn.classList.add('active');
+                else btn.classList.remove('active');
+            });
+            if (feed === 'tweets') {
+                newsContainer.style.display = 'none';
+                tweetsContainer.style.display = 'block';
+                if (tweetMunicipioSelect.value) refreshTweets();
+                else tweetsGrid.innerHTML = '<div class="loader">Selecciona un municipio para ver tweets</div>';
+            } else {
+                newsContainer.style.display = 'grid';
+                tweetsContainer.style.display = 'none';
+                applyFilters();
+            }
+        }
+
+        function applyFilters() {
+            if (activeFeed === 'tweets') return;
+            const depto = deptoSelect.value;
+            const mun = munSelect.value;
+            const maxHours = parseInt(timeSelect.value, 10);
+            const search = searchInput.value.trim().toLowerCase();
+            
+            let filtered = allNews.filter(n => {
+                if (n.horas > maxHours) return false;
+                if (mun) {
+                    if (n.municipio !== mun && !(n.titulo + n.contenido).toLowerCase().includes(mun.toLowerCase())) return false;
+                } else if (depto) {
+                    const deptoMuns = DEPTOS[depto] || [];
+                    const matchDepto = deptoMuns.some(m => n.municipio === m || (n.titulo + n.contenido).toLowerCase().includes(m.toLowerCase()));
+                    if (!matchDepto) return false;
+                }
+                if (search && !(n.titulo + n.contenido).toLowerCase().includes(search)) return false;
+                return true;
+            });
+            
+            filtered.sort((a,b) => b.fecha - a.fecha);
+            
+            if (activeFeed === 'municipios') filtered = filtered.filter(n => n.tipo === 'municipio');
+            if (activeFeed === 'ot') filtered = filtered.filter(n => n.esOT === true);
+            
+            currentFiltered = filtered;
+            renderNews(filtered);
+        }
+
+        function renderNews(items) {
+            if (!items.length) {
+                newsContainer.innerHTML = '<div class="loader">sin resultados en este filtro</div>';
                 return;
             }
-            const keyword = keywordInput.value.trim();
-
-            tweetsContainer.innerHTML = '<div class="loader">Buscando tweets en Nitter...</div>';
-            console.log(`Buscando: municipio=${municipio}, keyword=${keyword}`);
-            const tweets = await buscarTweets(municipio, keyword);
-            renderTweets(tweets, municipio, keyword);
+            newsContainer.innerHTML = items.map(n => {
+                const badgeTipo = n.esOT ? 'badge-ot' : 'badge-mun';
+                const textoTipo = n.esOT ? '🏛️ OT' : `🏙️ ${n.municipio}`;
+                const horasAgo = Math.round(n.horas);
+                const badgeTiempo = horasAgo < 24 ? '🟡 hoy' : '🟢 ayer';
+                const fechaStr = n.fecha.toLocaleDateString('es-CO');
+                const urlFinal = normalizarUrl(n.url);
+                const fuenteTexto = n.fuente ? `📰 ${n.fuente}` : '';
+                
+                return `
+                    <div class="card">
+                        <div class="card-header">
+                            <div class="card-title">${escapeHtml(n.titulo)}</div>
+                            <div class="meta">
+                                <span class="badge ${badgeTipo}">${textoTipo}</span>
+                                <span class="badge badge-time">${badgeTiempo}</span>
+                            </div>
+                        </div>
+                        <div class="card-body">${escapeHtml(n.contenido.substring(0, 180))}${n.contenido.length > 180 ? '…' : ''}</div>
+                        <div class="card-footer">
+                            <span>📅 ${fechaStr} ${fuenteTexto}</span>
+                            <a href="${urlFinal}" target="_blank" rel="noopener" class="btn-link">leer más →</a>
+                        </div>
+                    </div>
+                `;
+            }).join('');
         }
 
-        searchBtn.addEventListener('click', onSearch);
+        async function loadAllNews() {
+            newsContainer.innerHTML = '<div class="loader">cargando noticias desde fuentes seleccionadas...</div>';
+            await loadAllNewsFromSources();
+            if (allNews.length === 0) {
+                // datos de ejemplo si nada se carga
+                allNews.push({
+                    titulo: 'Pitalito: avances en vivienda social',
+                    contenido: 'Entrega de 25 viviendas en zona urbana.',
+                    url: '#',
+                    fecha: new Date(),
+                    horas: 3,
+                    tipo: 'municipio',
+                    municipio: 'Pitalito',
+                    esOT: false,
+                    fuente: 'Ejemplo'
+                });
+                allNews.push({
+                    titulo: 'Minvivienda presenta lineamientos para la actualización del POT',
+                    contenido: 'Directrices para municipios en la revisión de planes de ordenamiento.',
+                    url: '#',
+                    fecha: new Date(Date.now() - 10*3600000),
+                    horas: 10,
+                    tipo: 'ot',
+                    municipio: 'Nacional',
+                    esOT: true,
+                    fuente: 'Ejemplo'
+                });
+            }
+            applyFilters();
+            lastUpdateSpan.textContent = `⏱️ actualizado: ${new Date().toLocaleString('es-CO')}`;
+        }
 
-        // Modo oscuro
+        function updateMunicipiosDropdown() {
+            const depto = deptoSelect.value;
+            let muns = depto ? DEPTOS[depto] || [] : ALLOWED_MUNICIPIOS;
+            munSelect.innerHTML = '<option value="">todos</option>' + muns.map(m => `<option value="${m}">${m}</option>`).join('');
+        }
+
+        // Activar todas las fuentes automáticamente (sin UI de selección)
+        function initSourceSelector() {
+            RSS_FUENTES.forEach(fuente => fuentesActivas.add(fuente.nombre));
+        }
+
         function initTheme() {
             const isDark = localStorage.getItem('darkMode') === 'enabled';
             if (isDark) {
@@ -302,7 +830,44 @@
             });
         }
 
-        initTheme();
+        function bindEvents() {
+            deptoSelect.addEventListener('change', () => {
+                updateMunicipiosDropdown();
+                applyFilters();
+            });
+            munSelect.addEventListener('change', () => applyFilters());
+            timeSelect.addEventListener('change', () => applyFilters());
+            searchInput.addEventListener('input', () => applyFilters());
+            applyBtn.addEventListener('click', () => applyFilters());
+            refreshBtn.addEventListener('click', async () => {
+                if (activeFeed === 'tweets') refreshTweets();
+                else await loadAllNews();
+            });
+            document.querySelectorAll('.tab-btn').forEach(btn => {
+                btn.addEventListener('click', () => setActiveFeed(btn.dataset.feed));
+            });
+            loadTweetsBtn.addEventListener('click', refreshTweets);
+            ALLOWED_MUNICIPIOS.forEach(m => {
+                const option = document.createElement('option');
+                option.value = m;
+                option.textContent = m;
+                tweetMunicipioSelect.appendChild(option);
+            });
+        }
+
+        async function init() {
+            initTheme();
+            bindEvents();
+            initSourceSelector();
+            updateMunicipiosDropdown();
+            await loadAllNews();
+            setActiveFeed('todos');
+            setInterval(() => {
+                if (activeFeed !== 'tweets') loadAllNews();
+            }, 60 * 60 * 1000);
+        }
+        
+        init();
     </script>
 </body>
 </html>
