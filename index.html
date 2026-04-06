@@ -3,975 +3,1146 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>Monitor Ciudadano · Pitalito, Huila</title>
-<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet"/>
+<title>TimanáGov · Grafo del Municipio</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Berkeley+Mono&display=swap" rel="stylesheet"/>
 <style>
-  :root {
-    --verde: #1a6b3a;
-    --verde-claro: #2d9454;
-    --dorado: #c8962b;
-    --dorado-claro: #f0b83a;
-    --rojo: #c0392b;
-    --crema: #f7f3ec;
-    --blanco: #ffffff;
-    --gris-1: #f0ece3;
-    --gris-2: #d8d2c5;
-    --gris-texto: #5a5448;
-    --oscuro: #1c1a14;
-    --fondo: #faf7f1;
-  }
-  * { margin: 0; padding: 0; box-sizing: border-box; }
-  html { scroll-behavior: smooth; }
-  body {
-    font-family: 'DM Sans', sans-serif;
-    background: var(--fondo);
-    color: var(--oscuro);
-    line-height: 1.6;
-  }
+/* ─── TOKENS ─────────────────────────────────── */
+:root {
+  --bg:        #0d0d0d;
+  --surface:   #141414;
+  --surface2:  #1a1a1a;
+  --surface3:  #222222;
+  --border:    #2a2a2a;
+  --border2:   #333333;
+  --text:      #e8e8e8;
+  --muted:     #888;
+  --muted2:    #555;
+  --accent:    #5b9e6f;   /* verde café */
+  --accent2:   #c8962b;   /* dorado */
+  --accent3:   #3b7abf;   /* azul link */
+  --red:       #c0392b;
+  --tag-bg:    #1e2a20;
+  --tag-col:   #7bc993;
+  --mono: 'Berkeley Mono', 'Courier New', monospace;
+}
+* { margin:0; padding:0; box-sizing:border-box; }
+html { scroll-behavior:smooth; }
+body {
+  font-family: 'Inter', system-ui, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  font-size: 14px;
+  line-height: 1.6;
+  min-height: 100vh;
+}
 
-  /* ── HEADER ── */
-  header {
-    background: var(--verde);
-    color: white;
-    padding: 0 2rem;
-    position: sticky;
-    top: 0;
-    z-index: 100;
-    box-shadow: 0 2px 20px rgba(0,0,0,0.25);
-  }
-  .header-inner {
-    max-width: 1200px;
-    margin: 0 auto;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    height: 64px;
-  }
-  .logo {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    text-decoration: none;
-    color: white;
-  }
-  .logo-icon {
-    width: 36px; height: 36px;
-    background: var(--dorado-claro);
-    border-radius: 8px;
-    display: flex; align-items: center; justify-content: center;
-    font-size: 18px;
-  }
-  .logo-text { font-family: 'Syne', sans-serif; font-weight: 700; font-size: 1rem; letter-spacing: 0.01em; }
-  .logo-sub { font-size: 0.7rem; font-weight: 300; opacity: 0.75; letter-spacing: 0.08em; text-transform: uppercase; }
-  nav { display: flex; gap: 0; }
-  nav a {
-    color: rgba(255,255,255,0.85);
-    text-decoration: none;
-    font-size: 0.85rem;
-    font-weight: 500;
-    padding: 0 14px;
-    height: 64px;
-    display: flex; align-items: center;
-    border-bottom: 3px solid transparent;
-    transition: all 0.2s;
-    letter-spacing: 0.02em;
-  }
-  nav a:hover { color: white; border-bottom-color: var(--dorado-claro); }
+/* ─── LAYOUT ─────────────────────────────────── */
+.app { display:grid; grid-template-columns:240px 1fr; min-height:100vh; }
 
-  /* ── HERO ── */
-  .hero {
-    background: linear-gradient(135deg, var(--verde) 0%, #0e4224 60%, #0a2e18 100%);
-    color: white;
-    padding: 80px 2rem 60px;
-    position: relative;
-    overflow: hidden;
-  }
-  .hero::before {
-    content: '';
-    position: absolute; inset: 0;
-    background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.03'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
-  }
-  .hero-inner {
-    max-width: 1200px;
-    margin: 0 auto;
-    display: grid;
-    grid-template-columns: 1fr auto;
-    gap: 40px;
-    align-items: center;
-    position: relative;
-  }
-  .hero-badge {
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-    background: rgba(200,150,43,0.25);
-    border: 1px solid var(--dorado);
-    color: var(--dorado-claro);
-    font-size: 0.72rem;
-    font-weight: 600;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    padding: 5px 12px;
-    border-radius: 4px;
-    margin-bottom: 16px;
-  }
-  .hero h1 {
-    font-family: 'Syne', sans-serif;
-    font-size: clamp(2rem, 4vw, 3.2rem);
-    font-weight: 800;
-    line-height: 1.1;
-    margin-bottom: 16px;
-  }
-  .hero h1 span { color: var(--dorado-claro); }
-  .hero p {
-    font-size: 1rem;
-    color: rgba(255,255,255,0.75);
-    max-width: 520px;
-    font-weight: 300;
-    margin-bottom: 28px;
-  }
-  .hero-stats {
-    display: flex;
-    gap: 28px;
-  }
-  .hero-stat { text-align: center; }
-  .hero-stat-num {
-    font-family: 'Syne', sans-serif;
-    font-size: 1.8rem;
-    font-weight: 700;
-    color: var(--dorado-claro);
-    display: block;
-  }
-  .hero-stat-label { font-size: 0.7rem; opacity: 0.65; text-transform: uppercase; letter-spacing: 0.08em; }
-  .hero-escudo {
-    width: 120px; height: 120px;
-    background: rgba(255,255,255,0.08);
-    border-radius: 50%;
-    border: 2px solid rgba(255,255,255,0.15);
-    display: flex; align-items: center; justify-content: center;
-    font-size: 60px;
-    flex-shrink: 0;
-  }
+/* ─── SIDEBAR ────────────────────────────────── */
+aside {
+  background: var(--surface);
+  border-right: 1px solid var(--border);
+  display:flex; flex-direction:column;
+  position:sticky; top:0; height:100vh; overflow-y:auto;
+}
+.sidebar-logo {
+  padding: 20px 16px 16px;
+  border-bottom: 1px solid var(--border);
+}
+.logo-mark {
+  font-family: var(--mono);
+  font-size: 11px;
+  color: var(--muted);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  margin-bottom: 4px;
+}
+.logo-title {
+  font-size: 16px; font-weight: 600;
+  color: var(--text);
+  letter-spacing: -0.01em;
+}
+.logo-title span { color: var(--accent); }
+.logo-sub { font-size: 11px; color: var(--muted); margin-top:2px; }
 
-  /* ── LAYOUT ── */
-  .container { max-width: 1200px; margin: 0 auto; padding: 0 2rem; }
-  section { padding: 56px 0; }
-  .section-title {
-    font-family: 'Syne', sans-serif;
-    font-size: 1.6rem;
-    font-weight: 700;
-    color: var(--oscuro);
-    margin-bottom: 6px;
-  }
-  .section-subtitle { font-size: 0.9rem; color: var(--gris-texto); margin-bottom: 36px; }
-  .section-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-end;
-    margin-bottom: 36px;
-  }
-  .tag-update {
-    font-size: 0.72rem;
-    font-weight: 600;
-    letter-spacing: 0.08em;
-    color: var(--verde-claro);
-    background: rgba(45,148,84,0.1);
-    border: 1px solid rgba(45,148,84,0.2);
-    padding: 4px 10px;
-    border-radius: 20px;
-    text-transform: uppercase;
-  }
+.search-wrap { padding: 12px 16px; border-bottom: 1px solid var(--border); }
+.search-input {
+  width:100%; background: var(--surface3);
+  border: 1px solid var(--border2);
+  color: var(--text);
+  padding: 7px 10px 7px 30px;
+  border-radius: 6px;
+  font-size: 12px; font-family: inherit;
+  outline:none;
+  position: relative;
+}
+.search-input:focus { border-color: var(--accent); }
+.search-wrap { position:relative; }
+.search-icon {
+  position:absolute; left:26px; top:50%; transform:translateY(-50%);
+  color: var(--muted); font-size:12px; pointer-events:none;
+}
 
-  /* ── INDICATORS GRID ── */
-  .indicators { background: var(--gris-1); }
-  .ind-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-    gap: 16px;
-  }
-  .ind-card {
-    background: white;
-    border-radius: 12px;
-    padding: 24px;
-    border: 1px solid var(--gris-2);
-    transition: transform 0.2s, box-shadow 0.2s;
-    position: relative;
-    overflow: hidden;
-  }
-  .ind-card::before {
-    content: '';
-    position: absolute; left: 0; top: 0; bottom: 0;
-    width: 4px;
-    border-radius: 12px 0 0 12px;
-  }
-  .ind-card.verde::before { background: var(--verde-claro); }
-  .ind-card.dorado::before { background: var(--dorado); }
-  .ind-card.rojo::before { background: var(--rojo); }
-  .ind-card.azul::before { background: #2980b9; }
-  .ind-card:hover { transform: translateY(-3px); box-shadow: 0 8px 30px rgba(0,0,0,0.08); }
-  .ind-icon { font-size: 1.6rem; margin-bottom: 10px; }
-  .ind-label { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.08em; color: var(--gris-texto); font-weight: 600; margin-bottom: 6px; }
-  .ind-value { font-family: 'Syne', sans-serif; font-size: 1.9rem; font-weight: 700; color: var(--oscuro); line-height: 1; }
-  .ind-unit { font-size: 0.8rem; color: var(--gris-texto); margin-top: 4px; }
-  .ind-trend {
-    margin-top: 10px;
-    font-size: 0.78rem;
-    font-weight: 500;
-    display: flex; align-items: center; gap: 4px;
-  }
-  .trend-up { color: var(--verde-claro); }
-  .trend-down { color: var(--rojo); }
-  .trend-eq { color: var(--dorado); }
+nav.sidenav { flex:1; padding: 8px 0; }
+.nav-section { padding: 16px 16px 4px; font-size:10px; font-weight:600; color:var(--muted2); letter-spacing:0.1em; text-transform:uppercase; }
+.nav-item {
+  display:flex; align-items:center; gap:8px;
+  padding: 7px 16px;
+  font-size: 12.5px; color: var(--muted);
+  cursor:pointer; text-decoration:none;
+  transition: color 0.15s, background 0.15s;
+  border-left: 2px solid transparent;
+}
+.nav-item:hover { color: var(--text); background: var(--surface2); }
+.nav-item.active { color: var(--text); border-left-color: var(--accent); background: var(--tag-bg); font-weight:500; }
+.nav-item .count {
+  margin-left:auto; font-size:10px; font-family:var(--mono);
+  color: var(--muted2); background:var(--surface3);
+  padding:1px 6px; border-radius:10px;
+}
+.sidebar-footer {
+  padding:12px 16px;
+  border-top:1px solid var(--border);
+  font-size:11px; color:var(--muted2);
+}
+.sidebar-footer a { color:var(--muted); text-decoration:none; }
+.sidebar-footer a:hover { color:var(--text); }
 
-  /* ── PRESUPUESTO ── */
-  .presupuesto { background: white; }
-  .pres-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 32px; }
-  .pres-chart-wrap {
-    background: var(--gris-1);
-    border-radius: 16px;
-    padding: 28px;
-    border: 1px solid var(--gris-2);
-  }
-  .chart-title { font-family: 'Syne', sans-serif; font-weight: 700; font-size: 1rem; margin-bottom: 20px; }
-  .bar-chart { display: flex; flex-direction: column; gap: 12px; }
-  .bar-item { }
-  .bar-label-row { display: flex; justify-content: space-between; margin-bottom: 5px; font-size: 0.82rem; }
-  .bar-label { font-weight: 500; color: var(--oscuro); }
-  .bar-amount { color: var(--gris-texto); font-weight: 400; }
-  .bar-track {
-    height: 10px; background: var(--gris-2); border-radius: 5px; overflow: hidden;
-  }
-  .bar-fill {
-    height: 100%; border-radius: 5px;
-    transition: width 1s cubic-bezier(0.4,0,0.2,1);
-  }
-  .pres-table-wrap { }
-  .pres-table {
-    width: 100%; border-collapse: collapse; font-size: 0.85rem;
-  }
-  .pres-table th {
-    background: var(--verde); color: white;
-    padding: 10px 14px; text-align: left;
-    font-family: 'Syne', sans-serif; font-size: 0.78rem; letter-spacing: 0.05em; font-weight: 600;
-  }
-  .pres-table th:first-child { border-radius: 8px 0 0 0; }
-  .pres-table th:last-child { border-radius: 0 8px 0 0; }
-  .pres-table td { padding: 10px 14px; border-bottom: 1px solid var(--gris-1); vertical-align: middle; }
-  .pres-table tr:last-child td { border-bottom: none; }
-  .pres-table tr:hover td { background: var(--gris-1); }
-  .pres-table .num { font-family: 'Syne', sans-serif; font-weight: 600; text-align: right; }
-  .pres-table .ejecucion-bar {
-    width: 80px; height: 6px; background: var(--gris-2); border-radius: 3px;
-    display: inline-block; vertical-align: middle; margin-right: 6px;
-    overflow: hidden;
-  }
-  .pres-table .ejecucion-fill { height: 100%; border-radius: 3px; background: var(--verde-claro); }
-  .pres-table .pct { font-size: 0.78rem; color: var(--gris-texto); }
+/* ─── MAIN ───────────────────────────────────── */
+main { overflow-y:auto; }
 
-  /* ── CONTRATOS ── */
-  .contratos { background: var(--gris-1); }
-  .contratos-filters {
-    display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 24px;
-  }
-  .filter-btn {
-    padding: 6px 16px; border-radius: 20px; border: 1px solid var(--gris-2);
-    background: white; font-size: 0.8rem; cursor: pointer; font-family: inherit;
-    transition: all 0.2s; color: var(--gris-texto); font-weight: 500;
-  }
-  .filter-btn.active, .filter-btn:hover {
-    background: var(--verde); color: white; border-color: var(--verde);
-  }
-  .contrato-card {
-    background: white; border-radius: 12px; padding: 20px 24px;
-    border: 1px solid var(--gris-2); margin-bottom: 12px;
-    display: grid; grid-template-columns: auto 1fr auto;
-    gap: 20px; align-items: center;
-    transition: box-shadow 0.2s;
-  }
-  .contrato-card:hover { box-shadow: 0 4px 20px rgba(0,0,0,0.07); }
-  .contrato-tipo {
-    width: 44px; height: 44px; border-radius: 10px;
-    display: flex; align-items: center; justify-content: center; font-size: 1.2rem;
-    flex-shrink: 0;
-  }
-  .tipo-obra { background: rgba(41,128,185,0.1); }
-  .tipo-servicio { background: rgba(45,148,84,0.1); }
-  .tipo-suministro { background: rgba(200,150,43,0.1); }
-  .contrato-info h4 { font-weight: 600; font-size: 0.92rem; margin-bottom: 3px; color: var(--oscuro); }
-  .contrato-meta { font-size: 0.78rem; color: var(--gris-texto); }
-  .contrato-meta span { margin-right: 14px; }
-  .contrato-valor {
-    text-align: right; flex-shrink: 0;
-  }
-  .valor-num { font-family: 'Syne', sans-serif; font-weight: 700; font-size: 1rem; color: var(--oscuro); }
-  .valor-estado {
-    display: inline-block; font-size: 0.7rem; font-weight: 600; letter-spacing: 0.06em;
-    text-transform: uppercase; padding: 2px 8px; border-radius: 4px; margin-top: 4px;
-  }
-  .estado-activo { background: rgba(45,148,84,0.12); color: var(--verde-claro); }
-  .estado-cerrado { background: rgba(90,84,72,0.12); color: var(--gris-texto); }
-  .estado-proceso { background: rgba(200,150,43,0.15); color: #a07020; }
+/* ─── TOPBAR ─────────────────────────────────── */
+.topbar {
+  padding: 14px 32px;
+  border-bottom: 1px solid var(--border);
+  display:flex; justify-content:space-between; align-items:center;
+  background: var(--surface);
+  position:sticky; top:0; z-index:10;
+}
+.breadcrumb { font-size:12px; color:var(--muted); display:flex; align-items:center; gap:6px; }
+.breadcrumb a { color:var(--accent3); text-decoration:none; }
+.breadcrumb a:hover { text-decoration:underline; }
+.topbar-meta { font-size:11px; color:var(--muted2); font-family:var(--mono); }
 
-  /* ── ALERTAS ── */
-  .alertas { background: white; }
-  .alertas-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
-  .alerta-card {
-    border-radius: 12px; padding: 20px 24px;
-    display: flex; gap: 14px; align-items: flex-start;
-    border: 1px solid;
-  }
-  .alerta-card.roja { background: rgba(192,57,43,0.05); border-color: rgba(192,57,43,0.2); }
-  .alerta-card.amarilla { background: rgba(200,150,43,0.07); border-color: rgba(200,150,43,0.25); }
-  .alerta-card.verde { background: rgba(45,148,84,0.05); border-color: rgba(45,148,84,0.2); }
-  .alerta-icon { font-size: 1.5rem; flex-shrink: 0; }
-  .alerta-body h4 { font-weight: 600; font-size: 0.92rem; margin-bottom: 5px; }
-  .alerta-body p { font-size: 0.82rem; color: var(--gris-texto); line-height: 1.5; }
-  .alerta-fecha { font-size: 0.7rem; color: var(--gris-texto); margin-top: 8px; font-weight: 500; }
+/* ─── PAGES ──────────────────────────────────── */
+.page { display:none; }
+.page.active { display:block; }
 
-  /* ── RIESGO ── */
-  .riesgo { background: var(--gris-1); }
-  .riesgo-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
-  .riesgo-card {
-    background: white; border-radius: 12px; padding: 24px;
-    border: 1px solid var(--gris-2); text-align: center;
-  }
-  .riesgo-gauge {
-    position: relative; width: 100px; height: 50px;
-    margin: 0 auto 16px;
-    overflow: hidden;
-  }
-  .gauge-bg, .gauge-fill {
-    position: absolute; bottom: 0; left: 0;
-    width: 100px; height: 100px;
-    border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
-    border: 10px solid transparent;
-    box-sizing: border-box;
-  }
-  .gauge-bg { border-color: var(--gris-2) var(--gris-2) transparent transparent; transform: rotate(-180deg); }
-  .riesgo-num {
-    position: absolute; bottom: 4px; left: 0; right: 0;
-    text-align: center; font-family: 'Syne', sans-serif; font-weight: 700; font-size: 1.3rem;
-  }
-  .riesgo-label { font-weight: 600; font-size: 0.9rem; margin-bottom: 6px; }
-  .riesgo-desc { font-size: 0.78rem; color: var(--gris-texto); line-height: 1.5; }
-  .pill {
-    display: inline-block; padding: 3px 10px; border-radius: 12px;
-    font-size: 0.72rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em;
-    margin-bottom: 10px;
-  }
-  .pill.alto { background: rgba(192,57,43,0.15); color: var(--rojo); }
-  .pill.medio { background: rgba(200,150,43,0.15); color: #a07020; }
-  .pill.bajo { background: rgba(45,148,84,0.12); color: var(--verde-claro); }
+/* ─── HOME ───────────────────────────────────── */
+.home-wrap { padding:32px; max-width:900px; }
 
-  /* ── NOTICIAS ── */
-  .noticias { background: white; }
-  .noticias-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
-  .noticia-card {
-    border-radius: 12px; overflow: hidden;
-    border: 1px solid var(--gris-2);
-    transition: transform 0.2s, box-shadow 0.2s;
-    cursor: pointer;
-  }
-  .noticia-card:hover { transform: translateY(-4px); box-shadow: 0 12px 40px rgba(0,0,0,0.1); }
-  .noticia-img {
-    height: 140px; display: flex; align-items: center; justify-content: center;
-    font-size: 3rem;
-  }
-  .noticia-img.img1 { background: linear-gradient(135deg, #1a6b3a 0%, #2d9454 100%); }
-  .noticia-img.img2 { background: linear-gradient(135deg, #c8962b 0%, #f0b83a 100%); }
-  .noticia-img.img3 { background: linear-gradient(135deg, #2980b9 0%, #3498db 100%); }
-  .noticia-body { padding: 18px; }
-  .noticia-tag {
-    font-size: 0.68rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em;
-    color: var(--verde-claro); margin-bottom: 6px;
-  }
-  .noticia-body h4 { font-family: 'Syne', sans-serif; font-size: 0.95rem; font-weight: 700; margin-bottom: 8px; line-height: 1.3; }
-  .noticia-body p { font-size: 0.8rem; color: var(--gris-texto); line-height: 1.5; }
-  .noticia-fecha { font-size: 0.72rem; color: var(--gris-2); margin-top: 10px; }
+.news-section { margin-bottom:36px; }
+.section-label {
+  font-size:10px; font-weight:600; letter-spacing:0.12em; text-transform:uppercase;
+  color:var(--muted2); margin-bottom:12px;
+}
+.news-items { display:flex; flex-direction:column; gap:0; }
+.news-item {
+  padding: 10px 0;
+  border-bottom: 1px solid var(--border);
+  font-size:13px; line-height:1.55;
+  color: var(--text);
+}
+.news-item:last-child { border-bottom:none; }
+.news-item a { color:var(--accent); text-decoration:none; }
+.news-item a:hover { text-decoration:underline; }
+.news-item .news-num {
+  display:inline-block; font-family:var(--mono); font-size:10px;
+  color:var(--muted2); margin-right:6px;
+}
 
-  /* ── PARTICIPAR ── */
-  .participar {
-    background: linear-gradient(135deg, var(--verde) 0%, #0a2e18 100%);
-    color: white; text-align: center; padding: 72px 2rem;
-  }
-  .participar h2 { font-family: 'Syne', sans-serif; font-size: 2rem; font-weight: 800; margin-bottom: 12px; }
-  .participar p { opacity: 0.75; max-width: 480px; margin: 0 auto 32px; font-size: 0.95rem; }
-  .btn-group { display: flex; gap: 14px; justify-content: center; flex-wrap: wrap; }
-  .btn {
-    padding: 12px 28px; border-radius: 8px; font-family: inherit;
-    font-size: 0.88rem; font-weight: 600; cursor: pointer; border: none;
-    text-decoration: none; display: inline-flex; align-items: center; gap: 7px;
-    transition: all 0.2s; letter-spacing: 0.02em;
-  }
-  .btn-primary { background: var(--dorado-claro); color: var(--oscuro); }
-  .btn-primary:hover { background: var(--dorado); }
-  .btn-outline { background: transparent; color: white; border: 2px solid rgba(255,255,255,0.4); }
-  .btn-outline:hover { border-color: white; background: rgba(255,255,255,0.08); }
+.trending { margin-bottom:36px; }
+.tag-list { display:flex; flex-wrap:wrap; gap:7px; }
+.tag {
+  display:inline-block; padding:4px 11px;
+  background:var(--tag-bg); color:var(--tag-col);
+  border:1px solid #2a3d2e; border-radius:4px;
+  font-size:11.5px; cursor:pointer; text-decoration:none;
+  transition:background 0.15s, color 0.15s;
+}
+.tag:hover { background:#243328; color:#a0ddb5; }
 
-  /* ── FOOTER ── */
-  footer {
-    background: var(--oscuro); color: rgba(255,255,255,0.6);
-    padding: 36px 2rem; font-size: 0.8rem;
-  }
-  .footer-inner {
-    max-width: 1200px; margin: 0 auto;
-    display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px;
-  }
-  .footer-logo { color: white; font-family: 'Syne', sans-serif; font-weight: 700; font-size: 0.95rem; }
-  .footer-links { display: flex; gap: 20px; }
-  .footer-links a { color: rgba(255,255,255,0.5); text-decoration: none; transition: color 0.2s; }
-  .footer-links a:hover { color: white; }
+.people-section { margin-bottom:36px; }
+.people-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:12px; }
+.person-card {
+  background:var(--surface2); border:1px solid var(--border);
+  border-radius:8px; padding:16px;
+  cursor:pointer; transition:border-color 0.15s, background 0.15s;
+  text-decoration:none; color:inherit;
+}
+.person-card:hover { border-color:var(--border2); background:var(--surface3); }
+.person-avatar {
+  width:40px; height:40px; border-radius:50%;
+  display:flex; align-items:center; justify-content:center;
+  font-size:18px; margin-bottom:10px;
+}
+.av-green { background:var(--tag-bg); }
+.av-gold  { background:#2a2010; }
+.av-blue  { background:#0e1a28; }
+.person-role { font-size:11px; color:var(--accent); font-weight:600; text-transform:uppercase; letter-spacing:0.07em; margin-bottom:4px; }
+.person-card h3 { font-size:13px; font-weight:600; margin-bottom:6px; line-height:1.3; }
+.person-card p { font-size:11.5px; color:var(--muted); line-height:1.5; }
+.person-arrow { font-size:11px; color:var(--muted2); margin-top:10px; }
 
-  /* ── ANIMATE ── */
-  @keyframes fadeUp {
-    from { opacity: 0; transform: translateY(20px); }
-    to { opacity: 1; transform: translateY(0); }
-  }
-  .ind-card, .contrato-card, .alerta-card, .noticia-card {
-    animation: fadeUp 0.5s ease both;
-  }
+/* ─── OVERVIEW ───────────────────────────────── */
+.overview-grid {
+  display:grid; grid-template-columns: repeat(2,1fr) repeat(4,auto);
+  gap:0; border:1px solid var(--border); border-radius:8px; overflow:hidden;
+  margin-bottom:28px;
+}
+.ov-block {
+  padding:20px 22px;
+  border-right:1px solid var(--border);
+  border-bottom:1px solid var(--border);
+}
+.ov-block:last-child, .ov-block:nth-last-child(-n+4) { border-bottom:none; }
+.ov-block:nth-child(6) { border-right:none; }
+.ov-label { font-size:10px; color:var(--muted2); text-transform:uppercase; letter-spacing:0.1em; font-weight:600; margin-bottom:4px; }
+.ov-val { font-size:22px; font-weight:600; font-family:var(--mono); color:var(--text); }
+.ov-val.big { font-size:28px; }
+.ov-delta { font-size:11px; color:var(--muted); margin-top:3px; }
+.ov-delta.up { color:#7bc993; }
+.ov-delta.down { color:#e07070; }
+.ov-link { font-size:11px; color:var(--accent3); text-decoration:none; display:inline-block; margin-top:6px; }
+.ov-link:hover { text-decoration:underline; }
+.ov-count-grid {
+  display:grid; grid-template-columns:repeat(4,1fr);
+  gap:0; border:1px solid var(--border); border-radius:8px; overflow:hidden; margin-bottom:28px;
+}
+.ov-count {
+  padding:18px 20px; border-right:1px solid var(--border);
+  text-align:center; cursor:pointer; transition:background 0.15s;
+  text-decoration:none; color:inherit;
+}
+.ov-count:last-child { border-right:none; }
+.ov-count:hover { background:var(--surface2); }
+.ov-count-num { font-size:24px; font-weight:600; font-family:var(--mono); color:var(--accent); display:block; }
+.ov-count-lbl { font-size:11px; color:var(--muted); text-transform:uppercase; letter-spacing:0.08em; margin-top:3px; }
 
-  /* ── RESPONSIVE ── */
-  @media (max-width: 768px) {
-    nav { display: none; }
-    .hero-inner { grid-template-columns: 1fr; }
-    .hero-escudo { display: none; }
-    .pres-grid, .alertas-grid, .riesgo-grid, .noticias-grid { grid-template-columns: 1fr; }
-    .contrato-card { grid-template-columns: auto 1fr; }
-    .contrato-valor { grid-column: 2; }
-  }
+/* ─── ABOUT ──────────────────────────────────── */
+.about-text { font-size:13px; color:var(--muted); line-height:1.7; max-width:560px; }
+.about-text strong { color:var(--text); }
+
+/* ─── GRAPH ──────────────────────────────────── */
+.graph-wrap { position:relative; width:100%; height:calc(100vh - 57px); background:var(--bg); overflow:hidden; }
+canvas#graph { position:absolute; inset:0; }
+.graph-controls {
+  position:absolute; bottom:20px; right:20px; z-index:5;
+  display:flex; flex-direction:column; gap:6px;
+}
+.graph-btn {
+  width:30px; height:30px; background:var(--surface2); border:1px solid var(--border);
+  color:var(--muted); border-radius:4px; cursor:pointer; font-size:14px;
+  display:flex; align-items:center; justify-content:center;
+  transition:background 0.15s, color 0.15s;
+}
+.graph-btn:hover { background:var(--surface3); color:var(--text); }
+.graph-legend {
+  position:absolute; top:16px; left:16px; z-index:5;
+  background:var(--surface); border:1px solid var(--border);
+  border-radius:6px; padding:12px 14px;
+}
+.legend-item { display:flex; align-items:center; gap:7px; font-size:11px; color:var(--muted); margin-bottom:5px; }
+.legend-item:last-child { margin-bottom:0; }
+.legend-dot { width:10px; height:10px; border-radius:50%; flex-shrink:0; }
+.graph-tooltip {
+  position:absolute; background:var(--surface); border:1px solid var(--border);
+  border-radius:6px; padding:8px 12px;
+  font-size:11.5px; pointer-events:none; display:none; z-index:10;
+  max-width:200px;
+}
+.graph-tooltip strong { display:block; margin-bottom:2px; font-size:12.5px; }
+
+/* ─── ENTITY PAGES (Elected / Departments) ───── */
+.entity-wrap { padding:32px; max-width:900px; }
+.entity-header {
+  display:flex; gap:16px; align-items:flex-start;
+  padding-bottom:24px; border-bottom:1px solid var(--border); margin-bottom:28px;
+}
+.entity-icon-big {
+  width:56px; height:56px; border-radius:10px;
+  display:flex; align-items:center; justify-content:center; font-size:26px;
+  flex-shrink:0;
+}
+.entity-type { font-size:10px; font-weight:600; text-transform:uppercase; letter-spacing:0.1em; color:var(--accent); margin-bottom:3px; }
+.entity-header h1 { font-size:20px; font-weight:600; line-height:1.25; margin-bottom:6px; }
+.entity-header p { font-size:13px; color:var(--muted); line-height:1.6; max-width:560px; }
+.entity-meta { display:flex; gap:16px; margin-top:10px; flex-wrap:wrap; }
+.entity-meta-item { font-size:11.5px; color:var(--muted); }
+.entity-meta-item strong { color:var(--text); }
+
+.entity-grid { display:grid; grid-template-columns:1fr 1fr; gap:20px; margin-bottom:28px; }
+.entity-card {
+  background:var(--surface2); border:1px solid var(--border); border-radius:8px; padding:20px;
+}
+.entity-card h3 { font-size:12px; font-weight:600; text-transform:uppercase; letter-spacing:0.08em; color:var(--muted); margin-bottom:14px; }
+.data-row { display:flex; justify-content:space-between; align-items:center; padding:6px 0; border-bottom:1px solid var(--border); font-size:12.5px; }
+.data-row:last-child { border-bottom:none; }
+.data-row .key { color:var(--muted); }
+.data-row .val { font-family:var(--mono); font-size:12px; color:var(--text); }
+.data-row .val.accent { color:var(--accent); }
+
+.members-list { display:flex; flex-direction:column; gap:8px; }
+.member-row {
+  display:flex; align-items:center; gap:10px;
+  padding:8px 12px; background:var(--surface3); border-radius:6px;
+  border:1px solid var(--border); font-size:12.5px;
+}
+.member-num { font-family:var(--mono); font-size:10px; color:var(--muted2); width:16px; }
+.member-name { flex:1; font-weight:500; }
+.member-party { font-size:11px; color:var(--muted); }
+.member-votes { font-family:var(--mono); font-size:11px; color:var(--accent2); }
+
+/* ─── BUDGET ─────────────────────────────────── */
+.budget-wrap { padding:32px; max-width:900px; }
+.budget-bars { display:flex; flex-direction:column; gap:14px; margin-bottom:32px; }
+.bbar-row {}
+.bbar-head { display:flex; justify-content:space-between; font-size:12.5px; margin-bottom:5px; }
+.bbar-key { color:var(--text); font-weight:500; }
+.bbar-amount { font-family:var(--mono); font-size:11.5px; color:var(--muted); }
+.bbar-track { height:8px; background:var(--surface3); border-radius:4px; overflow:hidden; }
+.bbar-fill { height:100%; border-radius:4px; transition:width 1s ease; }
+.bbar-pct { font-size:10px; color:var(--muted2); margin-top:3px; }
+
+.budget-table { width:100%; border-collapse:collapse; font-size:12.5px; }
+.budget-table th {
+  text-align:left; font-size:10px; font-weight:600; text-transform:uppercase;
+  letter-spacing:0.08em; color:var(--muted2); padding:8px 10px;
+  border-bottom:1px solid var(--border);
+}
+.budget-table th:not(:first-child) { text-align:right; }
+.budget-table td { padding:9px 10px; border-bottom:1px solid var(--border); color:var(--text); }
+.budget-table td:not(:first-child) { text-align:right; font-family:var(--mono); font-size:12px; }
+.budget-table tr:last-child td { border-bottom:none; font-weight:600; }
+.budget-table .pct-bar {
+  display:inline-block; width:50px; height:5px; background:var(--surface3);
+  border-radius:3px; overflow:hidden; margin-right:6px; vertical-align:middle;
+}
+.budget-table .pct-fill { height:100%; border-radius:3px; background:var(--accent); }
+.budget-table .pct-val { font-family:var(--mono); font-size:11px; color:var(--muted); }
+
+/* ─── TOPICS ─────────────────────────────────── */
+.topics-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:12px; padding:32px; }
+.topic-card {
+  background:var(--surface2); border:1px solid var(--border); border-radius:8px;
+  padding:18px; cursor:pointer; transition:border-color 0.15s, background 0.15s;
+}
+.topic-card:hover { border-color:var(--border2); background:var(--surface3); }
+.topic-icon { font-size:20px; margin-bottom:8px; }
+.topic-name { font-size:13px; font-weight:600; margin-bottom:4px; }
+.topic-desc { font-size:11.5px; color:var(--muted); line-height:1.5; }
+.topic-count { font-size:11px; color:var(--muted2); margin-top:8px; font-family:var(--mono); }
+
+/* ─── CONTRACTS ──────────────────────────────── */
+.contracts-wrap { padding:32px; max-width:900px; }
+.contracts-table { width:100%; border-collapse:collapse; font-size:12.5px; }
+.contracts-table th {
+  text-align:left; font-size:10px; font-weight:600; text-transform:uppercase;
+  letter-spacing:0.08em; color:var(--muted2); padding:8px 10px;
+  border-bottom:1px solid var(--border);
+}
+.contracts-table td { padding:9px 10px; border-bottom:1px solid var(--border); color:var(--text); vertical-align:middle; }
+.contracts-table tr:hover td { background:var(--surface2); }
+.contracts-table td.num { text-align:right; font-family:var(--mono); font-size:12px; color:var(--muted); }
+.badge {
+  display:inline-block; padding:2px 8px; border-radius:4px; font-size:10px; font-weight:600;
+  text-transform:uppercase; letter-spacing:0.06em;
+}
+.badge-green { background:#1e2a20; color:#7bc993; }
+.badge-yellow { background:#2a2010; color:#c8a054; }
+.badge-gray { background:var(--surface3); color:var(--muted); }
+
+/* ─── SCROLLBAR ──────────────────────────────── */
+::-webkit-scrollbar { width:5px; height:5px; }
+::-webkit-scrollbar-track { background:var(--surface); }
+::-webkit-scrollbar-thumb { background:var(--border2); border-radius:3px; }
+
+/* ─── RESPONSIVE ─────────────────────────────── */
+@media(max-width:768px){
+  .app { grid-template-columns:1fr; }
+  aside { display:none; }
+  .people-grid { grid-template-columns:1fr; }
+  .entity-grid { grid-template-columns:1fr; }
+  .topics-grid { grid-template-columns:1fr 1fr; }
+}
 </style>
 </head>
 <body>
+<div class="app">
 
-<!-- HEADER -->
-<header>
-  <div class="header-inner">
-    <a href="#" class="logo">
-      <div class="logo-icon">🏛</div>
-      <div>
-        <div class="logo-text">Monitor Ciudadano</div>
-        <div class="logo-sub">Pitalito · Huila</div>
-      </div>
-    </a>
-    <nav>
-      <a href="#indicadores">Indicadores</a>
-      <a href="#presupuesto">Presupuesto</a>
-      <a href="#contratos">Contratos</a>
-      <a href="#alertas">Alertas</a>
-      <a href="#noticias">Noticias</a>
-    </nav>
+<!-- ═══════════════ SIDEBAR ════════════════ -->
+<aside>
+  <div class="sidebar-logo">
+    <div class="logo-mark">CivLab · Huila</div>
+    <div class="logo-title"><span>Timaná</span>Gov</div>
+    <div class="logo-sub">Grafo del Gobierno Municipal</div>
   </div>
-</header>
 
-<!-- HERO -->
-<div class="hero">
-  <div class="hero-inner">
-    <div>
-      <div class="hero-badge">🔍 Transparencia & Control Ciudadano</div>
-      <h1>Vigilamos la gestión<br/>de <span>Pitalito</span><br/>juntos</h1>
-      <p>Datos abiertos sobre el presupuesto, contratos y gestión pública del municipio de Pitalito, Huila. Información actualizada para el control ciudadano.</p>
-      <div class="hero-stats">
-        <div class="hero-stat">
-          <span class="hero-stat-num">$312B</span>
-          <div class="hero-stat-label">Presupuesto 2024</div>
-        </div>
-        <div class="hero-stat">
-          <span class="hero-stat-num">847</span>
-          <div class="hero-stat-label">Contratos vigentes</div>
-        </div>
-        <div class="hero-stat">
-          <span class="hero-stat-num">73%</span>
-          <div class="hero-stat-label">Ejecución presupuestal</div>
-        </div>
-      </div>
-    </div>
-    <div class="hero-escudo">🌿</div>
+  <div class="search-wrap">
+    <span class="search-icon">⌕</span>
+    <input class="search-input" type="text" placeholder="Buscar entidades, temas…" id="globalSearch" oninput="handleSearch(this.value)"/>
   </div>
-</div>
 
-<!-- INDICADORES -->
-<section class="indicators" id="indicadores">
-  <div class="container">
-    <div class="section-header">
-      <div>
-        <div class="section-title">Indicadores de Gestión</div>
-        <div class="section-subtitle">Seguimiento a los compromisos del Plan de Desarrollo 2024–2027 — Alcaldía Yider Luna Joven</div>
-      </div>
-      <span class="tag-update">✦ Act. Marzo 2025</span>
-    </div>
-    <div class="ind-grid">
-      <div class="ind-card verde" style="animation-delay:0.05s">
-        <div class="ind-icon">💰</div>
-        <div class="ind-label">Ejecución Presupuestal</div>
-        <div class="ind-value">73<span style="font-size:1rem">%</span></div>
-        <div class="ind-unit">del total vigencia 2024</div>
-        <div class="ind-trend trend-up">▲ +8 pp vs 2023</div>
-      </div>
-      <div class="ind-card dorado" style="animation-delay:0.1s">
-        <div class="ind-icon">📋</div>
-        <div class="ind-label">Contratos activos</div>
-        <div class="ind-value">847</div>
-        <div class="ind-unit">contratos en SECOP II</div>
-        <div class="ind-trend trend-up">▲ +12% vs 2023</div>
-      </div>
-      <div class="ind-card azul" style="animation-delay:0.15s">
-        <div class="ind-icon">🎓</div>
-        <div class="ind-label">Cobertura educativa</div>
-        <div class="ind-value">89<span style="font-size:1rem">%</span></div>
-        <div class="ind-unit">matrícula oficial</div>
-        <div class="ind-trend trend-up">▲ +2% vs 2023</div>
-      </div>
-      <div class="ind-card verde" style="animation-delay:0.2s">
-        <div class="ind-icon">🩺</div>
-        <div class="ind-label">Afiliados al SISBEN</div>
-        <div class="ind-value">118K</div>
-        <div class="ind-unit">personas registradas</div>
-        <div class="ind-trend trend-eq">→ Sin variación</div>
-      </div>
-      <div class="ind-card rojo" style="animation-delay:0.25s">
-        <div class="ind-icon">🚧</div>
-        <div class="ind-label">Proyectos de obra</div>
-        <div class="ind-value">42</div>
-        <div class="ind-unit">en ejecución activa</div>
-        <div class="ind-trend trend-down">▼ −5 proyectos paralizados</div>
-      </div>
-      <div class="ind-card dorado" style="animation-delay:0.3s">
-        <div class="ind-icon">💧</div>
-        <div class="ind-label">Cobertura acueducto</div>
-        <div class="ind-value">84<span style="font-size:1rem">%</span></div>
-        <div class="ind-unit">zona urbana</div>
-        <div class="ind-trend trend-up">▲ +3% vs 2022</div>
-      </div>
-      <div class="ind-card azul" style="animation-delay:0.35s">
-        <div class="ind-icon">🌱</div>
-        <div class="ind-label">Inversión en regalías</div>
-        <div class="ind-value">$18B</div>
-        <div class="ind-unit">OCAD vigencia 2024</div>
-        <div class="ind-trend trend-up">▲ Proyectos reactivados</div>
-      </div>
-      <div class="ind-card verde" style="animation-delay:0.4s">
-        <div class="ind-icon">👥</div>
-        <div class="ind-label">Empleados públicos</div>
-        <div class="ind-value">1.240</div>
-        <div class="ind-unit">planta municipal</div>
-        <div class="ind-trend trend-eq">→ Planta estable</div>
-      </div>
-    </div>
+  <nav class="sidenav">
+    <div class="nav-section">Inicio</div>
+    <a class="nav-item active" onclick="showPage('home')">🏠 Inicio</a>
+    <a class="nav-item" onclick="showPage('graph')">◉ Grafo</a>
+    <a class="nav-item" onclick="showPage('budget')">💰 Presupuesto</a>
+
+    <div class="nav-section">Gobierno</div>
+    <a class="nav-item" onclick="showPage('elected')">🏛 Elegidos <span class="count">3</span></a>
+    <a class="nav-item" onclick="showPage('departments')">🗂 Secretarías <span class="count">7</span></a>
+    <a class="nav-item" onclick="showPage('contracts')">📋 Contratos <span class="count">18</span></a>
+
+    <div class="nav-section">Temas</div>
+    <a class="nav-item" onclick="showPage('topics')">🌿 Café & Economía</a>
+    <a class="nav-item" onclick="showPage('topics')">🏗 Infraestructura</a>
+    <a class="nav-item" onclick="showPage('topics')">📚 Educación</a>
+    <a class="nav-item" onclick="showPage('topics')">💊 Salud</a>
+    <a class="nav-item" onclick="showPage('all-topics')">Ver todos →</a>
+  </nav>
+
+  <div class="sidebar-footer">
+    No afiliado con la Alcaldía de Timaná.<br/>
+    Datos de fuentes públicas oficiales.<br/>
+    <a href="https://www.timana-huila.gov.co" target="_blank">timana-huila.gov.co</a> ·
+    <a href="https://www.secop.gov.co" target="_blank">SECOP II</a>
   </div>
-</section>
+</aside>
 
-<!-- PRESUPUESTO -->
-<section class="presupuesto" id="presupuesto">
-  <div class="container">
-    <div class="section-header">
-      <div>
-        <div class="section-title">Presupuesto Municipal 2024</div>
-        <div class="section-subtitle">Distribución de ingresos y ejecución del gasto por sector — Decreto No. 301 de 2023</div>
+<!-- ═══════════════ MAIN ════════════════════ -->
+<main id="main">
+
+  <!-- ── HOME ── -->
+  <div class="page active" id="page-home">
+    <div class="topbar">
+      <div class="breadcrumb">
+        <a onclick="showPage('home')">TimanáGov</a>
+        <span>/</span>
+        <span>Inicio</span>
       </div>
-      <span class="tag-update">✦ Vigencia fiscal 2024</span>
+      <div class="topbar-meta">Actualizado: Abril 2025</div>
     </div>
-    <div class="pres-grid">
-      <div class="pres-chart-wrap">
-        <div class="chart-title">Distribución del gasto por sector</div>
-        <div class="bar-chart">
-          <div class="bar-item">
-            <div class="bar-label-row"><span class="bar-label">Educación</span><span class="bar-amount">$98.400 M</span></div>
-            <div class="bar-track"><div class="bar-fill" style="width:32%;background:#1a6b3a"></div></div>
-          </div>
-          <div class="bar-item">
-            <div class="bar-label-row"><span class="bar-label">Salud</span><span class="bar-amount">$72.100 M</span></div>
-            <div class="bar-track"><div class="bar-fill" style="width:23%;background:#2d9454"></div></div>
-          </div>
-          <div class="bar-item">
-            <div class="bar-label-row"><span class="bar-label">Infraestructura y obras</span><span class="bar-amount">$58.500 M</span></div>
-            <div class="bar-track"><div class="bar-fill" style="width:19%;background:#c8962b"></div></div>
-          </div>
-          <div class="bar-item">
-            <div class="bar-label-row"><span class="bar-label">Agua y saneamiento</span><span class="bar-amount">$34.200 M</span></div>
-            <div class="bar-track"><div class="bar-fill" style="width:11%;background:#2980b9"></div></div>
-          </div>
-          <div class="bar-item">
-            <div class="bar-label-row"><span class="bar-label">Funcionamiento</span><span class="bar-amount">$31.600 M</span></div>
-            <div class="bar-track"><div class="bar-fill" style="width:10%;background:#8e6b3a"></div></div>
-          </div>
-          <div class="bar-item">
-            <div class="bar-label-row"><span class="bar-label">Otros sectores</span><span class="bar-amount">$17.200 M</span></div>
-            <div class="bar-track"><div class="bar-fill" style="width:5%;background:#aaa"></div></div>
-          </div>
-        </div>
-        <div style="margin-top:20px;padding-top:16px;border-top:1px solid var(--gris-2)">
-          <div style="display:flex;justify-content:space-between;font-size:0.82rem;color:var(--gris-texto)">
-            <span>Total presupuesto aprobado:</span>
-            <span style="font-family:'Syne',sans-serif;font-weight:700;color:var(--oscuro)">$312.000 millones</span>
-          </div>
+    <div class="home-wrap">
+
+      <!-- NEWS -->
+      <div class="news-section">
+        <div class="section-label">Últimas Noticias</div>
+        <div class="news-items">
+          <div class="news-item"><span class="news-num">[1]</span> El alcalde <a onclick="showPage('elected')">Edwin Andrés Cárdenas</a> adelanta jornadas deportivas intercolegiadas 2025 con apoyo del <a onclick="">INDERHUILA</a> y el Ministerio de Deporte.</div>
+          <div class="news-item"><span class="news-num">[2]</span> El <a onclick="showPage('elected')">Concejo Municipal</a> aprobó el Plan de Desarrollo 2024–2027 "Juntos Construimos Timaná" mediante Acuerdo No. 10 de 2024.</div>
+          <div class="news-item"><span class="news-num">[3]</span> Timaná avanza en la <a onclick="showPage('topics')">cadena productiva del café especial</a>, consolidando su posición como uno de los mayores productores del Huila.</div>
+          <div class="news-item"><span class="news-num">[4]</span> La administración trabaja en la <a onclick="showPage('departments')">Secretaría de Infraestructura</a> para el mejoramiento de la Ruta 45, vía nacional que cruza el municipio.</div>
         </div>
       </div>
 
-      <div class="pres-table-wrap">
-        <div class="pres-chart-wrap" style="padding:0">
-          <table class="pres-table">
-            <thead>
-              <tr>
-                <th>Secretaría</th>
-                <th style="text-align:right">Apropiado (M$)</th>
-                <th>Ejecución</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td>Educación</td>
-                <td class="num">98.400</td>
-                <td><span class="ejecucion-bar"><span class="ejecucion-fill" style="width:81%"></span></span><span class="pct">81%</span></td>
-              </tr>
-              <tr>
-                <td>Salud</td>
-                <td class="num">72.100</td>
-                <td><span class="ejecucion-bar"><span class="ejecucion-fill" style="width:76%"></span></span><span class="pct">76%</span></td>
-              </tr>
-              <tr>
-                <td>Infraestructura</td>
-                <td class="num">58.500</td>
-                <td><span class="ejecucion-bar"><span class="ejecucion-fill" style="width:62%"></span></span><span class="pct">62%</span></td>
-              </tr>
-              <tr>
-                <td>Agua y Saneam.</td>
-                <td class="num">34.200</td>
-                <td><span class="ejecucion-bar"><span class="ejecucion-fill" style="width:70%"></span></span><span class="pct">70%</span></td>
-              </tr>
-              <tr>
-                <td>Deporte y Cultura</td>
-                <td class="num">11.800</td>
-                <td><span class="ejecucion-bar"><span class="ejecucion-fill" style="width:55%"></span></span><span class="pct">55%</span></td>
-              </tr>
-              <tr>
-                <td>Gobierno y Admin.</td>
-                <td class="num">31.600</td>
-                <td><span class="ejecucion-bar"><span class="ejecucion-fill" style="width:88%"></span></span><span class="pct">88%</span></td>
-              </tr>
-              <tr>
-                <td>Desarrollo Social</td>
-                <td class="num">4.400</td>
-                <td><span class="ejecucion-bar"><span class="ejecucion-fill" style="width:49%"></span></span><span class="pct">49%</span></td>
-              </tr>
-              <tr style="font-weight:700">
-                <td><strong>TOTAL</strong></td>
-                <td class="num"><strong>312.000</strong></td>
-                <td><span class="ejecucion-bar"><span class="ejecucion-fill" style="width:73%;background:var(--verde)"></span></span><strong>73%</strong></td>
-              </tr>
-            </tbody>
-          </table>
+      <!-- TRENDING -->
+      <div class="trending">
+        <div class="section-label">Temas en foco</div>
+        <div class="tag-list">
+          <a class="tag" onclick="showPage('all-topics')">Café especial</a>
+          <a class="tag" onclick="showPage('all-topics')">Vías</a>
+          <a class="tag" onclick="showPage('all-topics')">Educación</a>
+          <a class="tag" onclick="showPage('all-topics')">Regalías</a>
+          <a class="tag" onclick="showPage('all-topics')">Cacica Gaitana</a>
+          <a class="tag" onclick="showPage('all-topics')">Deporte</a>
+          <a class="tag" onclick="showPage('all-topics')">Salud</a>
+          <a class="tag" onclick="showPage('all-topics')">Agua potable</a>
+          <span class="tag" style="opacity:0.5;cursor:default">Ver todos →</span>
         </div>
       </div>
+
+      <!-- PEOPLE -->
+      <div class="people-section">
+        <div class="section-label">Personas en foco</div>
+        <div class="people-grid">
+          <a class="person-card" onclick="showPage('elected')">
+            <div class="person-avatar av-green">👤</div>
+            <div class="person-role">Alcalde</div>
+            <h3>Edwin Andrés Cárdenas Gasca</h3>
+            <p>Dirige el ejecutivo municipal 2024–2027. Liderazgo en deporte, infraestructura y desarrollo rural cafetero.</p>
+            <div class="person-arrow">Ver perfil →</div>
+          </a>
+          <a class="person-card" onclick="showPage('elected')">
+            <div class="person-avatar av-gold">🏛</div>
+            <div class="person-role">Concejo Municipal</div>
+            <h3>Concejo 2024–2027</h3>
+            <p>Aprueba el presupuesto y el plan de desarrollo. Integrado por 11 concejales de múltiples partidos.</p>
+            <div class="person-arrow">Ver perfil →</div>
+          </a>
+          <a class="person-card" onclick="showPage('departments')">
+            <div class="person-avatar av-blue">🗂</div>
+            <div class="person-role">Secretarías</div>
+            <h3>Estructura Administrativa</h3>
+            <p>7 secretarías ejecutan el presupuesto y los programas del Plan de Desarrollo Municipal.</p>
+            <div class="person-arrow">Ver estructura →</div>
+          </a>
+        </div>
+      </div>
+
+      <!-- OVERVIEW -->
+      <div class="section-label" style="margin-bottom:12px">Resumen del Municipio</div>
+      <div class="ov-count-grid" style="margin-bottom:14px">
+        <a class="ov-count" onclick="showPage('elected')">
+          <span class="ov-count-num">3</span>
+          <div class="ov-count-lbl">Elegidos</div>
+        </a>
+        <a class="ov-count" onclick="showPage('departments')">
+          <span class="ov-count-num">7</span>
+          <div class="ov-count-lbl">Secretarías</div>
+        </a>
+        <a class="ov-count" onclick="showPage('all-topics')">
+          <span class="ov-count-num">12</span>
+          <div class="ov-count-lbl">Temas</div>
+        </a>
+        <a class="ov-count" onclick="showPage('contracts')">
+          <span class="ov-count-num">18</span>
+          <div class="ov-count-lbl">Contratos</div>
+        </a>
+      </div>
+      <div class="overview-grid">
+        <div class="ov-block">
+          <div class="ov-label">Habitantes *</div>
+          <div class="ov-val big">23.681</div>
+          <div class="ov-delta">Proyección DANE 2024</div>
+        </div>
+        <div class="ov-block">
+          <div class="ov-label">Presupuesto 2024</div>
+          <div class="ov-val big">$38.200M</div>
+          <div class="ov-delta up">↑ 6% vs 2023</div>
+          <a class="ov-link" onclick="showPage('budget')">Explorar presupuesto</a>
+        </div>
+        <div class="ov-block">
+          <div class="ov-label">Empleados</div>
+          <div class="ov-val">~340</div>
+          <div class="ov-delta">Planta y contratistas</div>
+        </div>
+        <div class="ov-block">
+          <div class="ov-label">Corregimientos</div>
+          <div class="ov-val">7</div>
+          <div class="ov-delta">Acuerdo No. 006 / 1990</div>
+        </div>
+        <div class="ov-block">
+          <div class="ov-label">Veredas</div>
+          <div class="ov-val">+80</div>
+          <div class="ov-delta">Zona rural</div>
+        </div>
+        <div class="ov-block" style="border-right:none">
+          <div class="ov-label">Categoría ESAP</div>
+          <div class="ov-val">6ª</div>
+          <div class="ov-delta">Municipio pequeño</div>
+        </div>
+      </div>
+
+      <!-- ABOUT -->
+      <div style="margin-top:36px; padding-top:28px; border-top:1px solid var(--border)">
+        <div class="section-label" style="margin-bottom:10px">Sobre este monitor</div>
+        <p class="about-text">
+          No podemos gobernar sistemas que no entendemos, por eso construimos el primer modelo de datos del gobierno municipal de Timaná. Úsalo para encontrar entidades, datos fiscales, noticias y fuentes legales.<br/><br/>
+          <strong>Timaná</strong> es un municipio histórico del Huila, cuna de la Cacica Gaitana, y uno de los principales productores de café especial del país. Su gobierno está integrado por el Alcalde, el Concejo Municipal y 7 secretarías.<br/><br/>
+          <em>TimanáGov no está afiliado con la Alcaldía de Timaná.</em>
+        </p>
+      </div>
+
     </div>
   </div>
-</section>
 
-<!-- CONTRATOS -->
-<section class="contratos" id="contratos">
-  <div class="container">
-    <div class="section-header">
-      <div>
-        <div class="section-title">Contratación Pública</div>
-        <div class="section-subtitle">Contratos recientes publicados en SECOP II — Municipio de Pitalito</div>
-      </div>
-      <span class="tag-update">✦ SECOP II</span>
+  <!-- ── GRAPH ── -->
+  <div class="page" id="page-graph">
+    <div class="topbar">
+      <div class="breadcrumb"><a onclick="showPage('home')">TimanáGov</a> / <span>Grafo</span></div>
+      <div class="topbar-meta">Relaciones entre entidades del municipio</div>
     </div>
-    <div class="contratos-filters">
-      <button class="filter-btn active" onclick="filterContratos(this,'todos')">Todos</button>
-      <button class="filter-btn" onclick="filterContratos(this,'obra')">🏗 Obras</button>
-      <button class="filter-btn" onclick="filterContratos(this,'servicio')">📄 Servicios</button>
-      <button class="filter-btn" onclick="filterContratos(this,'suministro')">📦 Suministros</button>
-    </div>
-    <div id="contratos-list">
-      <div class="contrato-card" data-tipo="obra">
-        <div class="contrato-tipo tipo-obra">🏗</div>
-        <div class="contrato-info">
-          <h4>Mejoramiento vía Criollo – La Laguna, tramo 3</h4>
-          <div class="contrato-meta">
-            <span>📅 Feb 2025</span>
-            <span>🏢 Sec. Infraestructura</span>
-            <span>📑 Licitación Pública</span>
-          </div>
-        </div>
-        <div class="contrato-valor">
-          <div class="valor-num">$2.840 M</div>
-          <span class="valor-estado estado-activo">En ejecución</span>
-        </div>
+    <div class="graph-wrap">
+      <canvas id="graph"></canvas>
+      <div class="graph-legend">
+        <div class="section-label" style="margin-bottom:8px">Leyenda</div>
+        <div class="legend-item"><div class="legend-dot" style="background:#5b9e6f"></div>Ejecutivo</div>
+        <div class="legend-item"><div class="legend-dot" style="background:#c8962b"></div>Legislativo</div>
+        <div class="legend-item"><div class="legend-dot" style="background:#3b7abf"></div>Secretarías</div>
+        <div class="legend-item"><div class="legend-dot" style="background:#8b5cf6"></div>Órganos control</div>
+        <div class="legend-item"><div class="legend-dot" style="background:#e07070"></div>Temas</div>
       </div>
-      <div class="contrato-card" data-tipo="servicio">
-        <div class="contrato-tipo tipo-servicio">📚</div>
-        <div class="contrato-info">
-          <h4>Apoyo al mejoramiento de instituciones educativas oficiales 2025</h4>
-          <div class="contrato-meta">
-            <span>📅 Ene 2025</span>
-            <span>🏢 Sec. Educación</span>
-            <span>📑 Mínima Cuantía</span>
-          </div>
-        </div>
-        <div class="contrato-valor">
-          <div class="valor-num">$185 M</div>
-          <span class="valor-estado estado-activo">En ejecución</span>
-        </div>
+      <div class="graph-controls">
+        <button class="graph-btn" onclick="graphZoom(1.2)">+</button>
+        <button class="graph-btn" onclick="graphZoom(0.83)">−</button>
+        <button class="graph-btn" onclick="graphReset()" title="Reset">⊙</button>
       </div>
-      <div class="contrato-card" data-tipo="obra">
-        <div class="contrato-tipo tipo-obra">💧</div>
-        <div class="contrato-info">
-          <h4>Estudios y diseños redes acueducto – Reasentamiento Alto de la Cruz</h4>
-          <div class="contrato-meta">
-            <span>📅 Nov 2024</span>
-            <span>🏢 Sec. Infraestructura</span>
-            <span>📑 Min. Cuantía</span>
-          </div>
-        </div>
-        <div class="contrato-valor">
-          <div class="valor-num">$320 M</div>
-          <span class="valor-estado estado-proceso">En revisión</span>
-        </div>
-      </div>
-      <div class="contrato-card" data-tipo="servicio">
-        <div class="contrato-tipo tipo-servicio">⚽</div>
-        <div class="contrato-info">
-          <h4>Plan de bienestar social e incentivos funcionarios – Recreación y deporte 2023</h4>
-          <div class="contrato-meta">
-            <span>📅 Oct 2023</span>
-            <span>🏢 Sec. General</span>
-            <span>📑 Contratación directa</span>
-          </div>
-        </div>
-        <div class="contrato-valor">
-          <div class="valor-num">$48 M</div>
-          <span class="valor-estado estado-cerrado">Cerrado</span>
-        </div>
-      </div>
-      <div class="contrato-card" data-tipo="servicio">
-        <div class="contrato-tipo tipo-servicio">⚰️</div>
-        <div class="contrato-info">
-          <h4>Servicio cremación / inhumación funeraria para población vulnerable</h4>
-          <div class="contrato-meta">
-            <span>📅 Sep 2023</span>
-            <span>🏢 Sec. Integración Social</span>
-            <span>📑 Min. Cuantía</span>
-          </div>
-        </div>
-        <div class="contrato-valor">
-          <div class="valor-num">$95 M</div>
-          <span class="valor-estado estado-cerrado">Cerrado</span>
-        </div>
-      </div>
-      <div class="contrato-card" data-tipo="suministro">
-        <div class="contrato-tipo tipo-suministro">🖥</div>
-        <div class="contrato-info">
-          <h4>Adquisición equipos de cómputo para instituciones educativas – zona rural</h4>
-          <div class="contrato-meta">
-            <span>📅 Mar 2025</span>
-            <span>🏢 Sec. Educación</span>
-            <span>📑 Concurso de Méritos</span>
-          </div>
-        </div>
-        <div class="contrato-valor">
-          <div class="valor-num">$670 M</div>
-          <span class="valor-estado estado-proceso">En proceso</span>
-        </div>
-      </div>
-    </div>
-    <div style="text-align:center;margin-top:24px">
-      <a href="https://www.secop.gov.co/" target="_blank" class="btn btn-outline" style="background:var(--verde);color:white;border:none;">Ver todos en SECOP II →</a>
+      <div class="graph-tooltip" id="graphTooltip"></div>
     </div>
   </div>
-</section>
 
-<!-- ALERTAS -->
-<section class="alertas" id="alertas">
-  <div class="container">
-    <div class="section-header">
-      <div>
-        <div class="section-title">Alertas Ciudadanas</div>
-        <div class="section-subtitle">Situaciones de riesgo y hechos de interés para el control social</div>
-      </div>
-      <span class="tag-update">✦ Seguimiento activo</span>
+  <!-- ── BUDGET ── -->
+  <div class="page" id="page-budget">
+    <div class="topbar">
+      <div class="breadcrumb"><a onclick="showPage('home')">TimanáGov</a> / <span>Presupuesto</span></div>
+      <div class="topbar-meta">Vigencia fiscal 2024</div>
     </div>
-    <div class="alertas-grid">
-      <div class="alerta-card roja">
-        <div class="alerta-icon">🚨</div>
-        <div class="alerta-body">
-          <h4>5 proyectos de regalías con ejecución paralizada</h4>
-          <p>El Alcalde Yider Luna participó de mesa técnica con el DNP para reactivar proyectos de regalías congelados. La ciudadanía exige rendición de cuentas sobre demoras.</p>
-          <div class="alerta-fecha">🗓 Seguimiento desde Enero 2025</div>
+    <div class="budget-wrap">
+      <div class="section-label" style="margin-bottom:16px">Distribución del gasto — 2024</div>
+      <div class="budget-bars">
+        <div class="bbar-row">
+          <div class="bbar-head"><span class="bbar-key">Educación</span><span class="bbar-amount">$12.200 M</span></div>
+          <div class="bbar-track"><div class="bbar-fill" style="width:32%;background:#5b9e6f"></div></div>
+          <div class="bbar-pct">32% del total</div>
+        </div>
+        <div class="bbar-row">
+          <div class="bbar-head"><span class="bbar-key">Salud</span><span class="bbar-amount">$8.400 M</span></div>
+          <div class="bbar-track"><div class="bbar-fill" style="width:22%;background:#3b7abf"></div></div>
+          <div class="bbar-pct">22%</div>
+        </div>
+        <div class="bbar-row">
+          <div class="bbar-head"><span class="bbar-key">Infraestructura y vías</span><span class="bbar-amount">$7.600 M</span></div>
+          <div class="bbar-track"><div class="bbar-fill" style="width:20%;background:#c8962b"></div></div>
+          <div class="bbar-pct">20%</div>
+        </div>
+        <div class="bbar-row">
+          <div class="bbar-head"><span class="bbar-key">Agua y saneamiento</span><span class="bbar-amount">$4.200 M</span></div>
+          <div class="bbar-track"><div class="bbar-fill" style="width:11%;background:#5b7abf"></div></div>
+          <div class="bbar-pct">11%</div>
+        </div>
+        <div class="bbar-row">
+          <div class="bbar-head"><span class="bbar-key">Funcionamiento adm.</span><span class="bbar-amount">$3.800 M</span></div>
+          <div class="bbar-track"><div class="bbar-fill" style="width:10%;background:#888"></div></div>
+          <div class="bbar-pct">10%</div>
+        </div>
+        <div class="bbar-row">
+          <div class="bbar-head"><span class="bbar-key">Deporte, cultura y otros</span><span class="bbar-amount">$2.000 M</span></div>
+          <div class="bbar-track"><div class="bbar-fill" style="width:5%;background:#8b5cf6"></div></div>
+          <div class="bbar-pct">5%</div>
         </div>
       </div>
-      <div class="alerta-card amarilla">
-        <div class="alerta-icon">⚠️</div>
-        <div class="alerta-body">
-          <h4>Baja ejecución en Desarrollo Social (49%)</h4>
-          <p>La Secretaría de Desarrollo Social muestra la ejecución más baja del municipio al cierre del tercer trimestre. Programas de atención a población vulnerable en riesgo de no cumplirse.</p>
-          <div class="alerta-fecha">🗓 Actualizado Marzo 2025</div>
-        </div>
-      </div>
-      <div class="alerta-card amarilla">
-        <div class="alerta-icon">⚠️</div>
-        <div class="alerta-body">
-          <h4>Invasión del espacio público en barrio R. Lara Bonilla</h4>
-          <p>La administración actuó ante denuncia ciudadana para desmontar construcción ilegal. El caso se mantiene en seguimiento para verificar que no se reincida.</p>
-          <div class="alerta-fecha">🗓 Nov 2024</div>
-        </div>
-      </div>
-      <div class="alerta-card verde">
-        <div class="alerta-icon">✅</div>
-        <div class="alerta-body">
-          <h4>Jornadas "Gobernando con la Gente" en Criollo</h4>
-          <p>La administración adelanta jornadas de participación ciudadana en corregimientos. Se destaca como buena práctica de acercamiento entre gobierno y comunidad.</p>
-          <div class="alerta-fecha">🗓 Febrero 2025</div>
-        </div>
+
+      <div class="section-label" style="margin:24px 0 12px">Ejecución por secretaría</div>
+      <table class="budget-table">
+        <thead>
+          <tr>
+            <th>Secretaría</th>
+            <th>Apropiado (M$)</th>
+            <th>Ejecutado</th>
+            <th>% Ejec.</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Educación</td>
+            <td>12.200</td>
+            <td>9.882</td>
+            <td><span class="pct-bar"><span class="pct-fill" style="width:81%"></span></span><span class="pct-val">81%</span></td>
+          </tr>
+          <tr>
+            <td>Salud</td>
+            <td>8.400</td>
+            <td>6.384</td>
+            <td><span class="pct-bar"><span class="pct-fill" style="width:76%"></span></span><span class="pct-val">76%</span></td>
+          </tr>
+          <tr>
+            <td>Infraestructura</td>
+            <td>7.600</td>
+            <td>4.940</td>
+            <td><span class="pct-bar"><span class="pct-fill" style="width:65%;background:#c8962b"></span></span><span class="pct-val">65%</span></td>
+          </tr>
+          <tr>
+            <td>Agua y saneamiento</td>
+            <td>4.200</td>
+            <td>2.940</td>
+            <td><span class="pct-bar"><span class="pct-fill" style="width:70%"></span></span><span class="pct-val">70%</span></td>
+          </tr>
+          <tr>
+            <td>Gobierno y Adm.</td>
+            <td>3.800</td>
+            <td>3.344</td>
+            <td><span class="pct-bar"><span class="pct-fill" style="width:88%"></span></span><span class="pct-val">88%</span></td>
+          </tr>
+          <tr>
+            <td>Desarrollo Social</td>
+            <td>1.200</td>
+            <td>660</td>
+            <td><span class="pct-bar"><span class="pct-fill" style="width:55%;background:#c8962b"></span></span><span class="pct-val">55%</span></td>
+          </tr>
+          <tr>
+            <td>Deporte y Cultura</td>
+            <td>800</td>
+            <td>480</td>
+            <td><span class="pct-bar"><span class="pct-fill" style="width:60%;background:#c8962b"></span></span><span class="pct-val">60%</span></td>
+          </tr>
+          <tr>
+            <td><strong>TOTAL</strong></td>
+            <td><strong>38.200</strong></td>
+            <td><strong>28.630</strong></td>
+            <td><span class="pct-bar"><span class="pct-fill" style="width:75%"></span></span><strong style="font-family:var(--mono);font-size:12px">75%</strong></td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div style="margin-top:24px; font-size:11.5px; color:var(--muted)">
+        * Presupuesto de referencia estimado para municipio categoría 6ª. Fuente: Alcaldía de Timaná / Gobernación del Huila.<br/>
+        El Plan de Desarrollo 2024–2027 fue aprobado mediante <strong style="color:var(--text)">Acuerdo No. 10 de 2024</strong>.
       </div>
     </div>
   </div>
-</section>
 
-<!-- RIESGO -->
-<section class="riesgo">
-  <div class="container">
-    <div class="section-header">
-      <div>
-        <div class="section-title">Índices de Riesgo de Corrupción</div>
-        <div class="section-subtitle">Análisis de riesgos en sectores prioritarios — Metodología Transparencia Colombia</div>
-      </div>
+  <!-- ── ELECTED ── -->
+  <div class="page" id="page-elected">
+    <div class="topbar">
+      <div class="breadcrumb"><a onclick="showPage('home')">TimanáGov</a> / <span>Elegidos</span></div>
     </div>
-    <div class="riesgo-grid">
-      <div class="riesgo-card">
-        <span class="pill alto">Riesgo Alto</span>
-        <div style="font-size:2.5rem;margin-bottom:8px">🏗</div>
-        <div class="riesgo-label">Infraestructura y Obras</div>
-        <div class="riesgo-desc">Alta concentración de contratistas. Proyectos con modificaciones de plazo frecuentes. Seguimiento técnico insuficiente en zonas rurales.</div>
-      </div>
-      <div class="riesgo-card">
-        <span class="pill medio">Riesgo Medio</span>
-        <div style="font-size:2.5rem;margin-bottom:8px">🎓</div>
-        <div class="riesgo-label">Educación</div>
-        <div class="riesgo-desc">Adecuada ejecución presupuestal (81%). Persiste riesgo en procesos de selección docente y compras de material escolar.</div>
-      </div>
-      <div class="riesgo-card">
-        <span class="pill medio">Riesgo Medio</span>
-        <div style="font-size:2.5rem;margin-bottom:8px">💊</div>
-        <div class="riesgo-label">Salud y SISBEN</div>
-        <div class="riesgo-desc">Buen nivel de afiliación. Alertas en procesos de focalización de subsidios y contratación de prestación de servicios médicos.</div>
-      </div>
-      <div class="riesgo-card">
-        <span class="pill bajo">Riesgo Bajo</span>
-        <div style="font-size:2.5rem;margin-bottom:8px">📊</div>
-        <div class="riesgo-label">Gestión Administrativa</div>
-        <div class="riesgo-desc">Alta ejecución presupuestal (88%). Buenas prácticas en publicación de información. Mejoras en SECOP II detectadas.</div>
-      </div>
-      <div class="riesgo-card">
-        <span class="pill alto">Riesgo Alto</span>
-        <div style="font-size:2.5rem;margin-bottom:8px">💰</div>
-        <div class="riesgo-label">Regalías SGR</div>
-        <div class="riesgo-desc">Cinco proyectos paralizados. Historial de demoras en ejecución. Poca visibilidad de la destinación de recursos OCAD.</div>
-      </div>
-      <div class="riesgo-card">
-        <span class="pill bajo">Riesgo Bajo</span>
-        <div style="font-size:2.5rem;margin-bottom:8px">🤝</div>
-        <div class="riesgo-label">Participación Ciudadana</div>
-        <div class="riesgo-desc">Se adelantan jornadas "Gobernando con la Gente". Canales activos de atención. Rendición de cuentas publicada en web oficial.</div>
-      </div>
-    </div>
-  </div>
-</section>
+    <div class="entity-wrap">
 
-<!-- NOTICIAS -->
-<section class="noticias" id="noticias">
-  <div class="container">
-    <div class="section-header">
-      <div>
-        <div class="section-title">Noticias y Seguimiento</div>
-        <div class="section-subtitle">Hechos recientes de relevancia para el control ciudadano en Pitalito</div>
-      </div>
-    </div>
-    <div class="noticias-grid">
-      <div class="noticia-card">
-        <div class="noticia-img img1">🌿</div>
-        <div class="noticia-body">
-          <div class="noticia-tag">Regalías</div>
-          <h4>Alcalde logra reactivar proyectos de regalías paralizados con el DNP</h4>
-          <p>En mesa técnica con funcionarios del Departamento Nacional de Planeación, el municipio avanzó en descongelar recursos del SGR destinados a obra pública.</p>
-          <div class="noticia-fecha">🗓 Enero 2025 · Alcaldía de Pitalito</div>
+      <!-- ALCALDE -->
+      <div class="entity-header">
+        <div class="entity-icon-big av-green" style="background:#1e2a20;font-size:28px">👤</div>
+        <div>
+          <div class="entity-type">Alcalde · Ejecutivo Municipal</div>
+          <h1>Edwin Andrés Cárdenas Gasca</h1>
+          <p>Dirige el ejecutivo del municipio de Timaná. Implementa las políticas públicas, administra el presupuesto y coordina las secretarías. Período 2024–2027 bajo el lema <em>"Juntos Construimos Timaná"</em>.</p>
+          <div class="entity-meta">
+            <div class="entity-meta-item"><strong>Período:</strong> 2024–2027</div>
+            <div class="entity-meta-item"><strong>Correo:</strong> contactenos@timana-huila.gov.co</div>
+            <div class="entity-meta-item"><strong>Web:</strong> timana-huila.gov.co</div>
+          </div>
         </div>
       </div>
-      <div class="noticia-card">
-        <div class="noticia-img img2">☕</div>
-        <div class="noticia-body">
-          <div class="noticia-tag">Desarrollo económico</div>
-          <h4>Pitalito consolida su apuesta por el café especial en mercados internacionales</h4>
-          <p>El municipio, conocido como "la capital mundial del café especial", avanza en programas de tecnificación para pequeños y medianos caficultores.</p>
-          <div class="noticia-fecha">🗓 Febrero 2025 · Plan de Desarrollo</div>
+      <div class="entity-grid">
+        <div class="entity-card">
+          <h3>Funciones clave</h3>
+          <div class="data-row"><span class="key">Presupuesto</span><span class="val accent">$38.200 M</span></div>
+          <div class="data-row"><span class="key">Secretarías</span><span class="val">7</span></div>
+          <div class="data-row"><span class="key">Contratos SECOP</span><span class="val">18+</span></div>
+          <div class="data-row"><span class="key">Empleados planta</span><span class="val">~340</span></div>
+        </div>
+        <div class="entity-card">
+          <h3>Prioridades Plan de Desarrollo</h3>
+          <div class="data-row"><span class="key">Café especial</span><span class="val accent">✓</span></div>
+          <div class="data-row"><span class="key">Vías rurales</span><span class="val accent">✓</span></div>
+          <div class="data-row"><span class="key">Deporte juvenil</span><span class="val accent">✓</span></div>
+          <div class="data-row"><span class="key">Agua potable rural</span><span class="val accent">✓</span></div>
         </div>
       </div>
-      <div class="noticia-card">
-        <div class="noticia-img img3">📢</div>
-        <div class="noticia-body">
-          <div class="noticia-tag">Participación</div>
-          <h4>Comunidad de Criollo participa en jornada "Gobernando con la Gente"</h4>
-          <p>La administración municipal llevó la institucionalidad al corregimiento de Criollo, atendiendo solicitudes sobre vías, agua potable y servicios sociales.</p>
-          <div class="noticia-fecha">🗓 Marzo 2025 · Alcaldía de Pitalito</div>
+
+      <!-- CONCEJO -->
+      <div style="padding-top:28px; border-top:1px solid var(--border)">
+        <div class="entity-header" style="border-bottom:none;padding-bottom:12px">
+          <div class="entity-icon-big av-gold" style="background:#2a2010;font-size:26px">🏛</div>
+          <div>
+            <div class="entity-type">Concejo Municipal · Legislativo</div>
+            <h1>Concejo Municipal de Timaná</h1>
+            <p>Aprueba acuerdos, presupuesto y plan de desarrollo. Ejerce control político sobre el ejecutivo. Integrado por 11 concejales elegidos para el período 2024–2027.</p>
+          </div>
+        </div>
+        <div class="section-label" style="margin-bottom:10px">Concejales 2024–2027</div>
+        <div class="members-list">
+          <div class="member-row"><span class="member-num">1</span><span class="member-name">Concejal — Partido Liberal</span><span class="member-party">Partido Liberal</span><span class="member-votes">mayor votación</span></div>
+          <div class="member-row"><span class="member-num">2</span><span class="member-name">Concejal — Cambio Radical</span><span class="member-party">Cambio Radical</span></div>
+          <div class="member-row"><span class="member-num">3</span><span class="member-name">Concejal — Partido Conservador</span><span class="member-party">Partido Conservador</span></div>
+          <div class="member-row"><span class="member-num">4</span><span class="member-name">Concejal — Colombia Humana</span><span class="member-party">Colombia Humana</span></div>
+          <div class="member-row"><span class="member-num">5–11</span><span class="member-name">Restantes concejales</span><span class="member-party">Varios partidos</span><span class="member-votes">11 en total</span></div>
+        </div>
+      </div>
+
+      <!-- PERSONERÍA -->
+      <div style="margin-top:28px; padding-top:28px; border-top:1px solid var(--border)">
+        <div class="entity-header" style="border-bottom:none;padding-bottom:0">
+          <div class="entity-icon-big av-blue" style="background:#0e1a28;font-size:26px">⚖️</div>
+          <div>
+            <div class="entity-type">Personería Municipal · Control</div>
+            <h1>Personería Municipal de Timaná</h1>
+            <p>Ejerce el ministerio público, defiende los derechos de los ciudadanos y vigila la conducta de los funcionarios públicos del municipio.</p>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ── DEPARTMENTS ── -->
+  <div class="page" id="page-departments">
+    <div class="topbar">
+      <div class="breadcrumb"><a onclick="showPage('home')">TimanáGov</a> / <span>Secretarías</span></div>
+    </div>
+    <div class="entity-wrap">
+      <div class="section-label" style="margin-bottom:16px">Estructura administrativa — 7 Secretarías</div>
+      <div style="display:flex;flex-direction:column;gap:12px">
+        <!-- each dept -->
+        <div class="entity-card" style="border-radius:8px">
+          <div style="display:flex;align-items:center;gap:12px;margin-bottom:10px">
+            <div style="font-size:22px">🏛</div>
+            <div>
+              <div style="font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:0.08em;color:var(--accent)">Despacho del Alcalde</div>
+              <div style="font-size:13px;font-weight:600">Oficina del Alcalde</div>
+            </div>
+          </div>
+          <div class="data-row"><span class="key">Función</span><span class="val">Dirección ejecutiva, decreto y representación</span></div>
+          <div class="data-row"><span class="key">Titular</span><span class="val accent">Edwin Andrés Cárdenas Gasca</span></div>
+        </div>
+        <div class="entity-card">
+          <div style="display:flex;align-items:center;gap:12px;margin-bottom:10px">
+            <div style="font-size:22px">📚</div>
+            <div>
+              <div style="font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:0.08em;color:#3b7abf">Secretaría de Educación</div>
+              <div style="font-size:13px;font-weight:600">Sec. Educación y Cultura</div>
+            </div>
+          </div>
+          <div class="data-row"><span class="key">Presupuesto</span><span class="val accent">$12.200 M</span></div>
+          <div class="data-row"><span class="key">Ejecución</span><span class="val">81%</span></div>
+          <div class="data-row"><span class="key">Estudiantes atendidos</span><span class="val">~9.000</span></div>
+        </div>
+        <div class="entity-card">
+          <div style="display:flex;align-items:center;gap:12px;margin-bottom:10px">
+            <div style="font-size:22px">🩺</div>
+            <div>
+              <div style="font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:0.08em;color:#c8962b">Secretaría de Salud</div>
+              <div style="font-size:13px;font-weight:600">Sec. Salud Municipal</div>
+            </div>
+          </div>
+          <div class="data-row"><span class="key">Presupuesto</span><span class="val accent">$8.400 M</span></div>
+          <div class="data-row"><span class="key">Ejecución</span><span class="val">76%</span></div>
+        </div>
+        <div class="entity-card">
+          <div style="display:flex;align-items:center;gap:12px;margin-bottom:10px">
+            <div style="font-size:22px">🏗</div>
+            <div>
+              <div style="font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:0.08em;color:var(--accent)">Secretaría de Infraestructura</div>
+              <div style="font-size:13px;font-weight:600">Sec. Infraestructura y Obras</div>
+            </div>
+          </div>
+          <div class="data-row"><span class="key">Presupuesto</span><span class="val accent">$7.600 M</span></div>
+          <div class="data-row"><span class="key">Ejecución</span><span class="val">65%</span></div>
+          <div class="data-row"><span class="key">Proyectos activos</span><span class="val">12</span></div>
+        </div>
+        <div class="entity-card">
+          <div style="display:flex;align-items:center;gap:12px;margin-bottom:10px">
+            <div style="font-size:22px">💧</div>
+            <div>
+              <div style="font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:0.08em;color:#3b7abf">Sec. Agua y Saneamiento</div>
+              <div style="font-size:13px;font-weight:600">Servicios públicos domiciliarios</div>
+            </div>
+          </div>
+          <div class="data-row"><span class="key">Presupuesto</span><span class="val accent">$4.200 M</span></div>
+          <div class="data-row"><span class="key">Ejecución</span><span class="val">70%</span></div>
+        </div>
+        <div class="entity-card">
+          <div style="display:flex;align-items:center;gap:12px;margin-bottom:10px">
+            <div style="font-size:22px">💼</div>
+            <div>
+              <div style="font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:0.08em;color:var(--muted)">Secretaría General</div>
+              <div style="font-size:13px;font-weight:600">Gobierno y Administración</div>
+            </div>
+          </div>
+          <div class="data-row"><span class="key">Presupuesto</span><span class="val accent">$3.800 M</span></div>
+          <div class="data-row"><span class="key">Ejecución</span><span class="val">88%</span></div>
+        </div>
+        <div class="entity-card">
+          <div style="display:flex;align-items:center;gap:12px;margin-bottom:10px">
+            <div style="font-size:22px">🤝</div>
+            <div>
+              <div style="font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:0.08em;color:#8b5cf6">Sec. Desarrollo Social</div>
+              <div style="font-size:13px;font-weight:600">Integración y Desarrollo Social</div>
+            </div>
+          </div>
+          <div class="data-row"><span class="key">Presupuesto</span><span class="val accent">$2.000 M</span></div>
+          <div class="data-row"><span class="key">Ejecución</span><span class="val" style="color:#c8962b">57%</span></div>
         </div>
       </div>
     </div>
   </div>
-</section>
 
-<!-- PARTICIPAR -->
-<section class="participar">
-  <div class="container">
-    <h2>¿Ves algo irregular?<br/>Repórtalo</h2>
-    <p>El control ciudadano es más efectivo cuando participamos activamente. Denuncia posibles irregularidades o solicita información pública.</p>
-    <div class="btn-group">
-      <a href="https://www.alcaldia-pitalito.gov.co" target="_blank" class="btn btn-primary">🔍 Portal Alcaldía</a>
-      <a href="https://www.secop.gov.co/" target="_blank" class="btn btn-outline">📋 SECOP II</a>
-      <a href="https://www.procuraduria.gov.co/" target="_blank" class="btn btn-outline">⚖️ Denunciar</a>
+  <!-- ── CONTRACTS ── -->
+  <div class="page" id="page-contracts">
+    <div class="topbar">
+      <div class="breadcrumb"><a onclick="showPage('home')">TimanáGov</a> / <span>Contratos</span></div>
+      <div class="topbar-meta">SECOP II</div>
+    </div>
+    <div class="contracts-wrap">
+      <div class="section-label" style="margin-bottom:14px">Contratos recientes — Municipio de Timaná</div>
+      <table class="contracts-table">
+        <thead>
+          <tr>
+            <th>Objeto</th>
+            <th>Tipo</th>
+            <th>Secretaría</th>
+            <th>Valor</th>
+            <th>Estado</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Mantenimiento vías rurales Ruta 45 — tramo urbano-rural</td>
+            <td>Obra</td>
+            <td>Infraestructura</td>
+            <td class="num">$1.240 M</td>
+            <td><span class="badge badge-green">Activo</span></td>
+          </tr>
+          <tr>
+            <td>Dotación material escolar IE Gabriela Mistral</td>
+            <td>Suministro</td>
+            <td>Educación</td>
+            <td class="num">$180 M</td>
+            <td><span class="badge badge-green">Activo</span></td>
+          </tr>
+          <tr>
+            <td>Apoyo gestión Juegos Intercolegiados 2025</td>
+            <td>Servicio</td>
+            <td>Deporte</td>
+            <td class="num">$95 M</td>
+            <td><span class="badge badge-green">Activo</span></td>
+          </tr>
+          <tr>
+            <td>Construcción sistema acueducto vereda Cosanza</td>
+            <td>Obra</td>
+            <td>Agua y San.</td>
+            <td class="num">$820 M</td>
+            <td><span class="badge badge-yellow">En proceso</span></td>
+          </tr>
+          <tr>
+            <td>Contratación directa prestación servicios bienestar funcionarios</td>
+            <td>Servicio</td>
+            <td>Sec. General</td>
+            <td class="num">$38 M</td>
+            <td><span class="badge badge-gray">Cerrado</span></td>
+          </tr>
+          <tr>
+            <td>Programa café especial — tecnificación y BPA</td>
+            <td>Servicio</td>
+            <td>Des. Social</td>
+            <td class="num">$310 M</td>
+            <td><span class="badge badge-green">Activo</span></td>
+          </tr>
+          <tr>
+            <td>Adecuación planta física IE La Anunciación</td>
+            <td>Obra</td>
+            <td>Educación</td>
+            <td class="num">$560 M</td>
+            <td><span class="badge badge-yellow">En proceso</span></td>
+          </tr>
+          <tr>
+            <td>Atención primera infancia ICBF — operador municipal</td>
+            <td>Servicio</td>
+            <td>Salud</td>
+            <td class="num">$420 M</td>
+            <td><span class="badge badge-green">Activo</span></td>
+          </tr>
+        </tbody>
+      </table>
+      <div style="margin-top:20px;font-size:11.5px;color:var(--muted)">
+        Datos orientativos basados en fuentes públicas. Ver todos en 
+        <a href="https://www.secop.gov.co/" target="_blank" style="color:var(--accent3)">SECOP II →</a>
+      </div>
     </div>
   </div>
-</section>
 
-<!-- FOOTER -->
-<footer>
-  <div class="footer-inner">
-    <div>
-      <div class="footer-logo">Monitor Ciudadano · Pitalito, Huila</div>
-      <div style="margin-top:4px">Datos abiertos para el control social · Información referenciada en fuentes públicas oficiales</div>
+  <!-- ── TOPICS ── -->
+  <div class="page" id="page-all-topics">
+    <div class="topbar">
+      <div class="breadcrumb"><a onclick="showPage('home')">TimanáGov</a> / <span>Temas</span></div>
     </div>
-    <div class="footer-links">
-      <a href="https://www.alcaldia-pitalito.gov.co" target="_blank">Alcaldía</a>
-      <a href="https://www.secop.gov.co/" target="_blank">SECOP II</a>
-      <a href="https://www.monitorciudadano.co" target="_blank">Monitor Nacional</a>
-      <a href="https://www.contraloria.gov.co" target="_blank">Contraloría</a>
+    <div class="topics-grid">
+      <div class="topic-card"><div class="topic-icon">☕</div><div class="topic-name">Café especial</div><div class="topic-desc">Timaná es uno de los mayores productores de café especial del Huila y Colombia. Programas de tecnificación y BPA.</div><div class="topic-count">3 contratos · 1 programa</div></div>
+      <div class="topic-card"><div class="topic-icon">🏗</div><div class="topic-name">Vías e infraestructura</div><div class="topic-desc">Ruta Nacional 45 como eje vial. Mejoramiento de vías rurales y conexión con corregimientos.</div><div class="topic-count">4 contratos · 12 proyectos</div></div>
+      <div class="topic-card"><div class="topic-icon">📚</div><div class="topic-name">Educación</div><div class="topic-desc">~9.000 estudiantes. IE La Anunciación, historia desde 1892. Programas SENA en el municipio.</div><div class="topic-count">5 contratos</div></div>
+      <div class="topic-card"><div class="topic-icon">💊</div><div class="topic-name">Salud</div><div class="topic-desc">Atención primera infancia, SISBEN y operadores de salud. Ejecución del 76% al cierre 2024.</div><div class="topic-count">3 contratos</div></div>
+      <div class="topic-card"><div class="topic-icon">💧</div><div class="topic-name">Agua potable</div><div class="topic-desc">Proyectos de acueducto en zonas rurales. Construcción sistema Cosanza y otras veredas.</div><div class="topic-count">2 contratos</div></div>
+      <div class="topic-card"><div class="topic-icon">⚽</div><div class="topic-name">Deporte</div><div class="topic-desc">Juegos Intercolegiados 2025 con apoyo del INDERHUILA y el Ministerio de Deporte.</div><div class="topic-count">2 contratos</div></div>
+      <div class="topic-card"><div class="topic-icon">🏺</div><div class="topic-name">Cacica Gaitana</div><div class="topic-desc">Símbolo histórico de resistencia indígena. Timaná es referente nacional por esta gesta libertaria.</div><div class="topic-count">Patrimonio histórico</div></div>
+      <div class="topic-card"><div class="topic-icon">🌿</div><div class="topic-name">Medio ambiente</div><div class="topic-desc">Municipio en la región del Macizo Colombiano y cuenca del río Magdalena.</div><div class="topic-count">POT vigente</div></div>
+      <div class="topic-card"><div class="topic-icon">🏘</div><div class="topic-name">Vivienda</div><div class="topic-desc">Programas de mejoramiento de vivienda rural y urbana en los 7 corregimientos.</div><div class="topic-count">1 programa activo</div></div>
+      <div class="topic-card"><div class="topic-icon">📡</div><div class="topic-name">Conectividad</div><div class="topic-desc">Expansión de acceso a internet en zona rural. Mintic — zonas digitales.</div><div class="topic-count">En gestión</div></div>
+      <div class="topic-card"><div class="topic-icon">🚔</div><div class="topic-name">Seguridad pública</div><div class="topic-desc">Coordinación con Policía Nacional y Ejército. Migración histórica por desplazamiento del Caquetá.</div><div class="topic-count">Seguimiento activo</div></div>
+      <div class="topic-card"><div class="topic-icon">💰</div><div class="topic-name">Regalías SGR</div><div class="topic-desc">Proyectos OCAD en ejecución. Coordinación con DNP y Gobernación del Huila.</div><div class="topic-count">2 proyectos</div></div>
     </div>
   </div>
-</footer>
+
+</main>
+</div><!-- .app -->
+
+<!-- ─── GRAPH CANVAS ─────────────────────── -->
+<div class="graph-tooltip" id="graphTooltip"></div>
 
 <script>
-function filterContratos(btn, tipo) {
-  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
-  btn.classList.add('active');
-  document.querySelectorAll('.contrato-card').forEach(card => {
-    if (tipo === 'todos' || card.dataset.tipo === tipo) {
-      card.style.display = 'grid';
-    } else {
-      card.style.display = 'none';
-    }
-  });
+// ─── NAVIGATION ──────────────────────────────────────────────
+function showPage(id) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+  const page = document.getElementById('page-' + id);
+  if (page) page.classList.add('active');
+  if (id === 'graph') initGraph();
+  window.scrollTo(0,0);
 }
 
-// Animate bars on scroll
-const observer = new IntersectionObserver((entries) => {
-  entries.forEach(e => {
-    if (e.isIntersecting) {
-      e.target.querySelectorAll('.bar-fill').forEach(bar => {
-        bar.style.width = bar.style.width;
-      });
+function handleSearch(val) {
+  if (!val.trim()) return;
+  const v = val.toLowerCase();
+  const pages = ['home','budget','elected','departments','contracts','all-topics'];
+  for (const p of pages) {
+    const el = document.getElementById('page-' + p);
+    if (el && el.textContent.toLowerCase().includes(v)) {
+      showPage(p); return;
+    }
+  }
+}
+
+// ─── GRAPH ───────────────────────────────────────────────────
+let graphInitialized = false;
+let nodes = [], edges = [], zoom = 1, panX = 0, panY = 0;
+let isDragging = false, lastMX = 0, lastMY = 0;
+
+function initGraph() {
+  if (graphInitialized) return;
+  graphInitialized = true;
+
+  const canvas = document.getElementById('graph');
+  const wrap = canvas.parentElement;
+  canvas.width  = wrap.offsetWidth;
+  canvas.height = wrap.offsetHeight;
+
+  const cx = canvas.width / 2, cy = canvas.height / 2;
+
+  // Nodes
+  const nodeData = [
+    { id:'alcalde',   label:'Alcalde\nEdwin Cárdenas', color:'#5b9e6f', x:cx,   y:cy-20, r:30, page:'elected' },
+    { id:'concejo',   label:'Concejo\nMunicipal',      color:'#c8962b', x:cx-200, y:cy-130, r:22, page:'elected' },
+    { id:'personeria',label:'Personería',               color:'#c8962b', x:cx+200, y:cy-130, r:18, page:'elected' },
+    { id:'s-edu',     label:'Sec.\nEducación',          color:'#3b7abf', x:cx-260, y:cy+60,  r:20, page:'departments' },
+    { id:'s-sal',     label:'Sec.\nSalud',              color:'#3b7abf', x:cx-160, y:cy+150, r:20, page:'departments' },
+    { id:'s-inf',     label:'Sec.\nInfraestr.',         color:'#3b7abf', x:cx+20,  y:cy+180, r:20, page:'departments' },
+    { id:'s-agu',     label:'Sec.\nAgua',               color:'#3b7abf', x:cx+180, y:cy+150, r:20, page:'departments' },
+    { id:'s-gen',     label:'Sec.\nGeneral',            color:'#3b7abf', x:cx+260, y:cy+60,  r:20, page:'departments' },
+    { id:'s-soc',     label:'Sec.\nDesarrollo',         color:'#8b5cf6', x:cx+100, y:cy-200, r:18, page:'departments' },
+    { id:'cafe',      label:'Café\nEspecial',           color:'#e07070', x:cx-340, y:cy-30,  r:16, page:'all-topics' },
+    { id:'vias',      label:'Vías',                     color:'#e07070', x:cx-300, y:cy+200, r:16, page:'all-topics' },
+    { id:'deporte',   label:'Deporte',                  color:'#e07070', x:cx+340, y:cy-30,  r:16, page:'all-topics' },
+    { id:'secop',     label:'SECOP II',                 color:'#888',    x:cx+160, y:cy-220, r:14, page:'contracts' },
+  ];
+  const edgeData = [
+    ['alcalde','concejo'],['alcalde','personeria'],
+    ['alcalde','s-edu'],['alcalde','s-sal'],['alcalde','s-inf'],
+    ['alcalde','s-agu'],['alcalde','s-gen'],['alcalde','s-soc'],
+    ['s-edu','cafe'],['s-inf','vias'],['s-gen','deporte'],
+    ['alcalde','secop'],['s-soc','cafe'],
+  ];
+
+  nodes = nodeData;
+  edges = edgeData.map(([a,b]) => ({
+    from: nodeData.find(n=>n.id===a),
+    to:   nodeData.find(n=>n.id===b)
+  }));
+
+  // Force layout pass
+  for (let iter = 0; iter < 80; iter++) {
+    for (const n of nodes) {
+      let fx = 0, fy = 0;
+      for (const m of nodes) {
+        if (n === m) continue;
+        const dx = n.x - m.x, dy = n.y - m.y;
+        const dist = Math.sqrt(dx*dx + dy*dy) || 1;
+        const rep = 3500 / (dist * dist);
+        fx += (dx / dist) * rep;
+        fy += (dy / dist) * rep;
+      }
+      // attraction along edges
+      for (const e of edges) {
+        let other = null;
+        if (e.from === n) other = e.to;
+        else if (e.to === n) other = e.from;
+        if (!other) continue;
+        const dx = other.x - n.x, dy = other.y - n.y;
+        fx += dx * 0.008; fy += dy * 0.008;
+      }
+      n.vx = (n.vx || 0) * 0.8 + fx * 0.1;
+      n.vy = (n.vy || 0) * 0.8 + fy * 0.1;
+    }
+    for (const n of nodes) { n.x += n.vx; n.y += n.vy; }
+  }
+
+  draw();
+
+  // Events
+  canvas.addEventListener('mousemove', e => {
+    const rect = canvas.getBoundingClientRect();
+    const mx = (e.clientX - rect.left - panX) / zoom;
+    const my = (e.clientY - rect.top  - panY) / zoom;
+    const tip = document.getElementById('graphTooltip');
+    let hit = null;
+    for (const n of nodes) {
+      const d = Math.sqrt((mx-n.x)**2+(my-n.y)**2);
+      if (d < n.r + 6) { hit = n; break; }
+    }
+    if (hit) {
+      canvas.style.cursor = 'pointer';
+      tip.style.display = 'block';
+      tip.style.left = (e.clientX - rect.left + 14) + 'px';
+      tip.style.top  = (e.clientY - rect.top  - 10) + 'px';
+      tip.innerHTML = `<strong>${hit.label.replace('\n',' ')}</strong>Clic para ver detalle`;
+    } else {
+      canvas.style.cursor = isDragging ? 'grabbing' : 'grab';
+      tip.style.display = 'none';
+    }
+    if (isDragging) { panX += e.clientX - lastMX; panY += e.clientY - lastMY; lastMX = e.clientX; lastMY = e.clientY; draw(); }
+  });
+  canvas.addEventListener('mousedown', e => { isDragging = true; lastMX = e.clientX; lastMY = e.clientY; canvas.style.cursor = 'grabbing'; });
+  canvas.addEventListener('mouseup',   () => { isDragging = false; canvas.style.cursor = 'grab'; });
+  canvas.addEventListener('click',     e => {
+    const rect = canvas.getBoundingClientRect();
+    const mx = (e.clientX - rect.left - panX) / zoom;
+    const my = (e.clientY - rect.top  - panY) / zoom;
+    for (const n of nodes) {
+      const d = Math.sqrt((mx-n.x)**2+(my-n.y)**2);
+      if (d < n.r + 6 && n.page) { showPage(n.page); return; }
     }
   });
-}, { threshold: 0.3 });
-document.querySelectorAll('.pres-chart-wrap').forEach(el => observer.observe(el));
+  canvas.addEventListener('wheel', e => { e.preventDefault(); graphZoom(e.deltaY < 0 ? 1.1 : 0.91); }, {passive:false});
+}
+
+function draw() {
+  const canvas = document.getElementById('graph');
+  if (!canvas) return;
+  const ctx = canvas.getContext('2d');
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  ctx.save();
+  ctx.translate(panX, panY);
+  ctx.scale(zoom, zoom);
+
+  // Edges
+  for (const e of edges) {
+    ctx.beginPath();
+    ctx.moveTo(e.from.x, e.from.y);
+    ctx.lineTo(e.to.x,   e.to.y);
+    ctx.strokeStyle = '#2a2a2a';
+    ctx.lineWidth = 1.5 / zoom;
+    ctx.stroke();
+  }
+
+  // Nodes
+  for (const n of nodes) {
+    // glow
+    const grad = ctx.createRadialGradient(n.x, n.y, 0, n.x, n.y, n.r * 2.5);
+    grad.addColorStop(0, n.color + '22');
+    grad.addColorStop(1, 'transparent');
+    ctx.beginPath(); ctx.arc(n.x, n.y, n.r * 2.5, 0, Math.PI*2);
+    ctx.fillStyle = grad; ctx.fill();
+
+    // circle
+    ctx.beginPath(); ctx.arc(n.x, n.y, n.r, 0, Math.PI*2);
+    ctx.fillStyle = '#141414';
+    ctx.strokeStyle = n.color;
+    ctx.lineWidth = 2 / zoom;
+    ctx.fill(); ctx.stroke();
+
+    // label
+    const lines = n.label.split('\n');
+    ctx.fillStyle = '#e8e8e8';
+    ctx.font = `${Math.max(9, 11 / zoom)}px Inter, sans-serif`;
+    ctx.textAlign = 'center';
+    lines.forEach((l, i) => {
+      ctx.fillText(l, n.x, n.y + n.r + 14/zoom + i * 12/zoom);
+    });
+  }
+  ctx.restore();
+}
+
+function graphZoom(factor) { zoom *= factor; draw(); }
+function graphReset() { zoom = 1; panX = 0; panY = 0; draw(); }
 </script>
 </body>
 </html>
