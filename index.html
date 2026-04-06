@@ -1,638 +1,977 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-  <title>Observatorio Territorial · Huila, Caquetá, Putumayo</title>
-  <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Monitor Ciudadano · Pitalito, Huila</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet"/>
+<style>
+  :root {
+    --verde: #1a6b3a;
+    --verde-claro: #2d9454;
+    --dorado: #c8962b;
+    --dorado-claro: #f0b83a;
+    --rojo: #c0392b;
+    --crema: #f7f3ec;
+    --blanco: #ffffff;
+    --gris-1: #f0ece3;
+    --gris-2: #d8d2c5;
+    --gris-texto: #5a5448;
+    --oscuro: #1c1a14;
+    --fondo: #faf7f1;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--fondo);
+    color: var(--oscuro);
+    line-height: 1.6;
+  }
 
-    body {
-      background: #f0f6fa;
-      font-family: system-ui, 'Segoe UI', 'Roboto', 'Helvetica Neue', sans-serif;
-      padding: 24px 20px;
-      color: #1e2f3a;
-    }
+  /* ── HEADER ── */
+  header {
+    background: var(--verde);
+    color: white;
+    padding: 0 2rem;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    box-shadow: 0 2px 20px rgba(0,0,0,0.25);
+  }
+  .header-inner {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 64px;
+  }
+  .logo {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    text-decoration: none;
+    color: white;
+  }
+  .logo-icon {
+    width: 36px; height: 36px;
+    background: var(--dorado-claro);
+    border-radius: 8px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 18px;
+  }
+  .logo-text { font-family: 'Syne', sans-serif; font-weight: 700; font-size: 1rem; letter-spacing: 0.01em; }
+  .logo-sub { font-size: 0.7rem; font-weight: 300; opacity: 0.75; letter-spacing: 0.08em; text-transform: uppercase; }
+  nav { display: flex; gap: 0; }
+  nav a {
+    color: rgba(255,255,255,0.85);
+    text-decoration: none;
+    font-size: 0.85rem;
+    font-weight: 500;
+    padding: 0 14px;
+    height: 64px;
+    display: flex; align-items: center;
+    border-bottom: 3px solid transparent;
+    transition: all 0.2s;
+    letter-spacing: 0.02em;
+  }
+  nav a:hover { color: white; border-bottom-color: var(--dorado-claro); }
 
-    .container {
-      max-width: 1400px;
-      margin: 0 auto;
-    }
+  /* ── HERO ── */
+  .hero {
+    background: linear-gradient(135deg, var(--verde) 0%, #0e4224 60%, #0a2e18 100%);
+    color: white;
+    padding: 80px 2rem 60px;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero::before {
+    content: '';
+    position: absolute; inset: 0;
+    background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.03'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+  }
+  .hero-inner {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 40px;
+    align-items: center;
+    position: relative;
+  }
+  .hero-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: rgba(200,150,43,0.25);
+    border: 1px solid var(--dorado);
+    color: var(--dorado-claro);
+    font-size: 0.72rem;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    padding: 5px 12px;
+    border-radius: 4px;
+    margin-bottom: 16px;
+  }
+  .hero h1 {
+    font-family: 'Syne', sans-serif;
+    font-size: clamp(2rem, 4vw, 3.2rem);
+    font-weight: 800;
+    line-height: 1.1;
+    margin-bottom: 16px;
+  }
+  .hero h1 span { color: var(--dorado-claro); }
+  .hero p {
+    font-size: 1rem;
+    color: rgba(255,255,255,0.75);
+    max-width: 520px;
+    font-weight: 300;
+    margin-bottom: 28px;
+  }
+  .hero-stats {
+    display: flex;
+    gap: 28px;
+  }
+  .hero-stat { text-align: center; }
+  .hero-stat-num {
+    font-family: 'Syne', sans-serif;
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: var(--dorado-claro);
+    display: block;
+  }
+  .hero-stat-label { font-size: 0.7rem; opacity: 0.65; text-transform: uppercase; letter-spacing: 0.08em; }
+  .hero-escudo {
+    width: 120px; height: 120px;
+    background: rgba(255,255,255,0.08);
+    border-radius: 50%;
+    border: 2px solid rgba(255,255,255,0.15);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 60px;
+    flex-shrink: 0;
+  }
 
-    /* API bar */
-    .api-bar {
-      background: white;
-      border-radius: 32px;
-      padding: 16px 24px;
-      margin-bottom: 28px;
-      display: flex;
-      flex-wrap: wrap;
-      align-items: center;
-      justify-content: space-between;
-      gap: 16px;
-      box-shadow: 0 2px 10px rgba(0,0,0,0.03);
-      border: 1px solid #dfecf2;
-    }
+  /* ── LAYOUT ── */
+  .container { max-width: 1200px; margin: 0 auto; padding: 0 2rem; }
+  section { padding: 56px 0; }
+  .section-title {
+    font-family: 'Syne', sans-serif;
+    font-size: 1.6rem;
+    font-weight: 700;
+    color: var(--oscuro);
+    margin-bottom: 6px;
+  }
+  .section-subtitle { font-size: 0.9rem; color: var(--gris-texto); margin-bottom: 36px; }
+  .section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    margin-bottom: 36px;
+  }
+  .tag-update {
+    font-size: 0.72rem;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    color: var(--verde-claro);
+    background: rgba(45,148,84,0.1);
+    border: 1px solid rgba(45,148,84,0.2);
+    padding: 4px 10px;
+    border-radius: 20px;
+    text-transform: uppercase;
+  }
 
-    .api-control {
-      display: flex;
-      flex-wrap: wrap;
-      align-items: center;
-      gap: 12px;
-      background: #f8fafd;
-      padding: 5px 18px;
-      border-radius: 60px;
-    }
+  /* ── INDICATORS GRID ── */
+  .indicators { background: var(--gris-1); }
+  .ind-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 16px;
+  }
+  .ind-card {
+    background: white;
+    border-radius: 12px;
+    padding: 24px;
+    border: 1px solid var(--gris-2);
+    transition: transform 0.2s, box-shadow 0.2s;
+    position: relative;
+    overflow: hidden;
+  }
+  .ind-card::before {
+    content: '';
+    position: absolute; left: 0; top: 0; bottom: 0;
+    width: 4px;
+    border-radius: 12px 0 0 12px;
+  }
+  .ind-card.verde::before { background: var(--verde-claro); }
+  .ind-card.dorado::before { background: var(--dorado); }
+  .ind-card.rojo::before { background: var(--rojo); }
+  .ind-card.azul::before { background: #2980b9; }
+  .ind-card:hover { transform: translateY(-3px); box-shadow: 0 8px 30px rgba(0,0,0,0.08); }
+  .ind-icon { font-size: 1.6rem; margin-bottom: 10px; }
+  .ind-label { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.08em; color: var(--gris-texto); font-weight: 600; margin-bottom: 6px; }
+  .ind-value { font-family: 'Syne', sans-serif; font-size: 1.9rem; font-weight: 700; color: var(--oscuro); line-height: 1; }
+  .ind-unit { font-size: 0.8rem; color: var(--gris-texto); margin-top: 4px; }
+  .ind-trend {
+    margin-top: 10px;
+    font-size: 0.78rem;
+    font-weight: 500;
+    display: flex; align-items: center; gap: 4px;
+  }
+  .trend-up { color: var(--verde-claro); }
+  .trend-down { color: var(--rojo); }
+  .trend-eq { color: var(--dorado); }
 
-    .api-control label {
-      font-weight: 600;
-      font-size: 0.85rem;
-      color: #1e6f5c;
-    }
+  /* ── PRESUPUESTO ── */
+  .presupuesto { background: white; }
+  .pres-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 32px; }
+  .pres-chart-wrap {
+    background: var(--gris-1);
+    border-radius: 16px;
+    padding: 28px;
+    border: 1px solid var(--gris-2);
+  }
+  .chart-title { font-family: 'Syne', sans-serif; font-weight: 700; font-size: 1rem; margin-bottom: 20px; }
+  .bar-chart { display: flex; flex-direction: column; gap: 12px; }
+  .bar-item { }
+  .bar-label-row { display: flex; justify-content: space-between; margin-bottom: 5px; font-size: 0.82rem; }
+  .bar-label { font-weight: 500; color: var(--oscuro); }
+  .bar-amount { color: var(--gris-texto); font-weight: 400; }
+  .bar-track {
+    height: 10px; background: var(--gris-2); border-radius: 5px; overflow: hidden;
+  }
+  .bar-fill {
+    height: 100%; border-radius: 5px;
+    transition: width 1s cubic-bezier(0.4,0,0.2,1);
+  }
+  .pres-table-wrap { }
+  .pres-table {
+    width: 100%; border-collapse: collapse; font-size: 0.85rem;
+  }
+  .pres-table th {
+    background: var(--verde); color: white;
+    padding: 10px 14px; text-align: left;
+    font-family: 'Syne', sans-serif; font-size: 0.78rem; letter-spacing: 0.05em; font-weight: 600;
+  }
+  .pres-table th:first-child { border-radius: 8px 0 0 0; }
+  .pres-table th:last-child { border-radius: 0 8px 0 0; }
+  .pres-table td { padding: 10px 14px; border-bottom: 1px solid var(--gris-1); vertical-align: middle; }
+  .pres-table tr:last-child td { border-bottom: none; }
+  .pres-table tr:hover td { background: var(--gris-1); }
+  .pres-table .num { font-family: 'Syne', sans-serif; font-weight: 600; text-align: right; }
+  .pres-table .ejecucion-bar {
+    width: 80px; height: 6px; background: var(--gris-2); border-radius: 3px;
+    display: inline-block; vertical-align: middle; margin-right: 6px;
+    overflow: hidden;
+  }
+  .pres-table .ejecucion-fill { height: 100%; border-radius: 3px; background: var(--verde-claro); }
+  .pres-table .pct { font-size: 0.78rem; color: var(--gris-texto); }
 
-    .api-control input {
-      border: 1px solid #cde0e8;
-      border-radius: 40px;
-      padding: 8px 16px;
-      font-family: monospace;
-      font-size: 0.85rem;
-      width: 260px;
-      background: white;
-    }
+  /* ── CONTRATOS ── */
+  .contratos { background: var(--gris-1); }
+  .contratos-filters {
+    display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 24px;
+  }
+  .filter-btn {
+    padding: 6px 16px; border-radius: 20px; border: 1px solid var(--gris-2);
+    background: white; font-size: 0.8rem; cursor: pointer; font-family: inherit;
+    transition: all 0.2s; color: var(--gris-texto); font-weight: 500;
+  }
+  .filter-btn.active, .filter-btn:hover {
+    background: var(--verde); color: white; border-color: var(--verde);
+  }
+  .contrato-card {
+    background: white; border-radius: 12px; padding: 20px 24px;
+    border: 1px solid var(--gris-2); margin-bottom: 12px;
+    display: grid; grid-template-columns: auto 1fr auto;
+    gap: 20px; align-items: center;
+    transition: box-shadow 0.2s;
+  }
+  .contrato-card:hover { box-shadow: 0 4px 20px rgba(0,0,0,0.07); }
+  .contrato-tipo {
+    width: 44px; height: 44px; border-radius: 10px;
+    display: flex; align-items: center; justify-content: center; font-size: 1.2rem;
+    flex-shrink: 0;
+  }
+  .tipo-obra { background: rgba(41,128,185,0.1); }
+  .tipo-servicio { background: rgba(45,148,84,0.1); }
+  .tipo-suministro { background: rgba(200,150,43,0.1); }
+  .contrato-info h4 { font-weight: 600; font-size: 0.92rem; margin-bottom: 3px; color: var(--oscuro); }
+  .contrato-meta { font-size: 0.78rem; color: var(--gris-texto); }
+  .contrato-meta span { margin-right: 14px; }
+  .contrato-valor {
+    text-align: right; flex-shrink: 0;
+  }
+  .valor-num { font-family: 'Syne', sans-serif; font-weight: 700; font-size: 1rem; color: var(--oscuro); }
+  .valor-estado {
+    display: inline-block; font-size: 0.7rem; font-weight: 600; letter-spacing: 0.06em;
+    text-transform: uppercase; padding: 2px 8px; border-radius: 4px; margin-top: 4px;
+  }
+  .estado-activo { background: rgba(45,148,84,0.12); color: var(--verde-claro); }
+  .estado-cerrado { background: rgba(90,84,72,0.12); color: var(--gris-texto); }
+  .estado-proceso { background: rgba(200,150,43,0.15); color: #a07020; }
 
-    button {
-      background: #2c7a6e;
-      border: none;
-      border-radius: 40px;
-      padding: 8px 22px;
-      font-weight: 600;
-      color: white;
-      cursor: pointer;
-      transition: 0.2s;
-      font-size: 0.85rem;
-    }
+  /* ── ALERTAS ── */
+  .alertas { background: white; }
+  .alertas-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+  .alerta-card {
+    border-radius: 12px; padding: 20px 24px;
+    display: flex; gap: 14px; align-items: flex-start;
+    border: 1px solid;
+  }
+  .alerta-card.roja { background: rgba(192,57,43,0.05); border-color: rgba(192,57,43,0.2); }
+  .alerta-card.amarilla { background: rgba(200,150,43,0.07); border-color: rgba(200,150,43,0.25); }
+  .alerta-card.verde { background: rgba(45,148,84,0.05); border-color: rgba(45,148,84,0.2); }
+  .alerta-icon { font-size: 1.5rem; flex-shrink: 0; }
+  .alerta-body h4 { font-weight: 600; font-size: 0.92rem; margin-bottom: 5px; }
+  .alerta-body p { font-size: 0.82rem; color: var(--gris-texto); line-height: 1.5; }
+  .alerta-fecha { font-size: 0.7rem; color: var(--gris-texto); margin-top: 8px; font-weight: 500; }
 
-    button:hover {
-      background: #1e5f52;
-      transform: scale(0.97);
-    }
+  /* ── RIESGO ── */
+  .riesgo { background: var(--gris-1); }
+  .riesgo-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+  .riesgo-card {
+    background: white; border-radius: 12px; padding: 24px;
+    border: 1px solid var(--gris-2); text-align: center;
+  }
+  .riesgo-gauge {
+    position: relative; width: 100px; height: 50px;
+    margin: 0 auto 16px;
+    overflow: hidden;
+  }
+  .gauge-bg, .gauge-fill {
+    position: absolute; bottom: 0; left: 0;
+    width: 100px; height: 100px;
+    border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
+    border: 10px solid transparent;
+    box-sizing: border-box;
+  }
+  .gauge-bg { border-color: var(--gris-2) var(--gris-2) transparent transparent; transform: rotate(-180deg); }
+  .riesgo-num {
+    position: absolute; bottom: 4px; left: 0; right: 0;
+    text-align: center; font-family: 'Syne', sans-serif; font-weight: 700; font-size: 1.3rem;
+  }
+  .riesgo-label { font-weight: 600; font-size: 0.9rem; margin-bottom: 6px; }
+  .riesgo-desc { font-size: 0.78rem; color: var(--gris-texto); line-height: 1.5; }
+  .pill {
+    display: inline-block; padding: 3px 10px; border-radius: 12px;
+    font-size: 0.72rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em;
+    margin-bottom: 10px;
+  }
+  .pill.alto { background: rgba(192,57,43,0.15); color: var(--rojo); }
+  .pill.medio { background: rgba(200,150,43,0.15); color: #a07020; }
+  .pill.bajo { background: rgba(45,148,84,0.12); color: var(--verde-claro); }
 
-    .refresh-btn {
-      background: #3f8f7c;
-    }
+  /* ── NOTICIAS ── */
+  .noticias { background: white; }
+  .noticias-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
+  .noticia-card {
+    border-radius: 12px; overflow: hidden;
+    border: 1px solid var(--gris-2);
+    transition: transform 0.2s, box-shadow 0.2s;
+    cursor: pointer;
+  }
+  .noticia-card:hover { transform: translateY(-4px); box-shadow: 0 12px 40px rgba(0,0,0,0.1); }
+  .noticia-img {
+    height: 140px; display: flex; align-items: center; justify-content: center;
+    font-size: 3rem;
+  }
+  .noticia-img.img1 { background: linear-gradient(135deg, #1a6b3a 0%, #2d9454 100%); }
+  .noticia-img.img2 { background: linear-gradient(135deg, #c8962b 0%, #f0b83a 100%); }
+  .noticia-img.img3 { background: linear-gradient(135deg, #2980b9 0%, #3498db 100%); }
+  .noticia-body { padding: 18px; }
+  .noticia-tag {
+    font-size: 0.68rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em;
+    color: var(--verde-claro); margin-bottom: 6px;
+  }
+  .noticia-body h4 { font-family: 'Syne', sans-serif; font-size: 0.95rem; font-weight: 700; margin-bottom: 8px; line-height: 1.3; }
+  .noticia-body p { font-size: 0.8rem; color: var(--gris-texto); line-height: 1.5; }
+  .noticia-fecha { font-size: 0.72rem; color: var(--gris-2); margin-top: 10px; }
 
-    .status {
-      font-size: 0.8rem;
-      background: #eef2f5;
-      padding: 6px 14px;
-      border-radius: 30px;
-      color: #2c5a6e;
-    }
+  /* ── PARTICIPAR ── */
+  .participar {
+    background: linear-gradient(135deg, var(--verde) 0%, #0a2e18 100%);
+    color: white; text-align: center; padding: 72px 2rem;
+  }
+  .participar h2 { font-family: 'Syne', sans-serif; font-size: 2rem; font-weight: 800; margin-bottom: 12px; }
+  .participar p { opacity: 0.75; max-width: 480px; margin: 0 auto 32px; font-size: 0.95rem; }
+  .btn-group { display: flex; gap: 14px; justify-content: center; flex-wrap: wrap; }
+  .btn {
+    padding: 12px 28px; border-radius: 8px; font-family: inherit;
+    font-size: 0.88rem; font-weight: 600; cursor: pointer; border: none;
+    text-decoration: none; display: inline-flex; align-items: center; gap: 7px;
+    transition: all 0.2s; letter-spacing: 0.02em;
+  }
+  .btn-primary { background: var(--dorado-claro); color: var(--oscuro); }
+  .btn-primary:hover { background: var(--dorado); }
+  .btn-outline { background: transparent; color: white; border: 2px solid rgba(255,255,255,0.4); }
+  .btn-outline:hover { border-color: white; background: rgba(255,255,255,0.08); }
 
-    /* filtros */
-    .filters-panel {
-      background: white;
-      border-radius: 32px;
-      padding: 20px 24px;
-      margin-bottom: 28px;
-      display: flex;
-      flex-wrap: wrap;
-      gap: 30px;
-      border: 1px solid #dfecf2;
-    }
+  /* ── FOOTER ── */
+  footer {
+    background: var(--oscuro); color: rgba(255,255,255,0.6);
+    padding: 36px 2rem; font-size: 0.8rem;
+  }
+  .footer-inner {
+    max-width: 1200px; margin: 0 auto;
+    display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px;
+  }
+  .footer-logo { color: white; font-family: 'Syne', sans-serif; font-weight: 700; font-size: 0.95rem; }
+  .footer-links { display: flex; gap: 20px; }
+  .footer-links a { color: rgba(255,255,255,0.5); text-decoration: none; transition: color 0.2s; }
+  .footer-links a:hover { color: white; }
 
-    .filter-group {
-      flex: 1;
-      min-width: 180px;
-    }
+  /* ── ANIMATE ── */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  .ind-card, .contrato-card, .alerta-card, .noticia-card {
+    animation: fadeUp 0.5s ease both;
+  }
 
-    .filter-group h4 {
-      font-size: 0.85rem;
-      letter-spacing: 1px;
-      color: #1e6f5c;
-      margin-bottom: 12px;
-      font-weight: 700;
-    }
-
-    #dept-filter {
-      width: 100%;
-      padding: 10px 12px;
-      border-radius: 40px;
-      border: 1px solid #cde0e8;
-      background: white;
-      font-weight: 500;
-    }
-
-    .topic-checks {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 14px;
-    }
-
-    .topic-checks label {
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      background: #f0f5f8;
-      padding: 5px 16px;
-      border-radius: 40px;
-      font-size: 0.8rem;
-      font-weight: 500;
-      cursor: pointer;
-    }
-
-    /* grilla de noticias */
-    .news-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
-      gap: 24px;
-      margin-bottom: 48px;
-    }
-
-    .card {
-      background: white;
-      border-radius: 28px;
-      overflow: hidden;
-      transition: 0.2s;
-      box-shadow: 0 6px 14px rgba(0,0,0,0.05);
-      border: 1px solid #e2edf2;
-      display: flex;
-      flex-direction: column;
-    }
-
-    .card-content {
-      padding: 20px;
-      flex: 1;
-    }
-
-    .card-title {
-      font-size: 1.2rem;
-      font-weight: 700;
-      line-height: 1.3;
-      margin-bottom: 12px;
-    }
-
-    .card-title a {
-      text-decoration: none;
-      color: #1a4d5e;
-    }
-
-    .card-title a:hover {
-      color: #2c7a6e;
-      text-decoration: underline;
-    }
-
-    .card-desc {
-      color: #2c4a5c;
-      font-size: 0.9rem;
-      line-height: 1.45;
-      margin-bottom: 14px;
-      display: -webkit-box;
-      -webkit-line-clamp: 3;
-      -webkit-box-orient: vertical;
-      overflow: hidden;
-    }
-
-    .meta {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: space-between;
-      align-items: center;
-      font-size: 0.7rem;
-      color: #6f8ea0;
-      margin-top: 12px;
-      border-top: 1px solid #ecf3f7;
-      padding-top: 12px;
-    }
-
-    .tags {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
-      margin-bottom: 14px;
-    }
-
-    .tag {
-      background: #e9f0f5;
-      padding: 4px 12px;
-      border-radius: 40px;
-      font-size: 0.7rem;
-      font-weight: 600;
-    }
-
-    .tag-dept {
-      background: #e0f0ea;
-      color: #1e6f5c;
-    }
-
-    .tag-topic {
-      background: #e3eef8;
-      color: #2c6f8f;
-    }
-
-    .loading, .empty {
-      text-align: center;
-      padding: 50px;
-      font-size: 1.1rem;
-      color: #2c7a6e;
-    }
-
-    /* sección redes */
-    .social-section {
-      background: white;
-      border-radius: 32px;
-      padding: 24px;
-      margin-top: 20px;
-      border: 1px solid #dfecf2;
-    }
-
-    .social-section h3 {
-      font-size: 1.4rem;
-      margin-bottom: 18px;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      color: #1e4e5c;
-    }
-
-    .official-list {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 14px;
-      margin-bottom: 28px;
-      background: #fafefe;
-      padding: 16px;
-      border-radius: 28px;
-    }
-
-    .official-list a {
-      background: #eef3f7;
-      padding: 6px 18px;
-      border-radius: 40px;
-      text-decoration: none;
-      font-weight: 500;
-      color: #1e6f5c;
-      font-size: 0.85rem;
-    }
-
-    .search-tools {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 18px;
-      align-items: center;
-    }
-
-    .search-tools input {
-      flex: 2;
-      min-width: 220px;
-      padding: 10px 18px;
-      border-radius: 60px;
-      border: 1px solid #cde0e8;
-      font-size: 0.9rem;
-    }
-
-    .search-buttons {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 12px;
-    }
-
-    .x-btn { background: #000; }
-    .nitter-btn { background: #2c6f8f; }
-    .xcancel-btn { background: #9b6a3c; }
-
-    footer {
-      text-align: center;
-      margin-top: 40px;
-      font-size: 0.75rem;
-      color: #7f9aae;
-    }
-
-    @media (max-width: 680px) {
-      body { padding: 16px; }
-      .api-control input { width: 100%; }
-      .filters-panel { flex-direction: column; }
-    }
-  </style>
+  /* ── RESPONSIVE ── */
+  @media (max-width: 768px) {
+    nav { display: none; }
+    .hero-inner { grid-template-columns: 1fr; }
+    .hero-escudo { display: none; }
+    .pres-grid, .alertas-grid, .riesgo-grid, .noticias-grid { grid-template-columns: 1fr; }
+    .contrato-card { grid-template-columns: auto 1fr; }
+    .contrato-valor { grid-column: 2; }
+  }
+</style>
 </head>
 <body>
-<div class="container">
-  <div class="api-bar">
-    <div class="api-control">
-      <label>🔑 API Key NewsData.io</label>
-      <input type="text" id="apiKeyInput" placeholder="pub_f54e0bdb5c2b47aeb3daf0f871a8c16f" autocomplete="off">
-      <button id="saveApiKeyBtn">Guardar</button>
-    </div>
-    <div style="display: flex; gap: 12px; align-items: center;">
-      <button id="refreshBtn" class="refresh-btn">🔄 Actualizar</button>
-      <div id="apiStatus" class="status">⚙️ Sin API key</div>
-    </div>
-  </div>
 
-  <div class="filters-panel">
-    <div class="filter-group">
-      <h4>📍 Departamento</h4>
-      <select id="dept-filter">
-        <option value="all">Todos</option>
-      </select>
-    </div>
-    <div class="filter-group">
-      <h4>🏷️ Temas</h4>
-      <div class="topic-checks" id="topic-filters"></div>
-    </div>
+<!-- HEADER -->
+<header>
+  <div class="header-inner">
+    <a href="#" class="logo">
+      <div class="logo-icon">🏛</div>
+      <div>
+        <div class="logo-text">Monitor Ciudadano</div>
+        <div class="logo-sub">Pitalito · Huila</div>
+      </div>
+    </a>
+    <nav>
+      <a href="#indicadores">Indicadores</a>
+      <a href="#presupuesto">Presupuesto</a>
+      <a href="#contratos">Contratos</a>
+      <a href="#alertas">Alertas</a>
+      <a href="#noticias">Noticias</a>
+    </nav>
   </div>
+</header>
 
-  <div id="newsContainer" class="news-grid">
-    <div class="loading">📡 Cargando noticias de los últimos 7 días...</div>
-  </div>
-
-  <div class="social-section">
-    <h3>🐦 X (Twitter) · Búsquedas directas</h3>
-    <div class="official-list">
-      <strong>📢 Cuentas oficiales:</strong>
-      <a href="https://twitter.com/GobHuila" target="_blank">@GobHuila</a>
-      <a href="https://twitter.com/CAMHuila" target="_blank">@CAMHuila</a>
-      <a href="https://twitter.com/CorpoAmazonia" target="_blank">@CorpoAmazonia</a>
-      <a href="https://twitter.com/AlcaldiaPitalito" target="_blank">@AlcaldiaPitalito</a>
-      <a href="https://twitter.com/ANI_Colombia" target="_blank">@ANI_Colombia</a>
-      <a href="https://twitter.com/FlorenciaCaqueta" target="_blank">@FlorenciaCaqueta</a>
-      <a href="https://twitter.com/AlcaldiaMocoa" target="_blank">@AlcaldiaMocoa</a>
-    </div>
-    <div class="search-tools">
-      <input type="text" id="xSearchInput" value="ordenamiento territorial Huila" placeholder="Buscar en redes...">
-      <div class="search-buttons">
-        <button id="searchXBtn" class="x-btn">🔍 X</button>
-        <button id="searchNitterBtn" class="nitter-btn">🐦 Nitter</button>
-        <button id="searchXcancelBtn" class="xcancel-btn">❌ Xcancel</button>
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-inner">
+    <div>
+      <div class="hero-badge">🔍 Transparencia & Control Ciudadano</div>
+      <h1>Vigilamos la gestión<br/>de <span>Pitalito</span><br/>juntos</h1>
+      <p>Datos abiertos sobre el presupuesto, contratos y gestión pública del municipio de Pitalito, Huila. Información actualizada para el control ciudadano.</p>
+      <div class="hero-stats">
+        <div class="hero-stat">
+          <span class="hero-stat-num">$312B</span>
+          <div class="hero-stat-label">Presupuesto 2024</div>
+        </div>
+        <div class="hero-stat">
+          <span class="hero-stat-num">847</span>
+          <div class="hero-stat-label">Contratos vigentes</div>
+        </div>
+        <div class="hero-stat">
+          <span class="hero-stat-num">73%</span>
+          <div class="hero-stat-label">Ejecución presupuestal</div>
+        </div>
       </div>
     </div>
-    <p style="font-size: 0.7rem; margin-top: 16px;">✅ Sin bloqueos CORS: solo enlaces directos a plataformas alternativas.</p>
+    <div class="hero-escudo">🌿</div>
   </div>
-  <footer>NewsData.io · Agregador territorial · Últimos 7 días · Datos de Huila, Caquetá, Putumayo</footer>
 </div>
 
-<script>
-  // -------------------- CONSULTAS ESTRATÉGICAS --------------------
-  // Cada consulta: nombre, departamento asociado, tema principal.
-  // Cubre municipios clave y ordenamiento territorial.
-  const QUERIES = [
-    { q: "Neiva Huila ordenamiento territorial POT", dept: "Huila", topic: "POT/Licencias" },
-    { q: "Pitalito Huila licencias urbanísticas", dept: "Huila", topic: "POT/Licencias" },
-    { q: "Garzón Huila plan de ordenamiento", dept: "Huila", topic: "POT/Licencias" },
-    { q: "La Plata Huila desarrollo rural", dept: "Huila", topic: "Gobierno" },
-    { q: "Campoalegre Huila POT", dept: "Huila", topic: "POT/Licencias" },
-    { q: "Rivera Huila medio ambiente", dept: "Huila", topic: "Ambiental" },
-    { q: "Timaná Huila noticias", dept: "Huila", topic: "Gobierno" },
-    { q: "Gobernación del Huila noticias", dept: "Huila", topic: "Gobierno" },
-    { q: "CAM Huila cambio climático", dept: "Huila", topic: "Ambiental" },
-    { q: "Florencia Caquetá POT", dept: "Caquetá", topic: "POT/Licencias" },
-    { q: "San Vicente del Caguán Caquetá", dept: "Caquetá", topic: "Seguridad" },
-    { q: "Corpoamazonia Caquetá Putumayo", dept: "Caquetá", topic: "Ambiental" },
-    { q: "Mocoa Putumayo ordenamiento territorial", dept: "Putumayo", topic: "POT/Licencias" },
-    { q: "Puerto Asís Putumayo noticias", dept: "Putumayo", topic: "Gobierno" },
-    { q: "Putumayo desarrollo sostenible", dept: "Putumayo", topic: "Ambiental" },
-    { q: "licencias ambientales Huila ANLA", dept: "Huila", topic: "POT/Licencias" },
-    { q: "seguridad ciudadana Caquetá", dept: "Caquetá", topic: "Seguridad" },
-    { q: "economía Huila agroindustria", dept: "Huila", topic: "Gobierno" },
-    { q: "turismo Huila San Agustín", dept: "Huila", topic: "Gobierno" },
-    { q: "Agencia Nacional de Licencias ambientales", dept: "Nacional", topic: "POT/Licencias" }
-  ]; // 20 consultas (dentro del límite diario gratuito)
+<!-- INDICADORES -->
+<section class="indicators" id="indicadores">
+  <div class="container">
+    <div class="section-header">
+      <div>
+        <div class="section-title">Indicadores de Gestión</div>
+        <div class="section-subtitle">Seguimiento a los compromisos del Plan de Desarrollo 2024–2027 — Alcaldía Yider Luna Joven</div>
+      </div>
+      <span class="tag-update">✦ Act. Marzo 2025</span>
+    </div>
+    <div class="ind-grid">
+      <div class="ind-card verde" style="animation-delay:0.05s">
+        <div class="ind-icon">💰</div>
+        <div class="ind-label">Ejecución Presupuestal</div>
+        <div class="ind-value">73<span style="font-size:1rem">%</span></div>
+        <div class="ind-unit">del total vigencia 2024</div>
+        <div class="ind-trend trend-up">▲ +8 pp vs 2023</div>
+      </div>
+      <div class="ind-card dorado" style="animation-delay:0.1s">
+        <div class="ind-icon">📋</div>
+        <div class="ind-label">Contratos activos</div>
+        <div class="ind-value">847</div>
+        <div class="ind-unit">contratos en SECOP II</div>
+        <div class="ind-trend trend-up">▲ +12% vs 2023</div>
+      </div>
+      <div class="ind-card azul" style="animation-delay:0.15s">
+        <div class="ind-icon">🎓</div>
+        <div class="ind-label">Cobertura educativa</div>
+        <div class="ind-value">89<span style="font-size:1rem">%</span></div>
+        <div class="ind-unit">matrícula oficial</div>
+        <div class="ind-trend trend-up">▲ +2% vs 2023</div>
+      </div>
+      <div class="ind-card verde" style="animation-delay:0.2s">
+        <div class="ind-icon">🩺</div>
+        <div class="ind-label">Afiliados al SISBEN</div>
+        <div class="ind-value">118K</div>
+        <div class="ind-unit">personas registradas</div>
+        <div class="ind-trend trend-eq">→ Sin variación</div>
+      </div>
+      <div class="ind-card rojo" style="animation-delay:0.25s">
+        <div class="ind-icon">🚧</div>
+        <div class="ind-label">Proyectos de obra</div>
+        <div class="ind-value">42</div>
+        <div class="ind-unit">en ejecución activa</div>
+        <div class="ind-trend trend-down">▼ −5 proyectos paralizados</div>
+      </div>
+      <div class="ind-card dorado" style="animation-delay:0.3s">
+        <div class="ind-icon">💧</div>
+        <div class="ind-label">Cobertura acueducto</div>
+        <div class="ind-value">84<span style="font-size:1rem">%</span></div>
+        <div class="ind-unit">zona urbana</div>
+        <div class="ind-trend trend-up">▲ +3% vs 2022</div>
+      </div>
+      <div class="ind-card azul" style="animation-delay:0.35s">
+        <div class="ind-icon">🌱</div>
+        <div class="ind-label">Inversión en regalías</div>
+        <div class="ind-value">$18B</div>
+        <div class="ind-unit">OCAD vigencia 2024</div>
+        <div class="ind-trend trend-up">▲ Proyectos reactivados</div>
+      </div>
+      <div class="ind-card verde" style="animation-delay:0.4s">
+        <div class="ind-icon">👥</div>
+        <div class="ind-label">Empleados públicos</div>
+        <div class="ind-value">1.240</div>
+        <div class="ind-unit">planta municipal</div>
+        <div class="ind-trend trend-eq">→ Planta estable</div>
+      </div>
+    </div>
+  </div>
+</section>
 
-  let currentApiKey = "";
-  let allArticles = [];      // artículos procesados
-  let uniqueDepts = new Set();
-  let uniqueTopics = new Set();
-
-  const apiKeyInput = document.getElementById("apiKeyInput");
-  const saveBtn = document.getElementById("saveApiKeyBtn");
-  const refreshBtn = document.getElementById("refreshBtn");
-  const newsContainer = document.getElementById("newsContainer");
-  const apiStatus = document.getElementById("apiStatus");
-  const deptSelect = document.getElementById("dept-filter");
-  const topicFiltersDiv = document.getElementById("topic-filters");
-
-  // helpers
-  function showLoading() { newsContainer.innerHTML = `<div class="loading">⏳ Consultando ${QUERIES.length} fuentes... (hasta 30s)</div>`; }
-  function showError(msg) { newsContainer.innerHTML = `<div class="empty">⚠️ ${msg}</div>`; }
-
-  // guardar / cargar API key
-  function loadApiKey() {
-    const stored = localStorage.getItem("newsdata_key");
-    if (stored) {
-      currentApiKey = stored;
-      apiKeyInput.value = stored;
-      apiStatus.innerHTML = "✅ API key activa";
-      return true;
-    }
-    apiStatus.innerHTML = "🔑 Ingresa API key de newsdata.io";
-    return false;
-  }
-
-  function saveApiKey() {
-    const newKey = apiKeyInput.value.trim();
-    if (newKey.startsWith("pub_") && newKey.length > 10) {
-      localStorage.setItem("newsdata_key", newKey);
-      currentApiKey = newKey;
-      apiStatus.innerHTML = "✅ API key guardada";
-      fetchAllNews();
-    } else {
-      alert("La API key debe empezar con 'pub_' (ej: pub_123456...)");
-    }
-  }
-
-  // llamada a NewsData.io para una query
-  async function fetchQuery(apiKey, queryObj) {
-    const url = `https://newsdata.io/api/1/news?apikey=${apiKey}&country=co&language=es&q=${encodeURIComponent(queryObj.q)}&timeframe=48h&size=8`;
-    try {
-      const res = await fetch(url);
-      if (!res.ok) throw new Error(`HTTP ${res.status}`);
-      const data = await res.json();
-      if (data.status === "error") {
-        console.warn(`Error en ${queryObj.q}: ${data.message}`);
-        return { query: queryObj, articles: [] };
-      }
-      return { query: queryObj, articles: data.results || [] };
-    } catch (err) {
-      console.error(`Fallo en consulta "${queryObj.q}":`, err);
-      return { query: queryObj, articles: [] };
-    }
-  }
-
-  // Fusionar artículos, agregar tags y filtrar por fecha (últimos 7 días)
-  function mergeAndFilter(queriesResults) {
-    const articleMap = new Map(); // key = link
-    const sevenDaysAgo = new Date();
-    sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7);
-
-    for (const { query, articles } of queriesResults) {
-      for (const art of articles) {
-        if (!art.link) continue;
-        const pubDate = new Date(art.pubDate);
-        if (pubDate < sevenDaysAgo) continue; // descartar antiguo
-
-        const existing = articleMap.get(art.link);
-        if (existing) {
-          if (!existing.departments.includes(query.dept)) existing.departments.push(query.dept);
-          if (!existing.topics.includes(query.topic)) existing.topics.push(query.topic);
-        } else {
-          articleMap.set(art.link, {
-            title: art.title || "Sin título",
-            link: art.link,
-            description: art.description || art.content || "Leer más en la fuente",
-            pubDate: art.pubDate,
-            source: art.source_id || art.source_name || "Fuente local",
-            departments: [query.dept],
-            topics: [query.topic]
-          });
-        }
-      }
-    }
-
-    let articlesList = Array.from(articleMap.values());
-    articlesList.sort((a, b) => new Date(b.pubDate) - new Date(a.pubDate));
-    return articlesList;
-  }
-
-  // obtener todos los artículos
-  async function fetchAllNews() {
-    if (!currentApiKey) {
-      showError("No hay API key. Guárdala primero.");
-      return;
-    }
-    showLoading();
-    try {
-      const promises = QUERIES.map(q => fetchQuery(currentApiKey, q));
-      const settled = await Promise.allSettled(promises);
-      const successful = [];
-      for (const res of settled) {
-        if (res.status === "fulfilled") successful.push(res.value);
-      }
-      if (successful.length === 0) throw new Error("No se pudo obtener resultados");
-
-      allArticles = mergeAndFilter(successful);
-
-      // extraer departamentos y temas únicos
-      uniqueDepts.clear();
-      uniqueTopics.clear();
-      allArticles.forEach(art => {
-        art.departments.forEach(d => uniqueDepts.add(d));
-        art.topics.forEach(t => uniqueTopics.add(t));
-      });
-
-      renderFilters();
-      renderNews(allArticles);
-      apiStatus.innerHTML = `📰 ${allArticles.length} noticias recientes (últimos 7 días) · ${QUERIES.length} consultas`;
-    } catch (err) {
-      console.error(err);
-      showError("Error cargando noticias: " + err.message);
-      apiStatus.innerHTML = "⚠️ Falló la carga";
-    }
-  }
-
-  function renderFilters() {
-    // departamentos
-    let deptHtml = '<option value="all">🌎 Todos los departamentos</option>';
-    [...uniqueDepts].sort().forEach(d => {
-      deptHtml += `<option value="${d}">📍 ${d}</option>`;
-    });
-    deptSelect.innerHTML = deptHtml;
-
-    // temas (checkboxes)
-    let topicsHtml = "";
-    [...uniqueTopics].sort().forEach(t => {
-      topicsHtml += `<label><input type="checkbox" class="topic-cb" value="${t}" checked> ${t}</label>`;
-    });
-    topicFiltersDiv.innerHTML = topicsHtml;
-    document.querySelectorAll('.topic-cb').forEach(cb => cb.addEventListener('change', applyFilters));
-    deptSelect.addEventListener('change', applyFilters);
-  }
-
-  function applyFilters() {
-    const selectedDept = deptSelect.value;
-    const selectedTopics = Array.from(document.querySelectorAll('.topic-cb:checked')).map(cb => cb.value);
-    let filtered = allArticles;
-    if (selectedDept !== "all") {
-      filtered = filtered.filter(art => art.departments.includes(selectedDept));
-    }
-    if (selectedTopics.length > 0) {
-      filtered = filtered.filter(art => art.topics.some(t => selectedTopics.includes(t)));
-    }
-    renderNews(filtered);
-  }
-
-  function renderNews(articles) {
-    if (!articles.length) {
-      newsContainer.innerHTML = `<div class="empty">📭 No hay noticias con los filtros seleccionados.</div>`;
-      return;
-    }
-    let html = "";
-    for (const art of articles) {
-      const date = new Date(art.pubDate);
-      const dateStr = date.toLocaleDateString('es-CO', { day:'numeric', month:'short', hour:'2-digit', minute:'2-digit' });
-      const tags = `
-        ${art.topics.map(t => `<span class="tag tag-topic">🏷️ ${t}</span>`).join('')}
-        ${art.departments.map(d => `<span class="tag tag-dept">📍 ${d}</span>`).join('')}
-      `;
-      html += `
-        <div class="card">
-          <div class="card-content">
-            <div class="tags">${tags}</div>
-            <div class="card-title">
-              <a href="${art.link}" target="_blank" rel="noopener">${escapeHtml(art.title)}</a>
-            </div>
-            <div class="card-desc">${escapeHtml(art.description.substring(0, 200))}${art.description.length > 200 ? '…' : ''}</div>
-            <div class="meta">
-              <span>📰 ${escapeHtml(art.source)}</span>
-              <span>🕒 ${dateStr}</span>
-            </div>
+<!-- PRESUPUESTO -->
+<section class="presupuesto" id="presupuesto">
+  <div class="container">
+    <div class="section-header">
+      <div>
+        <div class="section-title">Presupuesto Municipal 2024</div>
+        <div class="section-subtitle">Distribución de ingresos y ejecución del gasto por sector — Decreto No. 301 de 2023</div>
+      </div>
+      <span class="tag-update">✦ Vigencia fiscal 2024</span>
+    </div>
+    <div class="pres-grid">
+      <div class="pres-chart-wrap">
+        <div class="chart-title">Distribución del gasto por sector</div>
+        <div class="bar-chart">
+          <div class="bar-item">
+            <div class="bar-label-row"><span class="bar-label">Educación</span><span class="bar-amount">$98.400 M</span></div>
+            <div class="bar-track"><div class="bar-fill" style="width:32%;background:#1a6b3a"></div></div>
+          </div>
+          <div class="bar-item">
+            <div class="bar-label-row"><span class="bar-label">Salud</span><span class="bar-amount">$72.100 M</span></div>
+            <div class="bar-track"><div class="bar-fill" style="width:23%;background:#2d9454"></div></div>
+          </div>
+          <div class="bar-item">
+            <div class="bar-label-row"><span class="bar-label">Infraestructura y obras</span><span class="bar-amount">$58.500 M</span></div>
+            <div class="bar-track"><div class="bar-fill" style="width:19%;background:#c8962b"></div></div>
+          </div>
+          <div class="bar-item">
+            <div class="bar-label-row"><span class="bar-label">Agua y saneamiento</span><span class="bar-amount">$34.200 M</span></div>
+            <div class="bar-track"><div class="bar-fill" style="width:11%;background:#2980b9"></div></div>
+          </div>
+          <div class="bar-item">
+            <div class="bar-label-row"><span class="bar-label">Funcionamiento</span><span class="bar-amount">$31.600 M</span></div>
+            <div class="bar-track"><div class="bar-fill" style="width:10%;background:#8e6b3a"></div></div>
+          </div>
+          <div class="bar-item">
+            <div class="bar-label-row"><span class="bar-label">Otros sectores</span><span class="bar-amount">$17.200 M</span></div>
+            <div class="bar-track"><div class="bar-fill" style="width:5%;background:#aaa"></div></div>
           </div>
         </div>
-      `;
+        <div style="margin-top:20px;padding-top:16px;border-top:1px solid var(--gris-2)">
+          <div style="display:flex;justify-content:space-between;font-size:0.82rem;color:var(--gris-texto)">
+            <span>Total presupuesto aprobado:</span>
+            <span style="font-family:'Syne',sans-serif;font-weight:700;color:var(--oscuro)">$312.000 millones</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="pres-table-wrap">
+        <div class="pres-chart-wrap" style="padding:0">
+          <table class="pres-table">
+            <thead>
+              <tr>
+                <th>Secretaría</th>
+                <th style="text-align:right">Apropiado (M$)</th>
+                <th>Ejecución</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Educación</td>
+                <td class="num">98.400</td>
+                <td><span class="ejecucion-bar"><span class="ejecucion-fill" style="width:81%"></span></span><span class="pct">81%</span></td>
+              </tr>
+              <tr>
+                <td>Salud</td>
+                <td class="num">72.100</td>
+                <td><span class="ejecucion-bar"><span class="ejecucion-fill" style="width:76%"></span></span><span class="pct">76%</span></td>
+              </tr>
+              <tr>
+                <td>Infraestructura</td>
+                <td class="num">58.500</td>
+                <td><span class="ejecucion-bar"><span class="ejecucion-fill" style="width:62%"></span></span><span class="pct">62%</span></td>
+              </tr>
+              <tr>
+                <td>Agua y Saneam.</td>
+                <td class="num">34.200</td>
+                <td><span class="ejecucion-bar"><span class="ejecucion-fill" style="width:70%"></span></span><span class="pct">70%</span></td>
+              </tr>
+              <tr>
+                <td>Deporte y Cultura</td>
+                <td class="num">11.800</td>
+                <td><span class="ejecucion-bar"><span class="ejecucion-fill" style="width:55%"></span></span><span class="pct">55%</span></td>
+              </tr>
+              <tr>
+                <td>Gobierno y Admin.</td>
+                <td class="num">31.600</td>
+                <td><span class="ejecucion-bar"><span class="ejecucion-fill" style="width:88%"></span></span><span class="pct">88%</span></td>
+              </tr>
+              <tr>
+                <td>Desarrollo Social</td>
+                <td class="num">4.400</td>
+                <td><span class="ejecucion-bar"><span class="ejecucion-fill" style="width:49%"></span></span><span class="pct">49%</span></td>
+              </tr>
+              <tr style="font-weight:700">
+                <td><strong>TOTAL</strong></td>
+                <td class="num"><strong>312.000</strong></td>
+                <td><span class="ejecucion-bar"><span class="ejecucion-fill" style="width:73%;background:var(--verde)"></span></span><strong>73%</strong></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTRATOS -->
+<section class="contratos" id="contratos">
+  <div class="container">
+    <div class="section-header">
+      <div>
+        <div class="section-title">Contratación Pública</div>
+        <div class="section-subtitle">Contratos recientes publicados en SECOP II — Municipio de Pitalito</div>
+      </div>
+      <span class="tag-update">✦ SECOP II</span>
+    </div>
+    <div class="contratos-filters">
+      <button class="filter-btn active" onclick="filterContratos(this,'todos')">Todos</button>
+      <button class="filter-btn" onclick="filterContratos(this,'obra')">🏗 Obras</button>
+      <button class="filter-btn" onclick="filterContratos(this,'servicio')">📄 Servicios</button>
+      <button class="filter-btn" onclick="filterContratos(this,'suministro')">📦 Suministros</button>
+    </div>
+    <div id="contratos-list">
+      <div class="contrato-card" data-tipo="obra">
+        <div class="contrato-tipo tipo-obra">🏗</div>
+        <div class="contrato-info">
+          <h4>Mejoramiento vía Criollo – La Laguna, tramo 3</h4>
+          <div class="contrato-meta">
+            <span>📅 Feb 2025</span>
+            <span>🏢 Sec. Infraestructura</span>
+            <span>📑 Licitación Pública</span>
+          </div>
+        </div>
+        <div class="contrato-valor">
+          <div class="valor-num">$2.840 M</div>
+          <span class="valor-estado estado-activo">En ejecución</span>
+        </div>
+      </div>
+      <div class="contrato-card" data-tipo="servicio">
+        <div class="contrato-tipo tipo-servicio">📚</div>
+        <div class="contrato-info">
+          <h4>Apoyo al mejoramiento de instituciones educativas oficiales 2025</h4>
+          <div class="contrato-meta">
+            <span>📅 Ene 2025</span>
+            <span>🏢 Sec. Educación</span>
+            <span>📑 Mínima Cuantía</span>
+          </div>
+        </div>
+        <div class="contrato-valor">
+          <div class="valor-num">$185 M</div>
+          <span class="valor-estado estado-activo">En ejecución</span>
+        </div>
+      </div>
+      <div class="contrato-card" data-tipo="obra">
+        <div class="contrato-tipo tipo-obra">💧</div>
+        <div class="contrato-info">
+          <h4>Estudios y diseños redes acueducto – Reasentamiento Alto de la Cruz</h4>
+          <div class="contrato-meta">
+            <span>📅 Nov 2024</span>
+            <span>🏢 Sec. Infraestructura</span>
+            <span>📑 Min. Cuantía</span>
+          </div>
+        </div>
+        <div class="contrato-valor">
+          <div class="valor-num">$320 M</div>
+          <span class="valor-estado estado-proceso">En revisión</span>
+        </div>
+      </div>
+      <div class="contrato-card" data-tipo="servicio">
+        <div class="contrato-tipo tipo-servicio">⚽</div>
+        <div class="contrato-info">
+          <h4>Plan de bienestar social e incentivos funcionarios – Recreación y deporte 2023</h4>
+          <div class="contrato-meta">
+            <span>📅 Oct 2023</span>
+            <span>🏢 Sec. General</span>
+            <span>📑 Contratación directa</span>
+          </div>
+        </div>
+        <div class="contrato-valor">
+          <div class="valor-num">$48 M</div>
+          <span class="valor-estado estado-cerrado">Cerrado</span>
+        </div>
+      </div>
+      <div class="contrato-card" data-tipo="servicio">
+        <div class="contrato-tipo tipo-servicio">⚰️</div>
+        <div class="contrato-info">
+          <h4>Servicio cremación / inhumación funeraria para población vulnerable</h4>
+          <div class="contrato-meta">
+            <span>📅 Sep 2023</span>
+            <span>🏢 Sec. Integración Social</span>
+            <span>📑 Min. Cuantía</span>
+          </div>
+        </div>
+        <div class="contrato-valor">
+          <div class="valor-num">$95 M</div>
+          <span class="valor-estado estado-cerrado">Cerrado</span>
+        </div>
+      </div>
+      <div class="contrato-card" data-tipo="suministro">
+        <div class="contrato-tipo tipo-suministro">🖥</div>
+        <div class="contrato-info">
+          <h4>Adquisición equipos de cómputo para instituciones educativas – zona rural</h4>
+          <div class="contrato-meta">
+            <span>📅 Mar 2025</span>
+            <span>🏢 Sec. Educación</span>
+            <span>📑 Concurso de Méritos</span>
+          </div>
+        </div>
+        <div class="contrato-valor">
+          <div class="valor-num">$670 M</div>
+          <span class="valor-estado estado-proceso">En proceso</span>
+        </div>
+      </div>
+    </div>
+    <div style="text-align:center;margin-top:24px">
+      <a href="https://www.secop.gov.co/" target="_blank" class="btn btn-outline" style="background:var(--verde);color:white;border:none;">Ver todos en SECOP II →</a>
+    </div>
+  </div>
+</section>
+
+<!-- ALERTAS -->
+<section class="alertas" id="alertas">
+  <div class="container">
+    <div class="section-header">
+      <div>
+        <div class="section-title">Alertas Ciudadanas</div>
+        <div class="section-subtitle">Situaciones de riesgo y hechos de interés para el control social</div>
+      </div>
+      <span class="tag-update">✦ Seguimiento activo</span>
+    </div>
+    <div class="alertas-grid">
+      <div class="alerta-card roja">
+        <div class="alerta-icon">🚨</div>
+        <div class="alerta-body">
+          <h4>5 proyectos de regalías con ejecución paralizada</h4>
+          <p>El Alcalde Yider Luna participó de mesa técnica con el DNP para reactivar proyectos de regalías congelados. La ciudadanía exige rendición de cuentas sobre demoras.</p>
+          <div class="alerta-fecha">🗓 Seguimiento desde Enero 2025</div>
+        </div>
+      </div>
+      <div class="alerta-card amarilla">
+        <div class="alerta-icon">⚠️</div>
+        <div class="alerta-body">
+          <h4>Baja ejecución en Desarrollo Social (49%)</h4>
+          <p>La Secretaría de Desarrollo Social muestra la ejecución más baja del municipio al cierre del tercer trimestre. Programas de atención a población vulnerable en riesgo de no cumplirse.</p>
+          <div class="alerta-fecha">🗓 Actualizado Marzo 2025</div>
+        </div>
+      </div>
+      <div class="alerta-card amarilla">
+        <div class="alerta-icon">⚠️</div>
+        <div class="alerta-body">
+          <h4>Invasión del espacio público en barrio R. Lara Bonilla</h4>
+          <p>La administración actuó ante denuncia ciudadana para desmontar construcción ilegal. El caso se mantiene en seguimiento para verificar que no se reincida.</p>
+          <div class="alerta-fecha">🗓 Nov 2024</div>
+        </div>
+      </div>
+      <div class="alerta-card verde">
+        <div class="alerta-icon">✅</div>
+        <div class="alerta-body">
+          <h4>Jornadas "Gobernando con la Gente" en Criollo</h4>
+          <p>La administración adelanta jornadas de participación ciudadana en corregimientos. Se destaca como buena práctica de acercamiento entre gobierno y comunidad.</p>
+          <div class="alerta-fecha">🗓 Febrero 2025</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- RIESGO -->
+<section class="riesgo">
+  <div class="container">
+    <div class="section-header">
+      <div>
+        <div class="section-title">Índices de Riesgo de Corrupción</div>
+        <div class="section-subtitle">Análisis de riesgos en sectores prioritarios — Metodología Transparencia Colombia</div>
+      </div>
+    </div>
+    <div class="riesgo-grid">
+      <div class="riesgo-card">
+        <span class="pill alto">Riesgo Alto</span>
+        <div style="font-size:2.5rem;margin-bottom:8px">🏗</div>
+        <div class="riesgo-label">Infraestructura y Obras</div>
+        <div class="riesgo-desc">Alta concentración de contratistas. Proyectos con modificaciones de plazo frecuentes. Seguimiento técnico insuficiente en zonas rurales.</div>
+      </div>
+      <div class="riesgo-card">
+        <span class="pill medio">Riesgo Medio</span>
+        <div style="font-size:2.5rem;margin-bottom:8px">🎓</div>
+        <div class="riesgo-label">Educación</div>
+        <div class="riesgo-desc">Adecuada ejecución presupuestal (81%). Persiste riesgo en procesos de selección docente y compras de material escolar.</div>
+      </div>
+      <div class="riesgo-card">
+        <span class="pill medio">Riesgo Medio</span>
+        <div style="font-size:2.5rem;margin-bottom:8px">💊</div>
+        <div class="riesgo-label">Salud y SISBEN</div>
+        <div class="riesgo-desc">Buen nivel de afiliación. Alertas en procesos de focalización de subsidios y contratación de prestación de servicios médicos.</div>
+      </div>
+      <div class="riesgo-card">
+        <span class="pill bajo">Riesgo Bajo</span>
+        <div style="font-size:2.5rem;margin-bottom:8px">📊</div>
+        <div class="riesgo-label">Gestión Administrativa</div>
+        <div class="riesgo-desc">Alta ejecución presupuestal (88%). Buenas prácticas en publicación de información. Mejoras en SECOP II detectadas.</div>
+      </div>
+      <div class="riesgo-card">
+        <span class="pill alto">Riesgo Alto</span>
+        <div style="font-size:2.5rem;margin-bottom:8px">💰</div>
+        <div class="riesgo-label">Regalías SGR</div>
+        <div class="riesgo-desc">Cinco proyectos paralizados. Historial de demoras en ejecución. Poca visibilidad de la destinación de recursos OCAD.</div>
+      </div>
+      <div class="riesgo-card">
+        <span class="pill bajo">Riesgo Bajo</span>
+        <div style="font-size:2.5rem;margin-bottom:8px">🤝</div>
+        <div class="riesgo-label">Participación Ciudadana</div>
+        <div class="riesgo-desc">Se adelantan jornadas "Gobernando con la Gente". Canales activos de atención. Rendición de cuentas publicada en web oficial.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- NOTICIAS -->
+<section class="noticias" id="noticias">
+  <div class="container">
+    <div class="section-header">
+      <div>
+        <div class="section-title">Noticias y Seguimiento</div>
+        <div class="section-subtitle">Hechos recientes de relevancia para el control ciudadano en Pitalito</div>
+      </div>
+    </div>
+    <div class="noticias-grid">
+      <div class="noticia-card">
+        <div class="noticia-img img1">🌿</div>
+        <div class="noticia-body">
+          <div class="noticia-tag">Regalías</div>
+          <h4>Alcalde logra reactivar proyectos de regalías paralizados con el DNP</h4>
+          <p>En mesa técnica con funcionarios del Departamento Nacional de Planeación, el municipio avanzó en descongelar recursos del SGR destinados a obra pública.</p>
+          <div class="noticia-fecha">🗓 Enero 2025 · Alcaldía de Pitalito</div>
+        </div>
+      </div>
+      <div class="noticia-card">
+        <div class="noticia-img img2">☕</div>
+        <div class="noticia-body">
+          <div class="noticia-tag">Desarrollo económico</div>
+          <h4>Pitalito consolida su apuesta por el café especial en mercados internacionales</h4>
+          <p>El municipio, conocido como "la capital mundial del café especial", avanza en programas de tecnificación para pequeños y medianos caficultores.</p>
+          <div class="noticia-fecha">🗓 Febrero 2025 · Plan de Desarrollo</div>
+        </div>
+      </div>
+      <div class="noticia-card">
+        <div class="noticia-img img3">📢</div>
+        <div class="noticia-body">
+          <div class="noticia-tag">Participación</div>
+          <h4>Comunidad de Criollo participa en jornada "Gobernando con la Gente"</h4>
+          <p>La administración municipal llevó la institucionalidad al corregimiento de Criollo, atendiendo solicitudes sobre vías, agua potable y servicios sociales.</p>
+          <div class="noticia-fecha">🗓 Marzo 2025 · Alcaldía de Pitalito</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PARTICIPAR -->
+<section class="participar">
+  <div class="container">
+    <h2>¿Ves algo irregular?<br/>Repórtalo</h2>
+    <p>El control ciudadano es más efectivo cuando participamos activamente. Denuncia posibles irregularidades o solicita información pública.</p>
+    <div class="btn-group">
+      <a href="https://www.alcaldia-pitalito.gov.co" target="_blank" class="btn btn-primary">🔍 Portal Alcaldía</a>
+      <a href="https://www.secop.gov.co/" target="_blank" class="btn btn-outline">📋 SECOP II</a>
+      <a href="https://www.procuraduria.gov.co/" target="_blank" class="btn btn-outline">⚖️ Denunciar</a>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-inner">
+    <div>
+      <div class="footer-logo">Monitor Ciudadano · Pitalito, Huila</div>
+      <div style="margin-top:4px">Datos abiertos para el control social · Información referenciada en fuentes públicas oficiales</div>
+    </div>
+    <div class="footer-links">
+      <a href="https://www.alcaldia-pitalito.gov.co" target="_blank">Alcaldía</a>
+      <a href="https://www.secop.gov.co/" target="_blank">SECOP II</a>
+      <a href="https://www.monitorciudadano.co" target="_blank">Monitor Nacional</a>
+      <a href="https://www.contraloria.gov.co" target="_blank">Contraloría</a>
+    </div>
+  </div>
+</footer>
+
+<script>
+function filterContratos(btn, tipo) {
+  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  document.querySelectorAll('.contrato-card').forEach(card => {
+    if (tipo === 'todos' || card.dataset.tipo === tipo) {
+      card.style.display = 'grid';
+    } else {
+      card.style.display = 'none';
     }
-    newsContainer.innerHTML = html;
-  }
+  });
+}
 
-  function escapeHtml(str) {
-    if (!str) return "";
-    return str.replace(/[&<>]/g, function(m) {
-      if (m === '&') return '&amp;';
-      if (m === '<') return '&lt;';
-      if (m === '>') return '&gt;';
-      return m;
-    });
-  }
-
-  // Redes sociales
-  function setupSocial() {
-    const searchInput = document.getElementById("xSearchInput");
-    const xBtn = document.getElementById("searchXBtn");
-    const nitterBtn = document.getElementById("searchNitterBtn");
-    const xcancelBtn = document.getElementById("searchXcancelBtn");
-
-    const getTerm = () => encodeURIComponent(searchInput.value.trim() || "ordenamiento territorial Huila");
-
-    xBtn.addEventListener("click", () => window.open(`https://twitter.com/search?q=${getTerm()}&f=live`, "_blank"));
-    nitterBtn.addEventListener("click", () => window.open(`https://nitter.net/search?f=tweets&q=${getTerm()}`, "_blank"));
-    xcancelBtn.addEventListener("click", () => window.open(`https://xcancel.com/search?q=${getTerm()}`, "_blank"));
-  }
-
-  // Inicializar
-  function init() {
-    loadApiKey();
-    saveBtn.addEventListener("click", saveApiKey);
-    refreshBtn.addEventListener("click", () => {
-      if (currentApiKey) fetchAllNews();
-      else alert("Primero guarda tu API Key de NewsData.io");
-    });
-    setupSocial();
-    if (currentApiKey) fetchAllNews();
-  }
-
-  init();
+// Animate bars on scroll
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      e.target.querySelectorAll('.bar-fill').forEach(bar => {
+        bar.style.width = bar.style.width;
+      });
+    }
+  });
+}, { threshold: 0.3 });
+document.querySelectorAll('.pres-chart-wrap').forEach(el => observer.observe(el));
 </script>
 </body>
 </html>
