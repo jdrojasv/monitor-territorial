@@ -3,14 +3,14 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-  <title>Monitor Orito · Putumayo</title>
-  <!-- Fuente limpia y moderna -->
+  <title>Monitor Municipal · Sur de Colombia</title>
+  <!-- Fuente limpia -->
   <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet">
-  <!-- Font Awesome 6 (íconos minimalistas) -->
+  <!-- Font Awesome 6 -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-  <!-- Chart.js CDN (gráficos suaves) -->
+  <!-- Chart.js -->
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
-  <!-- Leaflet (mapa liviano) -->
+  <!-- Leaflet -->
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
   <style>
@@ -28,20 +28,23 @@
       padding: 2rem 1.5rem;
     }
 
-    /* contenedor principal */
     .container {
       max-width: 1280px;
       margin: 0 auto;
     }
 
-    /* header minimalista */
+    /* header con selector */
     .header {
-      margin-bottom: 2.5rem;
+      margin-bottom: 2rem;
       border-bottom: 1px solid #e2e8f0;
       padding-bottom: 1.25rem;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: flex-end;
+      gap: 1rem;
     }
-
-    .header h1 {
+    .title-area h1 {
       font-size: 1.9rem;
       font-weight: 600;
       letter-spacing: -0.3px;
@@ -49,25 +52,51 @@
       display: flex;
       align-items: center;
       gap: 0.5rem;
-      flex-wrap: wrap;
     }
-
-    .header h1 i {
+    .title-area h1 i {
       color: #2c7a5e;
       font-size: 1.7rem;
     }
-
     .sub {
-      font-size: 0.95rem;
+      font-size: 0.9rem;
       color: #4a627a;
-      margin-top: 0.5rem;
-      font-weight: 400;
+      margin-top: 0.3rem;
       border-left: 3px solid #2c7a5e;
       padding-left: 0.75rem;
     }
-
+    .selector-area {
+      background: white;
+      padding: 0.5rem 1rem;
+      border-radius: 2rem;
+      border: 1px solid #dce5ec;
+      box-shadow: 0 1px 2px rgba(0,0,0,0.02);
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+    .selector-area label {
+      font-size: 0.8rem;
+      font-weight: 500;
+      color: #2c5a6e;
+    }
+    #municipioSelect {
+      font-family: 'Inter', sans-serif;
+      background: #ffffff;
+      border: 1px solid #cbdde9;
+      border-radius: 2rem;
+      padding: 0.45rem 1rem;
+      font-size: 0.85rem;
+      font-weight: 500;
+      color: #1a3b4e;
+      cursor: pointer;
+      outline: none;
+      transition: 0.15s;
+    }
+    #municipioSelect:hover {
+      border-color: #2c7a5e;
+    }
     .last-update {
-      font-size: 0.75rem;
+      font-size: 0.7rem;
       color: #6c86a3;
       margin-top: 0.6rem;
       display: flex;
@@ -75,167 +104,130 @@
       gap: 0.4rem;
     }
 
-    /* grid de tarjetas KPI */
+    /* KPIs grid */
     .kpi-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
       gap: 1.25rem;
       margin-bottom: 2.5rem;
     }
-
     .card {
       background: white;
       border-radius: 1.25rem;
-      padding: 1.25rem 1rem;
+      padding: 1.2rem 1rem;
       box-shadow: 0 2px 6px rgba(0, 0, 0, 0.02), 0 1px 2px rgba(0, 0, 0, 0.03);
       border: 1px solid #eef2f6;
-      transition: all 0.2s ease;
+      transition: 0.2s;
     }
-
-    .card:hover {
-      border-color: #d0dfe8;
-      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.02), 0 2px 6px rgba(0, 0, 0, 0.05);
-    }
-
     .card-title {
-      font-size: 0.85rem;
+      font-size: 0.8rem;
       font-weight: 500;
       text-transform: uppercase;
       letter-spacing: 0.5px;
       color: #5e7c9c;
-      margin-bottom: 0.7rem;
+      margin-bottom: 0.6rem;
       display: flex;
       align-items: center;
       gap: 0.4rem;
     }
-
     .card-title i {
       width: 1.4rem;
-      font-size: 0.9rem;
       color: #2c7a5e;
     }
-
     .card-value {
       font-size: 2rem;
       font-weight: 700;
       color: #0f2c3b;
       line-height: 1.2;
-      margin-bottom: 0.25rem;
-      letter-spacing: -0.5px;
     }
-
     .card-unit {
       font-size: 0.8rem;
       font-weight: 400;
       color: #6a89a8;
-      margin-left: 0.2rem;
     }
-
     .card-trend {
-      font-size: 0.75rem;
+      font-size: 0.7rem;
       margin-top: 0.5rem;
       color: #4a7c6b;
-      display: flex;
-      align-items: center;
-      gap: 0.3rem;
     }
 
-    /* sección gráficos */
+    /* gráficos */
     .charts-section {
       display: grid;
       grid-template-columns: 1fr 1fr;
       gap: 1.5rem;
       margin-bottom: 2.5rem;
     }
-
     .chart-card {
       background: white;
       border-radius: 1.25rem;
       border: 1px solid #eef2f6;
-      padding: 1.2rem 1rem 1rem 1rem;
-      box-shadow: 0 1px 3px rgba(0,0,0,0.02);
+      padding: 1rem 1rem 0.8rem 1rem;
     }
-
     .chart-title {
       font-weight: 600;
-      font-size: 1rem;
+      font-size: 0.95rem;
       margin-bottom: 1rem;
       display: flex;
       align-items: center;
       gap: 0.5rem;
-      color: #1e3a4b;
       border-left: 3px solid #2c7a5e;
       padding-left: 0.7rem;
+      color: #1e3a4b;
     }
-
     canvas {
-      max-height: 280px;
+      max-height: 250px;
       width: 100%;
     }
 
-    /* sección inferior: mapa + info ambiental */
+    /* info row: mapa + sostenibilidad */
     .info-row {
       display: grid;
       grid-template-columns: 1fr 1fr;
       gap: 1.5rem;
       margin-bottom: 2rem;
     }
-
     .map-card, .sustainability-card {
       background: white;
       border-radius: 1.25rem;
       border: 1px solid #eef2f6;
       overflow: hidden;
-      padding: 0;
-      box-shadow: 0 1px 3px rgba(0,0,0,0.02);
     }
-
-    .map-card .card-header, .sustainability-card .card-header {
+    .card-header {
       padding: 1rem 1.2rem 0.2rem 1.2rem;
       font-weight: 600;
-      font-size: 0.95rem;
+      font-size: 0.9rem;
       display: flex;
       align-items: center;
       gap: 0.5rem;
       border-bottom: 1px solid #edf2f7;
       color: #1e3a4b;
     }
-
     #map {
       height: 260px;
       width: 100%;
       background: #e9f0f5;
-      z-index: 1;
     }
-
     .sustainability-content {
       padding: 1rem 1.2rem 1.2rem 1.2rem;
     }
-
     .sustainability-item {
       display: flex;
       justify-content: space-between;
       align-items: baseline;
-      padding: 0.7rem 0;
+      padding: 0.65rem 0;
       border-bottom: 1px solid #f0f4f9;
     }
-
-    .sustainability-item:last-child {
-      border-bottom: none;
-    }
-
     .sustainability-label {
-      font-size: 0.85rem;
+      font-size: 0.8rem;
       font-weight: 500;
       color: #4e6d8c;
     }
-
     .sustainability-value {
       font-weight: 600;
       color: #1f4156;
-      font-size: 1rem;
+      font-size: 0.9rem;
     }
-
     .badge {
       background: #eef6f2;
       padding: 0.2rem 0.6rem;
@@ -243,8 +235,8 @@
       font-size: 0.7rem;
       font-weight: 500;
       color: #2c7a5e;
+      margin-left: 0.4rem;
     }
-
     footer {
       margin-top: 2rem;
       text-align: center;
@@ -255,281 +247,319 @@
       display: flex;
       justify-content: space-between;
       flex-wrap: wrap;
-      gap: 0.5rem;
     }
-
     @media (max-width: 780px) {
-      body {
-        padding: 1.2rem;
-      }
-      .charts-section, .info-row {
-        grid-template-columns: 1fr;
-        gap: 1.2rem;
-      }
-      .card-value {
-        font-size: 1.7rem;
-      }
-      .header h1 {
-        font-size: 1.6rem;
-      }
-    }
-
-    /* tooltips y estilos minimal */
-    a {
-      text-decoration: none;
-    }
-    i, .fas, .far {
-      pointer-events: none;
+      body { padding: 1rem; }
+      .charts-section, .info-row { grid-template-columns: 1fr; }
+      .header { flex-direction: column; align-items: flex-start; }
+      .card-value { font-size: 1.7rem; }
     }
   </style>
 </head>
 <body>
 <div class="container">
   <div class="header">
-    <h1>
-      <i class="fas fa-chart-line"></i> 
-      Monitor Orito · Putumayo
-    </h1>
-    <div class="sub">
-      Seguimiento territorial con datos clave · Transparencia y visualización cívica
+    <div class="title-area">
+      <h1><i class="fas fa-chart-line"></i> Monitor Municipal · Sur de Colombia</h1>
+      <div class="sub">Datos territoriales con enfoque cívico · indicadores clave y tendencias</div>
     </div>
-    <div class="last-update">
-      <i class="fas fa-sync-alt fa-fw"></i> 
-      Datos actualizados: <span id="fechaActualizacion"></span> · Fuentes: DANE, SIMCO, IDEAM (cifras modelo con tendencia real)
-    </div>
-  </div>
-
-  <!-- Tarjetas KPI -->
-  <div class="kpi-grid">
-    <div class="card">
-      <div class="card-title"><i class="fas fa-users"></i> Población</div>
-      <div class="card-value">58.200 <span class="card-unit">hab</span></div>
-      <div class="card-trend"><i class="fas fa-arrow-up" style="font-size:0.7rem;"></i> +1.2% vs 2023</div>
-    </div>
-    <div class="card">
-      <div class="card-title"><i class="fas fa-map-marker-alt"></i> Área</div>
-      <div class="card-value">2.102 <span class="card-unit">km²</span></div>
-      <div class="card-trend"><i class="fas fa-mountain"></i> Amazonía noroccidental</div>
-    </div>
-    <div class="card">
-      <div class="card-title"><i class="fas fa-chart-simple"></i> Homicidios (2024)</div>
-      <div class="card-value">20 <span class="card-unit">casos</span></div>
-      <div class="card-trend"><i class="fas fa-arrow-down" style="color:#2b7e5a;"></i> -23% frente a 2023</div>
-    </div>
-    <div class="card">
-      <div class="card-title"><i class="fas fa-leaf"></i> Coca cultivada (2024)</div>
-      <div class="card-value">930 <span class="card-unit">ha</span></div>
-      <div class="card-trend"><i class="fas fa-arrow-down" style="color:#2b7e5a;"></i> reducción anual -6%</div>
-    </div>
-    <div class="card">
-      <div class="card-title"><i class="fas fa-oil-can"></i> Producción petrolera</div>
-      <div class="card-value">12.500 <span class="card-unit">bpd</span></div>
-      <div class="card-trend"><i class="fas fa-chart-line"></i> estabilidad operativa</div>
-    </div>
-    <div class="card">
-      <div class="card-title"><i class="fas fa-chart-pie"></i> NBI (Neces. Básicas Insat.)</div>
-      <div class="card-value">48<span class="card-unit">%</span></div>
-      <div class="card-trend"><i class="fas fa-arrow-down" style="color:#2b7e5a;"></i> -3.2 p.p. desde 2020</div>
+    <div class="selector-area">
+      <i class="fas fa-city" style="color:#2c7a5e;"></i>
+      <label for="municipioSelect">Municipio:</label>
+      <select id="municipioSelect">
+        <option value="orito">Orito (Putumayo)</option>
+        <option value="puerto_caicedo">Puerto Caicedo (Putumayo)</option>
+        <option value="valle_guamuez">Valle del Guamuez (La Hormiga)</option>
+        <option value="florencia">Florencia (Caquetá)</option>
+        <option value="pitalito">Pitalito (Huila)</option>
+        <option value="timana">Timaná (Huila)</option>
+        <option value="guadalupe">Guadalupe (Huila)</option>
+        <option value="acevedo">Acevedo (Huila)</option>
+        <option value="palestina">Palestina (Huila)</option>
+        <option value="isnos">Isnos (Huila)</option>
+        <option value="palermo">Palermo (Huila)</option>
+        <option value="laplata">La Plata (Huila)</option>
+        <option value="gigante">Gigante (Huila)</option>
+      </select>
     </div>
   </div>
+  <div class="last-update">
+    <i class="fas fa-sync-alt"></i> Datos actualizados: <span id="fechaActualizacion"></span> · Fuentes simuladas con tendencias regionales
+  </div>
 
-  <!-- Gráficos: tendencias -->
+  <!-- KPIs -->
+  <div class="kpi-grid" id="kpiContainer">
+    <!-- dinámico -->
+  </div>
+
+  <!-- gráficos -->
   <div class="charts-section">
     <div class="chart-card">
-      <div class="chart-title"><i class="fas fa-gavel"></i> Evolución de homicidios (casos anuales)</div>
-      <canvas id="homicidiosChart" width="400" height="250" style="max-width:100%; height:auto;"></canvas>
-      <div style="font-size:0.7rem; color:#8aa2c0; margin-top:0.8rem; text-align:center;">⬇️ Tendencia decreciente sostenida</div>
+      <div class="chart-title"><i class="fas fa-gavel"></i> Homicidios · evolución anual</div>
+      <canvas id="homicidiosChart" width="400" height="240"></canvas>
     </div>
     <div class="chart-card">
-      <div class="chart-title"><i class="fas fa-seedling"></i> Cultivos de coca · hectáreas (2020-2025p)</div>
-      <canvas id="cocaChart" width="400" height="250" style="max-width:100%; height:auto;"></canvas>
-      <div style="font-size:0.7rem; color:#8aa2c0; margin-top:0.8rem; text-align:center;">Reducción progresiva por programas de sustitución</div>
+      <div class="chart-title"><i class="fas fa-seedling"></i> Cultivos de coca (hectáreas)</div>
+      <canvas id="cocaChart" width="400" height="240"></canvas>
     </div>
   </div>
 
-  <!-- Mapa + indicadores ambientales y sociales -->
   <div class="info-row">
     <div class="map-card">
-      <div class="card-header"><i class="fas fa-map-pin"></i> Ubicación estratégica · Orito, Putumayo</div>
+      <div class="card-header"><i class="fas fa-map-pin"></i> Localización <span id="mapMunicipioNombre">Orito</span></div>
       <div id="map"></div>
-      <div style="padding: 0.5rem 1rem 0.8rem 1rem; font-size: 0.7rem; color:#527a9b; background:#ffffff; border-top:1px solid #ecf3f8;">
-        <i class="fas fa-location-dot"></i> Cabecera municipal · límites con Ecuador y piedemonte amazónico
+      <div style="padding: 0.5rem 1rem; font-size: 0.7rem; color:#527a9b; background:#fff; border-top:1px solid #ecf3f8;">
+        <i class="fas fa-location-dot"></i> Centro urbano · referencias geográficas
       </div>
     </div>
     <div class="sustainability-card">
-      <div class="card-header"><i class="fas fa-temperature-low"></i> Monitoreo ambiental y riesgos</div>
-      <div class="sustainability-content">
-        <div class="sustainability-item">
-          <span class="sustainability-label"><i class="fas fa-tree"></i> Deforestación (2024)</span>
-          <span class="sustainability-value">284 ha <span class="badge">-12% vs 2023</span></span>
-        </div>
-        <div class="sustainability-item">
-          <span class="sustainability-label"><i class="fas fa-tint"></i> Calidad del agua (río Orito)</span>
-          <span class="sustainability-value">Regular · Monitoreo activo</span>
-        </div>
-        <div class="sustainability-item">
-          <span class="sustainability-label"><i class="fas fa-cloud-rain"></i> Índice de riesgo de inundación</span>
-          <span class="sustainability-value">Medio-bajo <i class="fas fa-arrow-down" style="margin-left:6px; color:#2c7a5e;"></i></span>
-        </div>
-        <div class="sustainability-item">
-          <span class="sustainability-label"><i class="fas fa-temperature-high"></i> Temperatura promedio</span>
-          <span class="sustainability-value">24.5 °C</span>
-        </div>
-        <div class="sustainability-item">
-          <span class="sustainability-label"><i class="fas fa-hand-peace"></i> Índice de gobernanza local</span>
-          <span class="sustainability-value">57/100 <span class="badge">en mejora</span></span>
-        </div>
-        <div class="sustainability-item">
-          <span class="sustainability-label"><i class="fas fa-charging-station"></i> Energía renovable</span>
-          <span class="sustainability-value">Proyecto solar comunitario</span>
-        </div>
+      <div class="card-header"><i class="fas fa-leaf"></i> Indicadores ambientales y riesgos</div>
+      <div class="sustainability-content" id="sustainabilityContent">
+        <!-- dinámico -->
       </div>
     </div>
   </div>
-
   <footer>
-    <span><i class="far fa-copyright"></i> Datos abiertos · Simulación con información oficial y tendencias territoriales</span>
-    <span><i class="fas fa-chart-simple"></i> Monitor diseñado para Orito, Putumayo · Enfoque cívico</span>
+    <span><i class="far fa-copyright"></i> Datos de referencia con base en perfiles municipales · Simulación para monitoreo ciudadano</span>
+    <span><i class="fas fa-chart-simple"></i> Enfoque transparente · adaptado a la región surcolombiana</span>
   </footer>
 </div>
 
 <script>
-  (function() {
-    // Fecha dinámica para última actualización
-    const today = new Date();
-    const formattedDate = today.toLocaleDateString('es-CO', { year: 'numeric', month: 'long', day: 'numeric' });
-    document.getElementById('fechaActualizacion').innerText = formattedDate;
-
-    // ---- DATOS GRÁFICOS ----
-    // Homicidios anuales (2020 - 2025 estimado)
-    const years = ['2020', '2021', '2022', '2023', '2024', '2025'];
-    const homicidiosData = [34, 31, 27, 24, 20, 18];  // tendencia a la baja
-    const cocaData = [1250, 1180, 1080, 990, 930, 870];  // reducción progresiva
-
-    // Gráfico homicidios (line chart)
-    const ctxHomicidios = document.getElementById('homicidiosChart').getContext('2d');
-    new Chart(ctxHomicidios, {
-      type: 'line',
-      data: {
-        labels: years,
-        datasets: [{
-          label: 'Número de homicidios',
-          data: homicidiosData,
-          borderColor: '#bf5b3c',
-          backgroundColor: 'rgba(191, 91, 60, 0.03)',
-          borderWidth: 2.5,
-          pointRadius: 3.5,
-          pointBackgroundColor: '#bf5b3c',
-          pointBorderColor: '#ffffff',
-          pointBorderWidth: 1.5,
-          tension: 0.25,
-          fill: true,
-          pointHoverRadius: 5
-        }]
-      },
-      options: {
-        responsive: true,
-        maintainAspectRatio: true,
-        plugins: {
-          legend: { display: false },
-          tooltip: { backgroundColor: '#ffffff', titleColor: '#1e3a4b', bodyColor: '#2d4e6e', borderColor: '#dce5ec', borderWidth: 1 }
-        },
-        scales: {
-          y: { grid: { color: '#eef2f5', drawBorder: false }, ticks: { stepSize: 5, precision:0 }, title: { display: false } },
-          x: { grid: { display: false }, ticks: { font: { size: 11 } } }
-        }
-      }
-    });
-
-    // Gráfico coca (bar chart limpio)
-    const ctxCoca = document.getElementById('cocaChart').getContext('2d');
-    new Chart(ctxCoca, {
-      type: 'bar',
-      data: {
-        labels: years,
-        datasets: [{
-          label: 'Hectáreas de coca',
-          data: cocaData,
-          backgroundColor: '#6f9e7c',
-          borderRadius: 8,
-          barPercentage: 0.65,
-          categoryPercentage: 0.8,
-          hoverBackgroundColor: '#538e66'
-        }]
-      },
-      options: {
-        responsive: true,
-        maintainAspectRatio: true,
-        plugins: {
-          legend: { display: false },
-          tooltip: { callbacks: { label: (ctx) => `${ctx.raw} ha` } }
-        },
-        scales: {
-          y: { grid: { color: '#eef2f5' }, title: { display: false }, ticks: { callback: (val) => val + ' ha' } },
-          x: { grid: { display: false }, ticks: { font: { size: 11 } } }
-        }
-      }
-    });
-
-    // ---- MAPA LEAFLET (centro en Orito, Putumayo) ----
-    // Coordenadas aproximadas: 0.6696° N, -76.8773° W
-    const oritoLat = 0.6696;
-    const oritoLng = -76.8773;
-    const map = L.map('map').setView([oritoLat, oritoLng], 12);
-    
-    // Capa base minimalista y clara
-    L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
-      attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OSM</a> &copy; CartoDB',
-      subdomains: 'abcd',
-      maxZoom: 17,
-      minZoom: 8
-    }).addTo(map);
-    
-    // Marcador con popup informativo
-    const marker = L.marker([oritoLat, oritoLng], {
-      title: 'Orito, Putumayo'
-    }).addTo(map);
-    marker.bindPopup(`
-      <b>🏞️ Orito, Putumayo</b><br>
-      Capital petrolera del suroriente colombiano<br>
-      <span style="font-size:0.8rem;">Piedemonte amazónico · Reserva natural La Paya</span>
-    `).openPopup();
-    
-    // Ajuste de zoom y elegancia
-    map.attributionControl.setPrefix(false);
-    
-    // Opcional: agregar un círculo de radio simbólico para resaltar área urbana
-    L.circle([oritoLat, oritoLng], {
-      color: '#2c7a5e',
-      weight: 1.2,
-      fillColor: '#8fc9b0',
-      fillOpacity: 0.12,
-      radius: 5500
-    }).addTo(map);
-    
-    // pequeño control de escala (opcional)
-    L.control.scale({ metric: true, imperial: false, position: 'bottomleft' }).addTo(map);
-    
-    // --- interacción: si la ventana se redimensiona, el mapa se refresca correctamente
-    window.addEventListener('resize', () => {
-      setTimeout(() => { map.invalidateSize(); }, 150);
-    });
-    
-    // Pequeño detalle: en móviles se asegura el mapa correcto
-    if (window.innerWidth < 700) {
-      setTimeout(() => { map.invalidateSize(); }, 200);
+  // ---------- BASE DE DATOS DE MUNICIPIOS ----------
+  const municipiosData = {
+    orito: {
+      nombre: "Orito",
+      coords: [0.6696, -76.8773],
+      poblacion: 58200,
+      area: 2102,
+      homicidios_anual: 20,
+      coca_ha: 930,
+      petroleo_bpd: 12500,
+      nbi: 48,
+      tendencias: { homicidios: [34,31,27,24,20,18], coca: [1250,1180,1080,990,930,870] },
+      ambiente: { deforestacion: "284 ha", calidadAgua: "Regular · monitoreo", riesgoInundacion: "Medio-bajo", temp: "24.5°C", gobernanza: "57/100", energia: "Proyecto solar" }
+    },
+    puerto_caicedo: {
+      nombre: "Puerto Caicedo",
+      coords: [0.6833, -76.6150],
+      poblacion: 15200,
+      area: 1010,
+      homicidios_anual: 8,
+      coca_ha: 310,
+      petroleo_bpd: 0,
+      nbi: 55,
+      tendencias: { homicidios: [12,11,10,9,8,7], coca: [480,430,380,340,310,280] },
+      ambiente: { deforestacion: "112 ha", calidadAgua: "Buena", riesgoInundacion: "Medio", temp: "25.1°C", gobernanza: "61/100", energia: "Red nacional" }
+    },
+    valle_guamuez: {
+      nombre: "Valle del Guamuez",
+      coords: [0.4328, -76.9053],
+      poblacion: 56300,
+      area: 885,
+      homicidios_anual: 27,
+      coca_ha: 1450,
+      petroleo_bpd: 4300,
+      nbi: 62,
+      tendencias: { homicidios: [32,31,29,28,27,26], coca: [1780,1690,1580,1500,1450,1380] },
+      ambiente: { deforestacion: "420 ha", calidadAgua: "Regular", riesgoInundacion: "Alto", temp: "24.8°C", gobernanza: "44/100", energia: "Termoeléctrica" }
+    },
+    florencia: {
+      nombre: "Florencia",
+      coords: [1.6147, -75.6065],
+      poblacion: 168300,
+      area: 2292,
+      homicidios_anual: 35,
+      coca_ha: 680,
+      petroleo_bpd: 0,
+      nbi: 38,
+      tendencias: { homicidios: [42,41,39,37,35,33], coca: [950,890,820,750,680,610] },
+      ambiente: { deforestacion: "360 ha", calidadAgua: "Buena", riesgoInundacion: "Medio", temp: "23.5°C", gobernanza: "68/100", energia: "Hidroeléctrica" }
+    },
+    pitalito: {
+      nombre: "Pitalito",
+      coords: [1.8557, -76.0519],
+      poblacion: 134900,
+      area: 662,
+      homicidios_anual: 12,
+      coca_ha: 45,
+      petroleo_bpd: 0,
+      nbi: 31,
+      tendencias: { homicidios: [18,17,15,13,12,10], coca: [90,78,65,52,45,38] },
+      ambiente: { deforestacion: "28 ha", calidadAgua: "Excelente", riesgoInundacion: "Bajo", temp: "18.5°C", gobernanza: "74/100", energia: "Solar/Fotovoltaica" }
+    },
+    timana: {
+      nombre: "Timaná",
+      coords: [1.9734, -75.9289],
+      poblacion: 21000,
+      area: 274,
+      homicidios_anual: 4,
+      coca_ha: 12,
+      petroleo_bpd: 0,
+      nbi: 42,
+      tendencias: { homicidios: [7,6,5,5,4,3], coca: [28,24,18,14,12,9] },
+      ambiente: { deforestacion: "8 ha", calidadAgua: "Buena", riesgoInundacion: "Bajo", temp: "19.2°C", gobernanza: "71/100", energia: "Mini hidro" }
+    },
+    guadalupe: {
+      nombre: "Guadalupe",
+      coords: [2.0273, -75.7583],
+      poblacion: 18700,
+      area: 248,
+      homicidios_anual: 5,
+      coca_ha: 8,
+      petroleo_bpd: 0,
+      nbi: 39,
+      tendencias: { homicidios: [8,7,6,5,5,4], coca: [19,15,12,10,8,6] },
+      ambiente: { deforestacion: "5 ha", calidadAgua: "Buena", riesgoInundacion: "Bajo", temp: "20.1°C", gobernanza: "73/100", energia: "Red" }
+    },
+    acevedo: {
+      nombre: "Acevedo",
+      coords: [1.8006, -75.8772],
+      poblacion: 32500,
+      area: 624,
+      homicidios_anual: 7,
+      coca_ha: 21,
+      petroleo_bpd: 0,
+      nbi: 45,
+      tendencias: { homicidios: [12,11,9,8,7,6], coca: [48,40,32,26,21,17] },
+      ambiente: { deforestacion: "15 ha", calidadAgua: "Regular", riesgoInundacion: "Medio", temp: "20.5°C", gobernanza: "65/100", energia: "Red" }
+    },
+    palestina: {
+      nombre: "Palestina",
+      coords: [2.0161, -75.8217],
+      poblacion: 11500,
+      area: 147,
+      homicidios_anual: 2,
+      coca_ha: 3,
+      petroleo_bpd: 0,
+      nbi: 36,
+      tendencias: { homicidios: [4,3,3,2,2,1], coca: [9,7,5,4,3,2] },
+      ambiente: { deforestacion: "2 ha", calidadAgua: "Buena", riesgoInundacion: "Bajo", temp: "19.8°C", gobernanza: "78/100", energia: "Solar" }
+    },
+    isnos: {
+      nombre: "Isnos",
+      coords: [1.9406, -76.2372],
+      poblacion: 26400,
+      area: 582,
+      homicidios_anual: 6,
+      coca_ha: 14,
+      petroleo_bpd: 0,
+      nbi: 48,
+      tendencias: { homicidios: [9,8,7,7,6,5], coca: [29,24,20,17,14,11] },
+      ambiente: { deforestacion: "18 ha", calidadAgua: "Buena", riesgoInundacion: "Medio", temp: "17.5°C", gobernanza: "63/100", energia: "Eólica" }
+    },
+    palermo: {
+      nombre: "Palermo",
+      coords: [2.8915, -75.4379],
+      poblacion: 33200,
+      area: 706,
+      homicidios_anual: 9,
+      coca_ha: 27,
+      petroleo_bpd: 0,
+      nbi: 40,
+      tendencias: { homicidios: [14,13,11,10,9,8], coca: [54,47,39,33,27,22] },
+      ambiente: { deforestacion: "25 ha", calidadAgua: "Regular", riesgoInundacion: "Medio", temp: "22.4°C", gobernanza: "66/100", energia: "Biomasa" }
+    },
+    laplata: {
+      nombre: "La Plata",
+      coords: [2.3935, -75.8911],
+      poblacion: 61300,
+      area: 1270,
+      homicidios_anual: 14,
+      coca_ha: 68,
+      petroleo_bpd: 0,
+      nbi: 44,
+      tendencias: { homicidios: [19,18,16,15,14,13], coca: [112,98,85,76,68,59] },
+      ambiente: { deforestacion: "42 ha", calidadAgua: "Regular", riesgoInundacion: "Medio-alto", temp: "21.5°C", gobernanza: "60/100", energia: "Hidro" }
+    },
+    gigante: {
+      nombre: "Gigante",
+      coords: [2.3872, -75.5472],
+      poblacion: 27900,
+      area: 626,
+      homicidios_anual: 8,
+      coca_ha: 11,
+      petroleo_bpd: 0,
+      nbi: 38,
+      tendencias: { homicidios: [12,11,10,9,8,7], coca: [25,21,17,14,11,8] },
+      ambiente: { deforestacion: "10 ha", calidadAgua: "Buena", riesgoInundacion: "Bajo", temp: "23.2°C", gobernanza: "69/100", energia: "Red + solar" }
     }
+  };
 
-    // Estilo adicional: Tooltips explicativos y hover en cards (puramente visual)
-    const allCards = document.querySelectorAll('.card');
-    allCards.forEach(card => {
-      card.addEventListener('mouseenter', () => {
-        card.style.transition = 'all 0.2s';
-      });
+  // variables globales para gráficos
+  let homicidiosChart, cocaChart, currentMap;
+
+  // fecha de actualización
+  document.getElementById('fechaActualizacion').innerText = new Date().toLocaleDateString('es-CO', { year:'numeric', month:'long', day:'numeric' });
+
+  // función principal que actualiza todo según el municipio seleccionado
+  function actualizarMonitor(munKey) {
+    const data = municipiosData[munKey];
+    if (!data) return;
+
+    // Actualizar KPIs
+    const kpiHTML = `
+      <div class="card"><div class="card-title"><i class="fas fa-users"></i> Población</div><div class="card-value">${data.poblacion.toLocaleString()} <span class="card-unit">hab</span></div><div class="card-trend"><i class="fas fa-chart-line"></i> estimado 2025</div></div>
+      <div class="card"><div class="card-title"><i class="fas fa-map-marker-alt"></i> Área</div><div class="card-value">${data.area} <span class="card-unit">km²</span></div><div class="card-trend"><i class="fas fa-mountain"></i> territorio municipal</div></div>
+      <div class="card"><div class="card-title"><i class="fas fa-chart-simple"></i> Homicidios (2024)</div><div class="card-value">${data.homicidios_anual} <span class="card-unit">casos</span></div><div class="card-trend"><i class="fas ${data.homicidios_anual <= 10 ? 'fa-arrow-down' : 'fa-arrow-up'}" style="color:#2b7e5a;"></i> tendencia a la baja</div></div>
+      <div class="card"><div class="card-title"><i class="fas fa-leaf"></i> Coca cultivada (2024)</div><div class="card-value">${data.coca_ha} <span class="card-unit">ha</span></div><div class="card-trend"><i class="fas ${data.coca_ha < 100 ? 'fa-arrow-down' : 'fa-chart-line'}"></i> monitoreo UNODC</div></div>
+      <div class="card"><div class="card-title"><i class="fas fa-oil-can"></i> Producción petrolera</div><div class="card-value">${data.petroleo_bpd > 0 ? data.petroleo_bpd.toLocaleString() : 'N/A'} <span class="card-unit">${data.petroleo_bpd > 0 ? 'bpd' : ''}</span></div><div class="card-trend">${data.petroleo_bpd > 0 ? 'actividad extractiva' : 'sin producción significativa'}</div></div>
+      <div class="card"><div class="card-title"><i class="fas fa-chart-pie"></i> NBI (%)</div><div class="card-value">${data.nbi}<span class="card-unit">%</span></div><div class="card-trend"><i class="fas fa-chart-simple"></i> necesidades básicas</div></div>
+    `;
+    document.getElementById('kpiContainer').innerHTML = kpiHTML;
+
+    // Actualizar gráficos (destruir existentes y recrear)
+    const years = ['2020', '2021', '2022', '2023', '2024', '2025'];
+    const homData = data.tendencias.homicidios;
+    const cocaData = data.tendencias.coca;
+
+    if (homicidiosChart) homicidiosChart.destroy();
+    if (cocaChart) cocaChart.destroy();
+
+    const ctxH = document.getElementById('homicidiosChart').getContext('2d');
+    homicidiosChart = new Chart(ctxH, {
+      type: 'line',
+      data: { labels: years, datasets: [{ label: 'Homicidios', data: homData, borderColor: '#bf5b3c', backgroundColor: 'rgba(191,91,60,0.03)', borderWidth: 2.5, pointRadius: 3, pointBackgroundColor: '#bf5b3c', pointBorderColor: '#fff', tension: 0.2, fill: true }] },
+      options: { responsive: true, maintainAspectRatio: true, plugins: { legend: { display: false } }, scales: { y: { ticks: { precision: 0 } } } }
     });
-  })();
+    const ctxC = document.getElementById('cocaChart').getContext('2d');
+    cocaChart = new Chart(ctxC, {
+      type: 'bar',
+      data: { labels: years, datasets: [{ label: 'Hectáreas coca', data: cocaData, backgroundColor: '#6f9e7c', borderRadius: 8, barPercentage: 0.65 }] },
+      options: { responsive: true, maintainAspectRatio: true, plugins: { legend: { display: false } }, scales: { y: { ticks: { callback: (val) => val + ' ha' } } } }
+    });
+
+    // Actualizar mapa
+    const [lat, lng] = data.coords;
+    if (currentMap) currentMap.remove();
+    currentMap = L.map('map').setView([lat, lng], 12);
+    L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', { attribution: '&copy; OpenStreetMap & CartoDB', subdomains: 'abcd' }).addTo(currentMap);
+    L.marker([lat, lng]).bindPopup(`<b>${data.nombre}</b><br>Centro urbano`).addTo(currentMap).openPopup();
+    L.circle([lat, lng], { color: '#2c7a5e', weight: 1.2, fillColor: '#8fc9b0', fillOpacity: 0.12, radius: 5000 }).addTo(currentMap);
+    setTimeout(() => currentMap.invalidateSize(), 150);
+    document.getElementById('mapMunicipioNombre').innerText = data.nombre;
+
+    // Actualizar bloque de sostenibilidad
+    const amb = data.ambiente;
+    const sustainHTML = `
+      <div class="sustainability-item"><span class="sustainability-label"><i class="fas fa-tree"></i> Deforestación (2024)</span><span class="sustainability-value">${amb.deforestacion} <span class="badge">tendencia</span></span></div>
+      <div class="sustainability-item"><span class="sustainability-label"><i class="fas fa-tint"></i> Calidad del agua</span><span class="sustainability-value">${amb.calidadAgua}</span></div>
+      <div class="sustainability-item"><span class="sustainability-label"><i class="fas fa-cloud-rain"></i> Riesgo inundación</span><span class="sustainability-value">${amb.riesgoInundacion}</span></div>
+      <div class="sustainability-item"><span class="sustainability-label"><i class="fas fa-temperature-high"></i> Temperatura promedio</span><span class="sustainability-value">${amb.temp}</span></div>
+      <div class="sustainability-item"><span class="sustainability-label"><i class="fas fa-hand-peace"></i> Índice gobernanza</span><span class="sustainability-value">${amb.gobernanza}</span></div>
+      <div class="sustainability-item"><span class="sustainability-label"><i class="fas fa-charging-station"></i> Energía renovable</span><span class="sustainability-value">${amb.energia}</span></div>
+    `;
+    document.getElementById('sustainabilityContent').innerHTML = sustainHTML;
+  }
+
+  // Evento del selector
+  const selectMun = document.getElementById('municipioSelect');
+  selectMun.addEventListener('change', (e) => {
+    actualizarMonitor(e.target.value);
+  });
+
+  // Inicializar con Orito (por defecto)
+  actualizarMonitor('orito');
 </script>
-<!-- Nota: Los datos presentados en el monitor reflejan una síntesis de fuentes oficiales DANE, SIMCO, UNODC y proyecciones con tendencias territoriales reales. 
-     El diseño minimalista busca máxima claridad, similar a república.civlab.org, con enfoque ciudadano para Orito Putumayo. -->
 </body>
 </html>
