@@ -321,7 +321,7 @@
       margin-top: 4px;
     }
 
-    /* Carrusel para lugares emblemáticos */
+    /* Carrusel mejorado con imágenes realistas */
     .carousel-container {
       position: relative;
       padding: 1rem 1rem 1.2rem 1rem;
@@ -338,12 +338,13 @@
       height: 200px;
       object-fit: cover;
       border-radius: 1rem;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.05);
-      border: 1px solid #eef2f8;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+      border: 1px solid #e2ecf2;
+      background: #f4f8fa;
     }
     .carousel-caption {
       margin-top: 0.8rem;
-      font-weight: 600;
+      font-weight: 700;
       font-size: 0.9rem;
       color: #1a4b5e;
     }
@@ -385,10 +386,19 @@
       background: #cbdbe0;
       border-radius: 10px;
       transition: 0.1s;
+      cursor: pointer;
     }
     .indicator.active {
       background: #2c7a5e;
       width: 18px;
+    }
+    .photo-credit {
+      font-size: 0.6rem;
+      text-align: center;
+      color: #8ea3bb;
+      margin-top: 0.6rem;
+      border-top: 1px solid #eff3f8;
+      padding-top: 0.6rem;
     }
     @media (max-width: 780px) {
       body { padding: 1rem; }
@@ -456,31 +466,33 @@
     <div class="sustainability-card"><div class="card-header"><i class="fas fa-leaf"></i> Indicadores ambientales y riesgos</div><div class="sustainability-content" id="sustainabilityContent"></div></div>
   </div>
 
-  <!-- DOBLE COLUMNA: Eventos + Sitios emblemáticos -->
+  <!-- DOBLE COLUMNA: Eventos + Sitios emblemáticos con imágenes realistas -->
   <div class="events-sights-grid">
     <!-- Columna eventos -->
     <div class="events-column">
       <div class="section-header"><i class="fas fa-calendar-alt"></i> 📅 Festividades y eventos destacados</div>
       <div class="events-list" id="eventsList"></div>
     </div>
-    <!-- Columna lugares emblemáticos (carrusel) -->
+    <!-- Columna lugares emblemáticos (carrusel con imágenes representativas) -->
     <div class="sights-column">
       <div class="section-header"><i class="fas fa-camera-retro"></i> 🏞️ Lugares emblemáticos</div>
       <div class="carousel-container" id="sightsCarousel">
-        <!-- dinámico: imagen, título, descripción + botones -->
+        <!-- dinámico -->
       </div>
+      <div class="photo-credit"><i class="fas fa-image"></i> Imágenes representativas del municipio (fuentes: Unsplash, archivo ilustrativo)</div>
     </div>
   </div>
 
   <footer>
-    <span><i class="far fa-copyright"></i> Datos de referencia con base en perfiles municipales · Galería ilustrativa</span>
-    <span><i class="fas fa-chart-simple"></i> Eventos ordenados por fecha próxima · Imágenes referenciales</span>
+    <span><i class="far fa-copyright"></i> Datos de referencia · Las imágenes son ilustrativas y buscan representar los lugares típicos de cada municipio</span>
+    <span><i class="fas fa-chart-simple"></i> Eventos ordenados por fecha próxima · Galería interactiva</span>
   </footer>
 </div>
 
 <script>
   // --------------------------------------------------------------
-  // BASE DE DATOS COMPLETA (incluye sitios emblemáticos)
+  // BASE DE DATOS CON IMÁGENES REALISTAS (Unsplash / Paisajes colombianos)
+  // Cada sitio tiene una URL de imagen que evoca el lugar (ríos, parques, montañas, arquitectura local)
   // --------------------------------------------------------------
   const municipiosData = {
     orito: {
@@ -494,9 +506,9 @@
         { nombre: "Concierto Rock por la Paz", fecha: "2025-09-05", tipo: "no-tradicional", descripcion: "Bandas regionales en el parque principal." }
       ],
       sitios: [
-        { nombre: "Parque Principal de Orito", descripcion: "Corazón del municipio, rodeado de comercio y eventos culturales.", imagen: "https://picsum.photos/id/104/800/500" },
-        { nombre: "Río Orito", descripcion: "Afluente del Putumayo, ideal para ecoturismo y pesca artesanal.", imagen: "https://picsum.photos/id/96/800/500" },
-        { nombre: "Mirador La Cruz", descripcion: "Vista panorámica de la selva amazónica y el casco urbano.", imagen: "https://picsum.photos/id/382/800/500" }
+        { nombre: "Parque Principal de Orito", descripcion: "Corazón del municipio, rodeado de comercio y eventos culturales.", imagen: "https://images.unsplash.com/photo-1599661046281-e318f46a4c2a?w=800&h=500&fit=crop" },
+        { nombre: "Río Orito", descripcion: "Afluente del Putumayo, ideal para ecoturismo y pesca artesanal.", imagen: "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=800&h=500&fit=crop" },
+        { nombre: "Mirador La Cruz", descripcion: "Vista panorámica de la selva amazónica y el casco urbano.", imagen: "https://images.unsplash.com/photo-1542404774-3d9db7d3826c?w=800&h=500&fit=crop" }
       ]
     },
     puerto_caicedo: {
@@ -509,8 +521,8 @@
         { nombre: "Torneo de Pesca Artesanal", fecha: "2025-07-12", tipo: "no-tradicional", descripcion: "Competencia abierta en el río Putumayo." }
       ],
       sitios: [
-        { nombre: "Malecón Turístico", descripcion: "Espacio ribereño con vista al río Putumayo.", imagen: "https://picsum.photos/id/15/800/500" },
-        { nombre: "Reserva Natural Comunitaria", descripcion: "Senderismo y avistamiento de aves.", imagen: "https://picsum.photos/id/127/800/500" }
+        { nombre: "Malecón Turístico", descripcion: "Espacio ribereño con vista al río Putumayo.", imagen: "https://images.unsplash.com/photo-1473181488821-2d23949a045a?w=800&h=500&fit=crop" },
+        { nombre: "Reserva Natural Comunitaria", descripcion: "Senderismo y avistamiento de aves.", imagen: "https://images.unsplash.com/photo-1441974231531-c6227db76b6e?w=800&h=500&fit=crop" }
       ]
     },
     valle_guamuez: {
@@ -519,7 +531,7 @@
       cultivos: { "Coca": 1450, "Café": 80, "Palma": 2100, "Plátano": 310, "Maíz": 95, "Cacao": 25 },
       ambiente: { deforestacion: "420 ha", calidadAgua: "Regular", riesgoInundacion: "Alto", temp: "24.8°C", gobernanza: "44/100", energia: "Termoeléctrica" },
       eventos: [ { nombre: "Carnaval de la Hormiga", fecha: "2025-05-20", tipo: "tradicional", descripcion: "Desfile de comparsas." } ],
-      sitios: [ { nombre: "Cerro de la Virgen", descripcion: "Mirador y sitio de peregrinación.", imagen: "https://picsum.photos/id/133/800/500" } ]
+      sitios: [ { nombre: "Cerro de la Virgen", descripcion: "Mirador y sitio de peregrinación.", imagen: "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&h=500&fit=crop" } ]
     },
     florencia: {
       nombre: "Florencia", coords: [1.6147, -75.6065], poblacion: 168300, area: 2292, homicidios_anual: 35, petroleo_bpd: 0, nbi: 38,
@@ -527,7 +539,10 @@
       cultivos: { "Coca": 680, "Café": 520, "Plátano": 890, "Maíz": 430, "Cacao": 210, "Arroz": 370 },
       ambiente: { deforestacion: "360 ha", calidadAgua: "Buena", riesgoInundacion: "Medio", temp: "23.5°C", gobernanza: "68/100", energia: "Hidroeléctrica" },
       eventos: [ { nombre: "Feria Agropecuaria", fecha: "2025-07-04", tipo: "tradicional", descripcion: "Exposición ganadera." } ],
-      sitios: [ { nombre: "Catedral Nuestra Señora de Lourdes", descripcion: "Arquitectura religiosa.", imagen: "https://picsum.photos/id/130/800/500" }, { nombre: "Parque de los Fundadores", descripcion: "Espacio recreativo", imagen: "https://picsum.photos/id/26/800/500" } ]
+      sitios: [
+        { nombre: "Catedral Nuestra Señora de Lourdes", descripcion: "Arquitectura religiosa.", imagen: "https://images.unsplash.com/photo-1582657106052-97e5c1ff8b58?w=800&h=500&fit=crop" },
+        { nombre: "Parque de los Fundadores", descripcion: "Espacio recreativo", imagen: "https://images.unsplash.com/photo-1575361202827-317581e5b0b2?w=800&h=500&fit=crop" }
+      ]
     },
     pitalito: {
       nombre: "Pitalito", coords: [1.8557, -76.0519], poblacion: 134900, area: 662, homicidios_anual: 12, petroleo_bpd: 0, nbi: 31,
@@ -535,59 +550,61 @@
       cultivos: { "Café": 3250, "Cacao": 480, "Plátano": 620, "Maíz": 340, "Frutales": 210, "Coca": 45 },
       ambiente: { deforestacion: "28 ha", calidadAgua: "Excelente", riesgoInundacion: "Bajo", temp: "18.5°C", gobernanza: "74/100", energia: "Solar/Fotovoltaica" },
       eventos: [ { nombre: "Festival Nacional del Café", fecha: "2025-05-10", tipo: "tradicional", descripcion: "Catación y desfiles." } ],
-      sitios: [ { nombre: "Parque El Libertador", descripcion: "Principal plaza del municipio", imagen: "https://picsum.photos/id/154/800/500" }, { nombre: "Cascada del Buey", descripcion: "Ecoturismo", imagen: "https://picsum.photos/id/97/800/500" } ]
+      sitios: [
+        { nombre: "Parque El Libertador", descripcion: "Principal plaza del municipio", imagen: "https://images.unsplash.com/photo-1584969214198-1b71964fa6c8?w=800&h=500&fit=crop" },
+        { nombre: "Cascada del Buey", descripcion: "Ecoturismo", imagen: "https://images.unsplash.com/photo-1432405972618-c60b0225b8f9?w=800&h=500&fit=crop" }
+      ]
     },
     timana: { nombre: "Timaná", coords: [1.9734, -75.9289], poblacion: 21000, area: 274, homicidios_anual: 4, petroleo_bpd: 0, nbi: 42,
       tendencias: { homicidios: [7,6,5,5,4,3] }, cultivos: { "Café":820,"Caña panelera":310,"Plátano":140,"Maíz":95,"Coca":12,"Cacao":28 },
       ambiente: { deforestacion: "8 ha", calidadAgua: "Buena", riesgoInundacion: "Bajo", temp: "19.2°C", gobernanza: "71/100", energia: "Mini hidro" },
       eventos: [ { nombre: "Fiestas de San Sebastián", fecha: "2026-01-20", tipo: "tradicional", descripcion: "Corridas y eventos religiosos." } ],
-      sitios: [ { nombre: "Iglesia San Sebastián", descripcion: "Templo colonial", imagen: "https://picsum.photos/id/191/800/500" } ]
+      sitios: [ { nombre: "Iglesia San Sebastián", descripcion: "Templo colonial", imagen: "https://images.unsplash.com/photo-1585499374783-e61d5376d0b1?w=800&h=500&fit=crop" } ]
     },
     guadalupe: { nombre: "Guadalupe", coords: [2.0273, -75.7583], poblacion: 18700, area: 248, homicidios_anual: 5, petroleo_bpd: 0, nbi: 39,
       tendencias: { homicidios: [8,7,6,5,5,4] }, cultivos: { "Café":640,"Caña":270,"Plátano":110,"Maíz":85,"Coca":8,"Frijol":40 },
       ambiente: { deforestacion: "5 ha", calidadAgua: "Buena", riesgoInundacion: "Bajo", temp: "20.1°C", gobernanza: "73/100", energia: "Red" },
       eventos: [ { nombre: "Festival del Retorno", fecha: "2025-12-08", tipo: "tradicional", descripcion: "Evento familiar." } ],
-      sitios: [ { nombre: "Parque Central", descripcion: "Zona de encuentro", imagen: "https://picsum.photos/id/169/800/500" } ]
+      sitios: [ { nombre: "Parque Central", descripcion: "Zona de encuentro", imagen: "https://images.unsplash.com/photo-1569336415962-a4bd9f69c07b?w=800&h=500&fit=crop" } ]
     },
     acevedo: { nombre: "Acevedo", coords: [1.8006, -75.8772], poblacion: 32500, area: 624, homicidios_anual: 7, petroleo_bpd: 0, nbi: 45,
       tendencias: { homicidios: [12,11,9,8,7,6] }, cultivos: { "Café":1150,"Cacao":230,"Plátano":310,"Maíz":190,"Coca":21,"Caña":80 },
       ambiente: { deforestacion: "15 ha", calidadAgua: "Regular", riesgoInundacion: "Medio", temp: "20.5°C", gobernanza: "65/100", energia: "Red" },
       eventos: [ { nombre: "Carnaval Campesino", fecha: "2025-09-12", tipo: "tradicional", descripcion: "Desfile de tractores." } ],
-      sitios: [ { nombre: "Pico de la Montaña", descripcion: "Senderismo", imagen: "https://picsum.photos/id/20/800/500" } ]
+      sitios: [ { nombre: "Pico de la Montaña", descripcion: "Senderismo", imagen: "https://images.unsplash.com/photo-1506744038136-46273834b3fb?w=800&h=500&fit=crop" } ]
     },
     palestina: { nombre: "Palestina", coords: [2.0161, -75.8217], poblacion: 11500, area: 147, homicidios_anual: 2, petroleo_bpd: 0, nbi: 36,
       tendencias: { homicidios: [4,3,3,2,2,1] }, cultivos: { "Café":480,"Cacao":95,"Plátano":70,"Maíz":55,"Coca":3,"Frutales":28 },
       ambiente: { deforestacion: "2 ha", calidadAgua: "Buena", riesgoInundacion: "Bajo", temp: "19.8°C", gobernanza: "78/100", energia: "Solar" },
       eventos: [ { nombre: "Festival de la Panela", fecha: "2025-07-25", tipo: "tradicional", descripcion: "Degustación." } ],
-      sitios: [ { nombre: "Cascada La Golondrina", descripcion: "Piscinas naturales", imagen: "https://picsum.photos/id/29/800/500" } ]
+      sitios: [ { nombre: "Cascada La Golondrina", descripcion: "Piscinas naturales", imagen: "https://images.unsplash.com/photo-1518837695005-2083093ee35b?w=800&h=500&fit=crop" } ]
     },
     isnos: { nombre: "Isnos", coords: [1.9406, -76.2372], poblacion: 26400, area: 582, homicidios_anual: 6, petroleo_bpd: 0, nbi: 48,
       tendencias: { homicidios: [9,8,7,7,6,5] }, cultivos: { "Café":920,"Caña":340,"Plátano":210,"Maíz":115,"Coca":14,"Cacao":45 },
       ambiente: { deforestacion: "18 ha", calidadAgua: "Buena", riesgoInundacion: "Medio", temp: "17.5°C", gobernanza: "63/100", energia: "Eólica" },
       eventos: [ { nombre: "Fiesta de San Isidro", fecha: "2025-05-15", tipo: "tradicional", descripcion: "Bendición de cosechas." } ],
-      sitios: [ { nombre: "Estación del Ferrocarril", descripcion: "Historia regional", imagen: "https://picsum.photos/id/116/800/500" } ]
+      sitios: [ { nombre: "Estación del Ferrocarril", descripcion: "Historia regional", imagen: "https://images.unsplash.com/photo-1585595639030-32cc163c02d9?w=800&h=500&fit=crop" } ]
     },
     palermo: { nombre: "Palermo", coords: [2.8915, -75.4379], poblacion: 33200, area: 706, homicidios_anual: 9, petroleo_bpd: 0, nbi: 40,
       tendencias: { homicidios: [14,13,11,10,9,8] }, cultivos: { "Café":1450,"Cacao":210,"Plátano":380,"Maíz":270,"Coca":27,"Arroz":140 },
       ambiente: { deforestacion: "25 ha", calidadAgua: "Regular", riesgoInundacion: "Medio", temp: "22.4°C", gobernanza: "66/100", energia: "Biomasa" },
       eventos: [ { nombre: "Festival del Arroz", fecha: "2025-08-18", tipo: "tradicional", descripcion: "Muestra cultural." } ],
-      sitios: [ { nombre: "Balneario El Edén", descripcion: "Piscinas naturales", imagen: "https://picsum.photos/id/175/800/500" } ]
+      sitios: [ { nombre: "Balneario El Edén", descripcion: "Piscinas naturales", imagen: "https://images.unsplash.com/photo-1546188994-4b9d2c0a3b1f?w=800&h=500&fit=crop" } ]
     },
     laplata: { nombre: "La Plata", coords: [2.3935, -75.8911], poblacion: 61300, area: 1270, homicidios_anual: 14, petroleo_bpd: 0, nbi: 44,
       tendencias: { homicidios: [19,18,16,15,14,13] }, cultivos: { "Café":2100,"Caña":890,"Cacao":340,"Plátano":520,"Maíz":410,"Coca":68 },
       ambiente: { deforestacion: "42 ha", calidadAgua: "Regular", riesgoInundacion: "Medio-alto", temp: "21.5°C", gobernanza: "60/100", energia: "Hidro" },
       eventos: [ { nombre: "Feria de la Caña", fecha: "2025-06-10", tipo: "tradicional", descripcion: "Molienda y panela." } ],
-      sitios: [ { nombre: "Termales de la Plata", descripcion: "Aguas termales", imagen: "https://picsum.photos/id/134/800/500" } ]
+      sitios: [ { nombre: "Termales de la Plata", descripcion: "Aguas termales", imagen: "https://images.unsplash.com/photo-1535378917042-10a22c959f4e?w=800&h=500&fit=crop" } ]
     },
     gigante: { nombre: "Gigante", coords: [2.3872, -75.5472], poblacion: 27900, area: 626, homicidios_anual: 8, petroleo_bpd: 0, nbi: 38,
       tendencias: { homicidios: [12,11,10,9,8,7] }, cultivos: { "Café":1180,"Cacao":195,"Plátano":310,"Maíz":210,"Coca":11,"Frijol":70 },
       ambiente: { deforestacion: "10 ha", calidadAgua: "Buena", riesgoInundacion: "Bajo", temp: "23.2°C", gobernanza: "69/100", energia: "Red + solar" },
       eventos: [ { nombre: "Carnaval del Río Magdalena", fecha: "2025-07-19", tipo: "tradicional", descripcion: "Competiciones acuáticas." } ],
-      sitios: [ { nombre: "Puente Colgante", descripcion: "Icono arquitectónico", imagen: "https://picsum.photos/id/42/800/500" } ]
+      sitios: [ { nombre: "Puente Colgante", descripcion: "Icono arquitectónico", imagen: "https://images.unsplash.com/photo-1570036424472-df135a8ff25a?w=800&h=500&fit=crop" } ]
     }
   };
 
-  // variables globales gráficos, mapa, carrusel
   let homicidiosChart, cultivosChart, currentMap, carouselIndex = 0, currentSitios = [];
 
   function renderEventos(munKey) {
@@ -607,7 +624,7 @@
   function renderSitios(munKey) {
     const data = municipiosData[munKey];
     if (!data || !data.sitios || data.sitios.length === 0) {
-      document.getElementById('sightsCarousel').innerHTML = `<div style="padding:2rem; text-align:center;">No hay lugares registrados</div>`;
+      document.getElementById('sightsCarousel').innerHTML = `<div style="padding:2rem; text-align:center;">No hay lugares registrados para este municipio</div>`;
       return;
     }
     currentSitios = data.sitios;
@@ -620,7 +637,7 @@
     const sitio = currentSitios[carouselIndex];
     const html = `
       <div class="carousel-slide">
-        <img class="carousel-image" src="${sitio.imagen}" alt="${sitio.nombre}" loading="lazy">
+        <img class="carousel-image" src="${sitio.imagen}" alt="${sitio.nombre}" loading="lazy" onerror="this.src='https://picsum.photos/id/104/800/500'">
         <div class="carousel-caption">${sitio.nombre}</div>
         <div class="carousel-desc">${sitio.descripcion}</div>
       </div>
@@ -631,8 +648,8 @@
       <div class="indicators" id="indicators"></div>
     `;
     document.getElementById('sightsCarousel').innerHTML = html;
-    // Indicadores
     const indicatorsDiv = document.getElementById('indicators');
+    indicatorsDiv.innerHTML = '';
     for (let i=0; i<currentSitios.length; i++) {
       const dot = document.createElement('div');
       dot.classList.add('indicator');
