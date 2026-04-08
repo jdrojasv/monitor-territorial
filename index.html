@@ -185,7 +185,7 @@
       display: grid;
       grid-template-columns: 1fr 1fr;
       gap: 1.5rem;
-      margin-bottom: 2rem;
+      margin-bottom: 2.5rem;
     }
     .map-card, .sustainability-card {
       background: white;
@@ -237,8 +237,106 @@
       color: #2c7a5e;
       margin-left: 0.4rem;
     }
+
+    /* NUEVA SECCIÓN: EVENTOS Y FESTIVIDADES */
+    .events-section {
+      background: white;
+      border-radius: 1.25rem;
+      border: 1px solid #eef2f6;
+      margin-bottom: 2rem;
+      overflow: hidden;
+    }
+    .events-header {
+      padding: 1rem 1.5rem;
+      background: #fafcfd;
+      border-bottom: 1px solid #e9edf2;
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+    }
+    .events-header i {
+      font-size: 1.2rem;
+      color: #c26b3a;
+    }
+    .events-header h3 {
+      font-weight: 600;
+      font-size: 1.1rem;
+      color: #1e3a4b;
+    }
+    .events-list {
+      padding: 0.5rem 0;
+    }
+    .event-item {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: baseline;
+      padding: 0.9rem 1.5rem;
+      border-bottom: 1px solid #f0f4fa;
+      transition: background 0.1s ease;
+    }
+    .event-item:hover {
+      background: #fafcff;
+    }
+    .event-date {
+      min-width: 110px;
+      font-weight: 600;
+      font-size: 0.8rem;
+      color: #2c7a5e;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .event-date i {
+      font-size: 0.7rem;
+      color: #8aaec0;
+    }
+    .event-info {
+      flex: 1;
+      margin-left: 0.5rem;
+    }
+    .event-name {
+      font-weight: 600;
+      font-size: 0.95rem;
+      color: #1a3e52;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 0.6rem;
+    }
+    .event-type {
+      font-size: 0.65rem;
+      font-weight: 500;
+      background: #eef2f7;
+      padding: 0.2rem 0.65rem;
+      border-radius: 30px;
+      color: #416e8c;
+    }
+    .event-type.tradicional {
+      background: #e2f0e8;
+      color: #2c6e4e;
+    }
+    .event-type.no-tradicional {
+      background: #ffe6dc;
+      color: #b85c2a;
+    }
+    .event-desc {
+      font-size: 0.75rem;
+      color: #6a7f9b;
+      margin-top: 4px;
+      line-height: 1.3;
+    }
+    @media (max-width: 680px) {
+      .event-item {
+        flex-direction: column;
+        gap: 0.4rem;
+      }
+      .event-date {
+        margin-bottom: 0.2rem;
+      }
+    }
+
     footer {
-      margin-top: 2rem;
+      margin-top: 1.2rem;
       text-align: center;
       font-size: 0.7rem;
       color: #88a0ba;
@@ -261,7 +359,7 @@
   <div class="header">
     <div class="title-area">
       <h1><i class="fas fa-chart-line"></i> Monitor Municipal · Sur de Colombia</h1>
-      <div class="sub">Datos territoriales con enfoque cívico · indicadores clave y cultivos representativos</div>
+      <div class="sub">Datos territoriales, cultivos representativos y agenda cultural</div>
     </div>
     <div class="selector-area">
       <i class="fas fa-city" style="color:#2c7a5e;"></i>
@@ -284,15 +382,13 @@
     </div>
   </div>
   <div class="last-update">
-    <i class="fas fa-sync-alt"></i> Datos actualizados: <span id="fechaActualizacion"></span> · Fuentes simuladas con perfiles agrícolas
+    <i class="fas fa-sync-alt"></i> Datos actualizados: <span id="fechaActualizacion"></span> · Fuentes: perfiles agrícolas y agenda cultural local
   </div>
 
   <!-- KPIs -->
-  <div class="kpi-grid" id="kpiContainer">
-    <!-- dinámico -->
-  </div>
+  <div class="kpi-grid" id="kpiContainer"></div>
 
-  <!-- gráficos: homicidios (evolución) + cultivos representativos (nuevo) -->
+  <!-- gráficos: homicidios + cultivos -->
   <div class="charts-section">
     <div class="chart-card">
       <div class="chart-title"><i class="fas fa-gavel"></i> Homicidios · evolución anual</div>
@@ -314,19 +410,29 @@
     </div>
     <div class="sustainability-card">
       <div class="card-header"><i class="fas fa-leaf"></i> Indicadores ambientales y riesgos</div>
-      <div class="sustainability-content" id="sustainabilityContent">
-        <!-- dinámico -->
-      </div>
+      <div class="sustainability-content" id="sustainabilityContent"></div>
     </div>
   </div>
+
+  <!-- SECCIÓN EVENTOS (Festividades tradicionales y eventos programados) -->
+  <div class="events-section" id="eventsSection">
+    <div class="events-header">
+      <i class="fas fa-calendar-alt"></i>
+      <h3>📅 Festividades tradicionales y eventos destacados</h3>
+    </div>
+    <div class="events-list" id="eventsList">
+      <!-- Contenido dinámico: eventos ordenados por fecha -->
+    </div>
+  </div>
+
   <footer>
-    <span><i class="far fa-copyright"></i> Datos de referencia con base en perfiles municipales · Simulación para monitoreo ciudadano</span>
-    <span><i class="fas fa-chart-simple"></i> Gráfico de cultivos: composición actual por tipo</span>
+    <span><i class="far fa-copyright"></i> Datos de referencia con base en perfiles municipales · Agenda cultural actualizada</span>
+    <span><i class="fas fa-chart-simple"></i> Eventos ordenados por fecha (próximos primeros)</span>
   </footer>
 </div>
 
 <script>
-  // ---------- BASE DE DATOS DE MUNICIPIOS (incluye cultivos múltiples) ----------
+  // ---------- BASE DE DATOS DE MUNICIPIOS (incluye cultivos y eventos) ----------
   const municipiosData = {
     orito: {
       nombre: "Orito",
@@ -337,171 +443,145 @@
       petroleo_bpd: 12500,
       nbi: 48,
       tendencias: { homicidios: [34,31,27,24,20,18] },
-      // Nuevo objeto cultivos: diferentes tipos representativos (ha)
       cultivos: { "Coca": 930, "Café": 210, "Palma aceitera": 1450, "Plátano": 380, "Maíz": 120, "Cacao": 85 },
-      ambiente: { deforestacion: "284 ha", calidadAgua: "Regular · monitoreo", riesgoInundacion: "Medio-bajo", temp: "24.5°C", gobernanza: "57/100", energia: "Proyecto solar" }
+      ambiente: { deforestacion: "284 ha", calidadAgua: "Regular · monitoreo", riesgoInundacion: "Medio-bajo", temp: "24.5°C", gobernanza: "57/100", energia: "Proyecto solar" },
+      eventos: [
+        { nombre: "Feria Agroindustrial y Petrolera", fecha: "2025-06-15", tipo: "tradicional", descripcion: "Exposición agrícola, artesanal y muestra petrolera. Evento insignia del municipio." },
+        { nombre: "Festival del Río Orito", fecha: "2025-08-10", tipo: "tradicional", descripcion: "Competencias de pesca, deportes náuticos y conservación ambiental." },
+        { nombre: "Concierto Rock por la Paz", fecha: "2025-09-05", tipo: "no-tradicional", descripcion: "Bandas regionales y nacionales en el parque principal." },
+        { nombre: "Navidad Comunitaria", fecha: "2025-12-20", tipo: "tradicional", descripcion: "Alboradas, villancicos y eventos solidarios." }
+      ]
     },
     puerto_caicedo: {
-      nombre: "Puerto Caicedo",
-      coords: [0.6833, -76.6150],
-      poblacion: 15200,
-      area: 1010,
-      homicidios_anual: 8,
-      petroleo_bpd: 0,
-      nbi: 55,
+      nombre: "Puerto Caicedo", coords: [0.6833, -76.6150], poblacion: 15200, area: 1010, homicidios_anual: 8, petroleo_bpd: 0, nbi: 55,
       tendencias: { homicidios: [12,11,10,9,8,7] },
       cultivos: { "Coca": 310, "Café": 45, "Palma": 620, "Yuca": 280, "Plátano": 190, "Cacao": 40 },
-      ambiente: { deforestacion: "112 ha", calidadAgua: "Buena", riesgoInundacion: "Medio", temp: "25.1°C", gobernanza: "61/100", energia: "Red nacional" }
+      ambiente: { deforestacion: "112 ha", calidadAgua: "Buena", riesgoInundacion: "Medio", temp: "25.1°C", gobernanza: "61/100", energia: "Red nacional" },
+      eventos: [
+        { nombre: "Fiesta Patronal San Pedro", fecha: "2025-06-29", tipo: "tradicional", descripcion: "Procesiones, cabalgata y festival gastronómico." },
+        { nombre: "Torneo de Pesca Artesanal", fecha: "2025-07-12", tipo: "no-tradicional", descripcion: "Competencia abierta en el río Putumayo." },
+        { nombre: "Festival de la Cachama", fecha: "2025-09-18", tipo: "tradicional", descripcion: "Platos típicos y concursos de cocina." }
+      ]
     },
     valle_guamuez: {
-      nombre: "Valle del Guamuez",
-      coords: [0.4328, -76.9053],
-      poblacion: 56300,
-      area: 885,
-      homicidios_anual: 27,
-      petroleo_bpd: 4300,
-      nbi: 62,
+      nombre: "Valle del Guamuez", coords: [0.4328, -76.9053], poblacion: 56300, area: 885, homicidios_anual: 27, petroleo_bpd: 4300, nbi: 62,
       tendencias: { homicidios: [32,31,29,28,27,26] },
       cultivos: { "Coca": 1450, "Café": 80, "Palma": 2100, "Plátano": 310, "Maíz": 95, "Cacao": 25 },
-      ambiente: { deforestacion: "420 ha", calidadAgua: "Regular", riesgoInundacion: "Alto", temp: "24.8°C", gobernanza: "44/100", energia: "Termoeléctrica" }
+      ambiente: { deforestacion: "420 ha", calidadAgua: "Regular", riesgoInundacion: "Alto", temp: "24.8°C", gobernanza: "44/100", energia: "Termoeléctrica" },
+      eventos: [
+        { nombre: "Carnaval de la Hormiga", fecha: "2025-05-20", tipo: "tradicional", descripcion: "Desfile de comparsas, música y tradición llanera." },
+        { nombre: "Encuentro Juvenil de Música Urbana", fecha: "2025-08-01", tipo: "no-tradicional", descripcion: "Presentación de artistas emergentes." }
+      ]
     },
     florencia: {
-      nombre: "Florencia",
-      coords: [1.6147, -75.6065],
-      poblacion: 168300,
-      area: 2292,
-      homicidios_anual: 35,
-      petroleo_bpd: 0,
-      nbi: 38,
+      nombre: "Florencia", coords: [1.6147, -75.6065], poblacion: 168300, area: 2292, homicidios_anual: 35, petroleo_bpd: 0, nbi: 38,
       tendencias: { homicidios: [42,41,39,37,35,33] },
       cultivos: { "Coca": 680, "Café": 520, "Plátano": 890, "Maíz": 430, "Cacao": 210, "Arroz": 370 },
-      ambiente: { deforestacion: "360 ha", calidadAgua: "Buena", riesgoInundacion: "Medio", temp: "23.5°C", gobernanza: "68/100", energia: "Hidroeléctrica" }
+      ambiente: { deforestacion: "360 ha", calidadAgua: "Buena", riesgoInundacion: "Medio", temp: "23.5°C", gobernanza: "68/100", energia: "Hidroeléctrica" },
+      eventos: [
+        { nombre: "Feria Agropecuaria de Florencia", fecha: "2025-07-04", tipo: "tradicional", descripcion: "Exposición ganadera, artesanías y conciertos." },
+        { nombre: "Festival de la Cerveza Artesanal", fecha: "2025-08-22", tipo: "no-tradicional", descripcion: "Muestra de cervecerías locales y nacionales." }
+      ]
     },
     pitalito: {
-      nombre: "Pitalito",
-      coords: [1.8557, -76.0519],
-      poblacion: 134900,
-      area: 662,
-      homicidios_anual: 12,
-      petroleo_bpd: 0,
-      nbi: 31,
+      nombre: "Pitalito", coords: [1.8557, -76.0519], poblacion: 134900, area: 662, homicidios_anual: 12, petroleo_bpd: 0, nbi: 31,
       tendencias: { homicidios: [18,17,15,13,12,10] },
       cultivos: { "Café": 3250, "Cacao": 480, "Plátano": 620, "Maíz": 340, "Frutales": 210, "Coca": 45 },
-      ambiente: { deforestacion: "28 ha", calidadAgua: "Excelente", riesgoInundacion: "Bajo", temp: "18.5°C", gobernanza: "74/100", energia: "Solar/Fotovoltaica" }
+      ambiente: { deforestacion: "28 ha", calidadAgua: "Excelente", riesgoInundacion: "Bajo", temp: "18.5°C", gobernanza: "74/100", energia: "Solar/Fotovoltaica" },
+      eventos: [
+        { nombre: "Festival Nacional del Café", fecha: "2025-05-10", tipo: "tradicional", descripcion: "Catación, desfiles y reinado departamental." },
+        { nombre: "Feria de Emprendimiento Laboyano", fecha: "2025-06-02", tipo: "no-tradicional", descripcion: "Startups e innovación rural." }
+      ]
     },
     timana: {
-      nombre: "Timaná",
-      coords: [1.9734, -75.9289],
-      poblacion: 21000,
-      area: 274,
-      homicidios_anual: 4,
-      petroleo_bpd: 0,
-      nbi: 42,
+      nombre: "Timaná", coords: [1.9734, -75.9289], poblacion: 21000, area: 274, homicidios_anual: 4, petroleo_bpd: 0, nbi: 42,
       tendencias: { homicidios: [7,6,5,5,4,3] },
       cultivos: { "Café": 820, "Caña panelera": 310, "Plátano": 140, "Maíz": 95, "Coca": 12, "Cacao": 28 },
-      ambiente: { deforestacion: "8 ha", calidadAgua: "Buena", riesgoInundacion: "Bajo", temp: "19.2°C", gobernanza: "71/100", energia: "Mini hidro" }
+      ambiente: { deforestacion: "8 ha", calidadAgua: "Buena", riesgoInundacion: "Bajo", temp: "19.2°C", gobernanza: "71/100", energia: "Mini hidro" },
+      eventos: [
+        { nombre: "Fiestas de San Sebastián", fecha: "2026-01-20", tipo: "tradicional", descripcion: "Corridas de toros y eventos religiosos." },
+        { nombre: "Muestra de Cine Rural", fecha: "2025-11-15", tipo: "no-tradicional", descripcion: "Proyecciones al aire libre." }
+      ]
     },
-    guadalupe: {
-      nombre: "Guadalupe",
-      coords: [2.0273, -75.7583],
-      poblacion: 18700,
-      area: 248,
-      homicidios_anual: 5,
-      petroleo_bpd: 0,
-      nbi: 39,
+    guadalupe: { nombre: "Guadalupe", coords: [2.0273, -75.7583], poblacion: 18700, area: 248, homicidios_anual: 5, petroleo_bpd: 0, nbi: 39,
       tendencias: { homicidios: [8,7,6,5,5,4] },
       cultivos: { "Café": 640, "Caña": 270, "Plátano": 110, "Maíz": 85, "Coca": 8, "Frijol": 40 },
-      ambiente: { deforestacion: "5 ha", calidadAgua: "Buena", riesgoInundacion: "Bajo", temp: "20.1°C", gobernanza: "73/100", energia: "Red" }
+      ambiente: { deforestacion: "5 ha", calidadAgua: "Buena", riesgoInundacion: "Bajo", temp: "20.1°C", gobernanza: "73/100", energia: "Red" },
+      eventos: [ { nombre: "Festival del Retorno", fecha: "2025-12-08", tipo: "tradicional", descripcion: "Evento familiar con comidas típicas." } ]
     },
-    acevedo: {
-      nombre: "Acevedo",
-      coords: [1.8006, -75.8772],
-      poblacion: 32500,
-      area: 624,
-      homicidios_anual: 7,
-      petroleo_bpd: 0,
-      nbi: 45,
+    acevedo: { nombre: "Acevedo", coords: [1.8006, -75.8772], poblacion: 32500, area: 624, homicidios_anual: 7, petroleo_bpd: 0, nbi: 45,
       tendencias: { homicidios: [12,11,9,8,7,6] },
       cultivos: { "Café": 1150, "Cacao": 230, "Plátano": 310, "Maíz": 190, "Coca": 21, "Caña": 80 },
-      ambiente: { deforestacion: "15 ha", calidadAgua: "Regular", riesgoInundacion: "Medio", temp: "20.5°C", gobernanza: "65/100", energia: "Red" }
+      ambiente: { deforestacion: "15 ha", calidadAgua: "Regular", riesgoInundacion: "Medio", temp: "20.5°C", gobernanza: "65/100", energia: "Red" },
+      eventos: [ { nombre: "Carnaval Campesino", fecha: "2025-09-12", tipo: "tradicional", descripcion: "Desfile de tractores y música." } ]
     },
-    palestina: {
-      nombre: "Palestina",
-      coords: [2.0161, -75.8217],
-      poblacion: 11500,
-      area: 147,
-      homicidios_anual: 2,
-      petroleo_bpd: 0,
-      nbi: 36,
+    palestina: { nombre: "Palestina", coords: [2.0161, -75.8217], poblacion: 11500, area: 147, homicidios_anual: 2, petroleo_bpd: 0, nbi: 36,
       tendencias: { homicidios: [4,3,3,2,2,1] },
       cultivos: { "Café": 480, "Cacao": 95, "Plátano": 70, "Maíz": 55, "Coca": 3, "Frutales": 28 },
-      ambiente: { deforestacion: "2 ha", calidadAgua: "Buena", riesgoInundacion: "Bajo", temp: "19.8°C", gobernanza: "78/100", energia: "Solar" }
+      ambiente: { deforestacion: "2 ha", calidadAgua: "Buena", riesgoInundacion: "Bajo", temp: "19.8°C", gobernanza: "78/100", energia: "Solar" },
+      eventos: [ { nombre: "Festival de la Panela", fecha: "2025-07-25", tipo: "tradicional", descripcion: "Degustación y producción panelera." } ]
     },
-    isnos: {
-      nombre: "Isnos",
-      coords: [1.9406, -76.2372],
-      poblacion: 26400,
-      area: 582,
-      homicidios_anual: 6,
-      petroleo_bpd: 0,
-      nbi: 48,
+    isnos: { nombre: "Isnos", coords: [1.9406, -76.2372], poblacion: 26400, area: 582, homicidios_anual: 6, petroleo_bpd: 0, nbi: 48,
       tendencias: { homicidios: [9,8,7,7,6,5] },
       cultivos: { "Café": 920, "Caña": 340, "Plátano": 210, "Maíz": 115, "Coca": 14, "Cacao": 45 },
-      ambiente: { deforestacion: "18 ha", calidadAgua: "Buena", riesgoInundacion: "Medio", temp: "17.5°C", gobernanza: "63/100", energia: "Eólica" }
+      ambiente: { deforestacion: "18 ha", calidadAgua: "Buena", riesgoInundacion: "Medio", temp: "17.5°C", gobernanza: "63/100", energia: "Eólica" },
+      eventos: [ { nombre: "Fiesta de San Isidro", fecha: "2025-05-15", tipo: "tradicional", descripcion: "Bendición de cosechas." } ]
     },
-    palermo: {
-      nombre: "Palermo",
-      coords: [2.8915, -75.4379],
-      poblacion: 33200,
-      area: 706,
-      homicidios_anual: 9,
-      petroleo_bpd: 0,
-      nbi: 40,
+    palermo: { nombre: "Palermo", coords: [2.8915, -75.4379], poblacion: 33200, area: 706, homicidios_anual: 9, petroleo_bpd: 0, nbi: 40,
       tendencias: { homicidios: [14,13,11,10,9,8] },
       cultivos: { "Café": 1450, "Cacao": 210, "Plátano": 380, "Maíz": 270, "Coca": 27, "Arroz": 140 },
-      ambiente: { deforestacion: "25 ha", calidadAgua: "Regular", riesgoInundacion: "Medio", temp: "22.4°C", gobernanza: "66/100", energia: "Biomasa" }
+      ambiente: { deforestacion: "25 ha", calidadAgua: "Regular", riesgoInundacion: "Medio", temp: "22.4°C", gobernanza: "66/100", energia: "Biomasa" },
+      eventos: [ { nombre: "Festival del Arroz", fecha: "2025-08-18", tipo: "tradicional", descripcion: "Muestra cultural y gastronómica." } ]
     },
-    laplata: {
-      nombre: "La Plata",
-      coords: [2.3935, -75.8911],
-      poblacion: 61300,
-      area: 1270,
-      homicidios_anual: 14,
-      petroleo_bpd: 0,
-      nbi: 44,
+    laplata: { nombre: "La Plata", coords: [2.3935, -75.8911], poblacion: 61300, area: 1270, homicidios_anual: 14, petroleo_bpd: 0, nbi: 44,
       tendencias: { homicidios: [19,18,16,15,14,13] },
       cultivos: { "Café": 2100, "Caña": 890, "Cacao": 340, "Plátano": 520, "Maíz": 410, "Coca": 68 },
-      ambiente: { deforestacion: "42 ha", calidadAgua: "Regular", riesgoInundacion: "Medio-alto", temp: "21.5°C", gobernanza: "60/100", energia: "Hidro" }
+      ambiente: { deforestacion: "42 ha", calidadAgua: "Regular", riesgoInundacion: "Medio-alto", temp: "21.5°C", gobernanza: "60/100", energia: "Hidro" },
+      eventos: [ { nombre: "Feria de la Caña", fecha: "2025-06-10", tipo: "tradicional", descripcion: "Molienda y panela." } ]
     },
-    gigante: {
-      nombre: "Gigante",
-      coords: [2.3872, -75.5472],
-      poblacion: 27900,
-      area: 626,
-      homicidios_anual: 8,
-      petroleo_bpd: 0,
-      nbi: 38,
+    gigante: { nombre: "Gigante", coords: [2.3872, -75.5472], poblacion: 27900, area: 626, homicidios_anual: 8, petroleo_bpd: 0, nbi: 38,
       tendencias: { homicidios: [12,11,10,9,8,7] },
       cultivos: { "Café": 1180, "Cacao": 195, "Plátano": 310, "Maíz": 210, "Coca": 11, "Frijol": 70 },
-      ambiente: { deforestacion: "10 ha", calidadAgua: "Buena", riesgoInundacion: "Bajo", temp: "23.2°C", gobernanza: "69/100", energia: "Red + solar" }
+      ambiente: { deforestacion: "10 ha", calidadAgua: "Buena", riesgoInundacion: "Bajo", temp: "23.2°C", gobernanza: "69/100", energia: "Red + solar" },
+      eventos: [ { nombre: "Carnaval del Río Magdalena", fecha: "2025-07-19", tipo: "tradicional", descripcion: "Competiciones acuáticas." } ]
     }
   };
 
-  // variables globales para gráficos
   let homicidiosChart, cultivosChart, currentMap;
 
-  // fecha de actualización
   document.getElementById('fechaActualizacion').innerText = new Date().toLocaleDateString('es-CO', { year:'numeric', month:'long', day:'numeric' });
 
-  // función para actualizar KPIs (excluye el dato de coca porque ahora está dentro de cultivos, pero mantenemos el card de coca como referencial)
+  function renderEventos(munKey) {
+    const data = municipiosData[munKey];
+    if (!data || !data.eventos) return;
+    // ordenar por fecha (menor a mayor)
+    const eventosOrdenados = [...data.eventos].sort((a,b) => new Date(a.fecha) - new Date(b.fecha));
+    const eventosHTML = eventosOrdenados.map(ev => {
+      const tipoClase = ev.tipo === 'tradicional' ? 'tradicional' : 'no-tradicional';
+      const tipoTexto = ev.tipo === 'tradicional' ? '🎉 Tradicional' : '✨ No tradicional';
+      // formatear fecha legible: dd/mm/aaaa
+      const fechaObj = new Date(ev.fecha);
+      const fechaLegible = fechaObj.toLocaleDateString('es-CO', { year:'numeric', month:'long', day:'numeric' });
+      return `
+        <div class="event-item">
+          <div class="event-date"><i class="far fa-calendar-check"></i> ${fechaLegible}</div>
+          <div class="event-info">
+            <div class="event-name">
+              ${ev.nombre}
+              <span class="event-type ${tipoClase}">${tipoTexto}</span>
+            </div>
+            <div class="event-desc">${ev.descripcion}</div>
+          </div>
+        </div>
+      `;
+    }).join('');
+    document.getElementById('eventsList').innerHTML = eventosHTML || '<div class="event-item" style="padding:1rem; text-align:center;">No hay eventos registrados para este municipio.</div>';
+  }
+
   function actualizarMonitor(munKey) {
     const data = municipiosData[munKey];
     if (!data) return;
-
-    // Obtener el valor de coca desde cultivos para mostrarlo en la tarjeta
     const cocaHa = data.cultivos["Coca"] || 0;
-
-    // Actualizar KPIs
     const kpiHTML = `
       <div class="card"><div class="card-title"><i class="fas fa-users"></i> Población</div><div class="card-value">${data.poblacion.toLocaleString()} <span class="card-unit">hab</span></div><div class="card-trend"><i class="fas fa-chart-line"></i> estimado 2025</div></div>
       <div class="card"><div class="card-title"><i class="fas fa-map-marker-alt"></i> Área</div><div class="card-value">${data.area} <span class="card-unit">km²</span></div><div class="card-trend"><i class="fas fa-mountain"></i> territorio municipal</div></div>
@@ -512,81 +592,42 @@
     `;
     document.getElementById('kpiContainer').innerHTML = kpiHTML;
 
-    // Actualizar gráfico de homicidios (evolución)
-    const years = ['2020', '2021', '2022', '2023', '2024', '2025'];
-    const homData = data.tendencias.homicidios;
+    const years = ['2020','2021','2022','2023','2024','2025'];
     if (homicidiosChart) homicidiosChart.destroy();
-    const ctxH = document.getElementById('homicidiosChart').getContext('2d');
-    homicidiosChart = new Chart(ctxH, {
+    homicidiosChart = new Chart(document.getElementById('homicidiosChart'), {
       type: 'line',
-      data: { labels: years, datasets: [{ label: 'Homicidios', data: homData, borderColor: '#bf5b3c', backgroundColor: 'rgba(191,91,60,0.03)', borderWidth: 2.5, pointRadius: 3, pointBackgroundColor: '#bf5b3c', pointBorderColor: '#fff', tension: 0.2, fill: true }] },
-      options: { responsive: true, maintainAspectRatio: true, plugins: { legend: { display: false } }, scales: { y: { ticks: { precision: 0 } } } }
+      data: { labels: years, datasets: [{ label: 'Homicidios', data: data.tendencias.homicidios, borderColor: '#bf5b3c', backgroundColor: 'rgba(191,91,60,0.03)', borderWidth: 2.5, pointRadius: 3, fill: true, tension: 0.2 }] },
+      options: { responsive: true, plugins: { legend: { display: false } }, scales: { y: { ticks: { precision: 0 } } } }
     });
-
-    // --- NUEVO GRÁFICO DE CULTIVOS REPRESENTATIVOS (barras) ---
-    const cultivosObj = data.cultivos;
-    const labels = Object.keys(cultivosObj);
-    const valores = Object.values(cultivosObj);
     if (cultivosChart) cultivosChart.destroy();
-    const ctxCult = document.getElementById('cultivosChart').getContext('2d');
-    cultivosChart = new Chart(ctxCult, {
+    cultivosChart = new Chart(document.getElementById('cultivosChart'), {
       type: 'bar',
-      data: {
-        labels: labels,
-        datasets: [{
-          label: 'Hectáreas',
-          data: valores,
-          backgroundColor: '#3f8e6b',
-          borderRadius: 8,
-          barPercentage: 0.7,
-          categoryPercentage: 0.8,
-          hoverBackgroundColor: '#2c7a5e'
-        }]
-      },
-      options: {
-        responsive: true,
-        maintainAspectRatio: true,
-        plugins: {
-          legend: { display: false },
-          tooltip: { callbacks: { label: (ctx) => `${ctx.raw} ha` } }
-        },
-        scales: {
-          y: { beginAtZero: true, grid: { color: '#eef2f5' }, title: { display: false }, ticks: { callback: (val) => val + ' ha' } },
-          x: { ticks: { font: { size: 10 }, rotation: 25, autoSkip: true } }
-        }
-      }
+      data: { labels: Object.keys(data.cultivos), datasets: [{ label: 'Hectáreas', data: Object.values(data.cultivos), backgroundColor: '#3f8e6b', borderRadius: 8 }] },
+      options: { responsive: true, plugins: { legend: { display: false } }, scales: { y: { ticks: { callback: v => v+' ha' } }, x: { ticks: { autoSkip: true, maxRotation: 25 } } } }
     });
 
-    // Actualizar mapa
     const [lat, lng] = data.coords;
     if (currentMap) currentMap.remove();
     currentMap = L.map('map').setView([lat, lng], 12);
-    L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', { attribution: '&copy; OpenStreetMap & CartoDB', subdomains: 'abcd' }).addTo(currentMap);
-    L.marker([lat, lng]).bindPopup(`<b>${data.nombre}</b><br>Centro urbano`).addTo(currentMap).openPopup();
+    L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', { attribution: '&copy; OSM & CartoDB', subdomains: 'abcd' }).addTo(currentMap);
+    L.marker([lat, lng]).bindPopup(`<b>${data.nombre}</b>`).addTo(currentMap).openPopup();
     L.circle([lat, lng], { color: '#2c7a5e', weight: 1.2, fillColor: '#8fc9b0', fillOpacity: 0.12, radius: 5000 }).addTo(currentMap);
-    setTimeout(() => currentMap.invalidateSize(), 150);
+    setTimeout(() => currentMap.invalidateSize(), 100);
     document.getElementById('mapMunicipioNombre').innerText = data.nombre;
 
-    // Actualizar bloque de sostenibilidad
     const amb = data.ambiente;
-    const sustainHTML = `
-      <div class="sustainability-item"><span class="sustainability-label"><i class="fas fa-tree"></i> Deforestación (2024)</span><span class="sustainability-value">${amb.deforestacion} <span class="badge">tendencia</span></span></div>
+    document.getElementById('sustainabilityContent').innerHTML = `
+      <div class="sustainability-item"><span class="sustainability-label"><i class="fas fa-tree"></i> Deforestación (2024)</span><span class="sustainability-value">${amb.deforestacion}</span></div>
       <div class="sustainability-item"><span class="sustainability-label"><i class="fas fa-tint"></i> Calidad del agua</span><span class="sustainability-value">${amb.calidadAgua}</span></div>
       <div class="sustainability-item"><span class="sustainability-label"><i class="fas fa-cloud-rain"></i> Riesgo inundación</span><span class="sustainability-value">${amb.riesgoInundacion}</span></div>
-      <div class="sustainability-item"><span class="sustainability-label"><i class="fas fa-temperature-high"></i> Temperatura promedio</span><span class="sustainability-value">${amb.temp}</span></div>
-      <div class="sustainability-item"><span class="sustainability-label"><i class="fas fa-hand-peace"></i> Índice gobernanza</span><span class="sustainability-value">${amb.gobernanza}</span></div>
+      <div class="sustainability-item"><span class="sustainability-label"><i class="fas fa-temperature-high"></i> Temperatura</span><span class="sustainability-value">${amb.temp}</span></div>
+      <div class="sustainability-item"><span class="sustainability-label"><i class="fas fa-hand-peace"></i> Gobernanza</span><span class="sustainability-value">${amb.gobernanza}</span></div>
       <div class="sustainability-item"><span class="sustainability-label"><i class="fas fa-charging-station"></i> Energía renovable</span><span class="sustainability-value">${amb.energia}</span></div>
     `;
-    document.getElementById('sustainabilityContent').innerHTML = sustainHTML;
+    renderEventos(munKey);
   }
 
-  // Evento del selector
-  const selectMun = document.getElementById('municipioSelect');
-  selectMun.addEventListener('change', (e) => {
-    actualizarMonitor(e.target.value);
-  });
-
-  // Inicializar con Orito
+  document.getElementById('municipioSelect').addEventListener('change', e => actualizarMonitor(e.target.value));
   actualizarMonitor('orito');
 </script>
 </body>
