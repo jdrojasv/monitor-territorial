@@ -187,14 +187,14 @@
     }
     .sustainability-label { font-size: 0.8rem; font-weight: 500; color: #4e6d8c; }
     .sustainability-value { font-weight: 600; color: #1f4156; font-size: 0.9rem; }
-    /* EVENTOS + SÍMBOLOS */
-    .events-symbols-grid {
+    /* EVENTOS + HISTORIA (relato fundacional) */
+    .events-history-grid {
       display: grid;
       grid-template-columns: 1fr 1fr;
       gap: 1.5rem;
       margin-bottom: 2rem;
     }
-    .events-column, .symbols-column {
+    .events-column, .history-column {
       background: white;
       border-radius: 1.25rem;
       border: 1px solid #eef2f6;
@@ -235,61 +235,34 @@
     .event-type { font-size: 0.6rem; font-weight: 500; background: #eef2f7; padding: 0.2rem 0.65rem; border-radius: 30px; color: #416e8c; }
     .event-type.tradicional { background: #e2f0e8; color: #2c6e4e; }
     .event-desc { font-size: 0.7rem; color: #6a7f9b; margin-top: 4px; }
-    /* Símbolos municipales */
-    .symbols-content {
+    /* Historia / relato fundacional */
+    .history-content {
       padding: 1.2rem;
-      display: flex;
-      flex-direction: column;
-      gap: 1.2rem;
-    }
-    .symbol-item {
-      display: flex;
-      align-items: center;
-      gap: 1rem;
-      border-bottom: 1px solid #f0f4fa;
-      padding-bottom: 0.8rem;
-    }
-    .symbol-icon {
-      width: 48px;
-      text-align: center;
-      font-size: 2rem;
-    }
-    .symbol-info {
-      flex: 1;
-    }
-    .symbol-name {
-      font-weight: 700;
       font-size: 0.9rem;
-      color: #1f4e63;
-      margin-bottom: 0.2rem;
+      line-height: 1.5;
+      color: #2c4b66;
     }
-    .symbol-desc {
-      font-size: 0.75rem;
-      color: #5c7995;
-      line-height: 1.3;
+    .history-text {
+      margin-bottom: 1rem;
+      text-align: justify;
     }
-    .flag-badge {
-      display: inline-block;
-      width: 40px;
-      height: 24px;
-      border-radius: 4px;
-      margin-right: 8px;
+    .history-highlight {
+      background: #eef3f0;
+      padding: 0.8rem;
+      border-radius: 1rem;
+      border-left: 4px solid #2c7a5e;
+      font-size: 0.85rem;
+      margin-top: 0.5rem;
+      color: #1c5a47;
+    }
+    .history-icon {
+      font-size: 1.5rem;
+      margin-right: 0.5rem;
       vertical-align: middle;
-      box-shadow: 0 1px 2px rgba(0,0,0,0.1);
-    }
-    .shield-simple {
-      background: #e6d9b8;
-      border-radius: 50%;
-      width: 36px;
-      height: 36px;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 1.2rem;
     }
     @media (max-width: 780px) {
       body { padding: 1rem; }
-      .charts-section, .info-row, .events-symbols-grid { grid-template-columns: 1fr; gap: 1rem; }
+      .charts-section, .info-row, .events-history-grid { grid-template-columns: 1fr; gap: 1rem; }
       .header { flex-direction: column; align-items: flex-start; }
     }
     footer {
@@ -310,7 +283,7 @@
   <div class="header">
     <div class="title-area">
       <h1><i class="fas fa-chart-line"></i> Monitor Municipal · Sur de Colombia</h1>
-      <div class="sub">Datos territoriales, cultivos, agenda cultural y símbolos municipales</div>
+      <div class="sub">Datos territoriales, cultivos, agenda cultural e historia de cada municipio</div>
     </div>
     <div class="selector-area">
       <i class="fas fa-city" style="color:#2c7a5e;"></i>
@@ -333,7 +306,7 @@
     </div>
   </div>
   <div class="last-update">
-    <i class="fas fa-sync-alt"></i> Datos actualizados: <span id="fechaActualizacion"></span> · Símbolos municipales representativos
+    <i class="fas fa-sync-alt"></i> Datos actualizados: <span id="fechaActualizacion"></span> · Relatos históricos basados en fuentes locales
   </div>
 
   <!-- KPIs -->
@@ -351,29 +324,29 @@
     <div class="sustainability-card"><div class="card-header"><i class="fas fa-leaf"></i> Indicadores ambientales y riesgos</div><div class="sustainability-content" id="sustainabilityContent"></div></div>
   </div>
 
-  <!-- DOBLE COLUMNA: Eventos + Símbolos municipales -->
-  <div class="events-symbols-grid">
+  <!-- DOBLE COLUMNA: Eventos + Historia (relato fundacional y origen del nombre) -->
+  <div class="events-history-grid">
     <div class="events-column">
       <div class="section-header"><i class="fas fa-calendar-alt"></i> 📅 Festividades y eventos destacados</div>
       <div class="events-list" id="eventsList"></div>
     </div>
-    <div class="symbols-column">
-      <div class="section-header"><i class="fas fa-flag-checkered"></i> 🏛️ Símbolos del municipio</div>
-      <div class="symbols-content" id="symbolsContent">
+    <div class="history-column">
+      <div class="section-header"><i class="fas fa-book-open"></i> 📖 Relato histórico · origen y nombre</div>
+      <div class="history-content" id="historyContent">
         <!-- contenido dinámico -->
       </div>
     </div>
   </div>
 
   <footer>
-    <span><i class="far fa-copyright"></i> Datos de referencia · Símbolos basados en información oficial y tradición local</span>
-    <span><i class="fas fa-chart-simple"></i> Eventos ordenados por fecha · Identidad municipal</span>
+    <span><i class="far fa-copyright"></i> Datos de referencia · Relatos históricos con base en crónicas municipales</span>
+    <span><i class="fas fa-chart-simple"></i> Eventos ordenados por fecha · Identidad y memoria</span>
   </footer>
 </div>
 
 <script>
   // --------------------------------------------------------------
-  // BASE DE DATOS COMPLETA (incluye símbolos municipales)
+  // BASE DE DATOS DE MUNICIPIOS (incluye relato histórico)
   // --------------------------------------------------------------
   const municipiosData = {
     orito: {
@@ -386,89 +359,91 @@
         { nombre: "Festival del Río Orito", fecha: "2025-08-10", tipo: "tradicional", descripcion: "Competencias de pesca y deportes náuticos." },
         { nombre: "Concierto Rock por la Paz", fecha: "2025-09-05", tipo: "no-tradicional", descripcion: "Bandas regionales en el parque principal." }
       ],
-      simbolos: {
-        bandera: { nombre: "Bandera de Orito", descripcion: "Tres franjas horizontales: verde (selva), blanco (paz) y amarillo (riqueza petrolera).", colores: ["#2e7d32", "#ffffff", "#fbc02d"] },
-        escudo: { nombre: "Escudo de Orito", descripcion: "Forma española con palma de aceite, río y yacimiento petrolero.", icono: "🛡️" },
-        arbol: { nombre: "Palma de aceite", descripcion: "Símbolo del desarrollo agrícola y económico de la región." },
-        himno: { nombre: "Himno de Orito", descripcion: "Letra que resalta la vocación petrolera y amazónica." },
-        otro: { nombre: "Flor emblemática", descripcion: "Orquídea Cattleya (representativa del piedemonte)." }
-      }
+      historia: "Orito fue fundado en 1963 como corregimiento de Puerto Asís, pero su crecimiento llegó con el auge petrolero en los años 80. Su nombre proviene de la quebrada Orito, vocablo indígena que significa 'cerro de oro'. Hoy es conocido como el 'corazón petrolero de Putumayo', mezcla de selva, industria y resistencia campesina."
     },
     puerto_caicedo: {
       nombre: "Puerto Caicedo", coords: [0.6833, -76.6150], poblacion: 15200, area: 1010, homicidios_anual: 8, petroleo_bpd: 0, nbi: 55,
       tendencias: { homicidios: [12,11,10,9,8,7] }, cultivos: { "Coca": 310, "Café": 45, "Palma": 620, "Yuca": 280, "Plátano": 190, "Cacao": 40 },
       ambiente: { deforestacion: "112 ha", calidadAgua: "Buena", riesgoInundacion: "Medio", temp: "25.1°C", gobernanza: "61/100", energia: "Red nacional" },
       eventos: [ { nombre: "Fiesta Patronal San Pedro", fecha: "2025-06-29", tipo: "tradicional", descripcion: "Procesiones, cabalgata." }, { nombre: "Torneo de Pesca Artesanal", fecha: "2025-07-12", tipo: "no-tradicional", descripcion: "Competencia abierta." } ],
-      simbolos: { bandera: { nombre: "Bandera", descripcion: "Azul (río Putumayo), verde (selva) y blanco (paz).", colores: ["#1976d2", "#388e3c", "#ffffff"] }, escudo: { nombre: "Escudo", descripcion: "Ancla, pez y palmeras.", icono: "⚓" }, arbol: { nombre: "Palma de aceite", descripcion: "Principal cultivo industrial." }, himno: { nombre: "Himno", descripcion: "Canto a la riqueza fluvial." } }
+      historia: "Fundado en 1964 por colonos antioqueños y cundinamarqueses. Su nombre honra al sacerdote misionero José Caicedo, quien impulsó la educación en la región. Puerto sobre el río Putumayo, fue paso obligado de navegantes y punto de encuentro comercial."
     },
     valle_guamuez: {
       nombre: "Valle del Guamuez", coords: [0.4328, -76.9053], poblacion: 56300, area: 885, homicidios_anual: 27, petroleo_bpd: 4300, nbi: 62,
       tendencias: { homicidios: [32,31,29,28,27,26] }, cultivos: { "Coca": 1450, "Café": 80, "Palma": 2100, "Plátano": 310, "Maíz": 95, "Cacao": 25 },
       ambiente: { deforestacion: "420 ha", calidadAgua: "Regular", riesgoInundacion: "Alto", temp: "24.8°C", gobernanza: "44/100", energia: "Termoeléctrica" },
       eventos: [ { nombre: "Carnaval de la Hormiga", fecha: "2025-05-20", tipo: "tradicional", descripcion: "Desfile de comparsas." } ],
-      simbolos: { bandera: { nombre: "Bandera", descripcion: "Verde, rojo y amarillo (selva, sangre y riqueza).", colores: ["#2e7d32", "#d32f2f", "#fbc02d"] }, escudo: { nombre: "Escudo", descripcion: "Hormiga gigante y palma." }, arbol: { nombre: "Palma de aceite", descripcion: "Motor económico." } }
+      historia: "La Hormiga, como se le conoce, fue fundada en 1965. Su nombre original Valle del Guamuez deriva del río Guamuez (o Guamués). La leyenda cuenta que los primeros exploradores encontraron enormes hormigas arrieras, y el apodo quedó. Es un territorio de fuerte producción palmera y petrolera."
     },
     florencia: {
       nombre: "Florencia", coords: [1.6147, -75.6065], poblacion: 168300, area: 2292, homicidios_anual: 35, petroleo_bpd: 0, nbi: 38,
       tendencias: { homicidios: [42,41,39,37,35,33] }, cultivos: { "Coca": 680, "Café": 520, "Plátano": 890, "Maíz": 430, "Cacao": 210, "Arroz": 370 },
       ambiente: { deforestacion: "360 ha", calidadAgua: "Buena", riesgoInundacion: "Medio", temp: "23.5°C", gobernanza: "68/100", energia: "Hidroeléctrica" },
       eventos: [ { nombre: "Feria Agropecuaria", fecha: "2025-07-04", tipo: "tradicional", descripcion: "Exposición ganadera." } ],
-      simbolos: { bandera: { nombre: "Bandera", descripcion: "Blanco, verde y azul (paz, esperanza, cielo).", colores: ["#ffffff", "#2e7d32", "#0288d1"] }, escudo: { nombre: "Escudo", descripcion: "Cerro de la Horqueta, río Orteguaza." }, arbol: { nombre: "Ceiba", descripcion: "Árbol autóctono." } }
+      historia: "Florencia fue fundada el 25 de diciembre de 1902 por Doroteo de Pupiales. Su nombre fue un homenaje a Florencia, una bella mujer que inspiró a los fundadores. Capital de Caquetá, es la puerta de entrada a la Amazonía colombiana y un centro comercial vital."
     },
     pitalito: {
       nombre: "Pitalito", coords: [1.8557, -76.0519], poblacion: 134900, area: 662, homicidios_anual: 12, petroleo_bpd: 0, nbi: 31,
       tendencias: { homicidios: [18,17,15,13,12,10] }, cultivos: { "Café": 3250, "Cacao": 480, "Plátano": 620, "Maíz": 340, "Frutales": 210, "Coca": 45 },
       ambiente: { deforestacion: "28 ha", calidadAgua: "Excelente", riesgoInundacion: "Bajo", temp: "18.5°C", gobernanza: "74/100", energia: "Solar/Fotovoltaica" },
       eventos: [ { nombre: "Festival Nacional del Café", fecha: "2025-05-10", tipo: "tradicional", descripcion: "Catación y desfiles." } ],
-      simbolos: { bandera: { nombre: "Bandera", descripcion: "Franjas verde, blanca y roja (café, paz, sangre labriega).", colores: ["#4caf50", "#ffffff", "#d32f2f"] }, escudo: { nombre: "Escudo", descripcion: "Granos de café y montañas." }, arbol: { nombre: "Cafeto", descripcion: "Base de la economía local." }, himno: { nombre: "Himno", descripcion: "Alabanza al trabajo cafetero." } }
+      historia: "Fundado en 1816 por colonos españoles. El nombre 'Pitalito' proviene de la abundancia de pitahayas (fruto exótico) en la región. Es conocido como el 'Valle de Laboyos' y es el principal productor de café del Huila, con gran calidad exportadora."
     },
-    timana: { nombre: "Timaná", coords: [1.9734, -75.9289], poblacion: 21000, area: 274, homicidios_anual: 4, petroleo_bpd: 0, nbi: 42,
+    timana: {
+      nombre: "Timaná", coords: [1.9734, -75.9289], poblacion: 21000, area: 274, homicidios_anual: 4, petroleo_bpd: 0, nbi: 42,
       tendencias: { homicidios: [7,6,5,5,4,3] }, cultivos: { "Café":820,"Caña panelera":310,"Plátano":140,"Maíz":95,"Coca":12,"Cacao":28 },
       ambiente: { deforestacion: "8 ha", calidadAgua: "Buena", riesgoInundacion: "Bajo", temp: "19.2°C", gobernanza: "71/100", energia: "Mini hidro" },
       eventos: [ { nombre: "Fiestas de San Sebastián", fecha: "2026-01-20", tipo: "tradicional", descripcion: "Corridas y eventos religiosos." } ],
-      simbolos: { bandera: { nombre: "Bandera", descripcion: "Verde, amarillo y azul.", colores: ["#2e7d32", "#fbc02d", "#0288d1"] }, escudo: { nombre: "Escudo", descripcion: "Río Timaná y sol." }, arbol: { nombre: "Caña panelera", descripcion: "Tradición productiva." } }
+      historia: "Timaná es uno de los pueblos más antiguos del Huila, fundado en 1538 por el capitán Juan de Alonso. Su nombre deriva del cacique Timaná, que gobernaba la región antes de la llegada de los españoles. Fue cuna de la cultura Timanense, famosa por su cerámica."
     },
-    guadalupe: { nombre: "Guadalupe", coords: [2.0273, -75.7583], poblacion: 18700, area: 248, homicidios_anual: 5, petroleo_bpd: 0, nbi: 39,
+    guadalupe: {
+      nombre: "Guadalupe", coords: [2.0273, -75.7583], poblacion: 18700, area: 248, homicidios_anual: 5, petroleo_bpd: 0, nbi: 39,
       tendencias: { homicidios: [8,7,6,5,5,4] }, cultivos: { "Café":640,"Caña":270,"Plátano":110,"Maíz":85,"Coca":8,"Frijol":40 },
       ambiente: { deforestacion: "5 ha", calidadAgua: "Buena", riesgoInundacion: "Bajo", temp: "20.1°C", gobernanza: "73/100", energia: "Red" },
       eventos: [ { nombre: "Festival del Retorno", fecha: "2025-12-08", tipo: "tradicional", descripcion: "Evento familiar." } ],
-      simbolos: { bandera: { nombre: "Bandera", descripcion: "Verde y blanco.", colores: ["#2e7d32","#ffffff"] }, escudo: { nombre: "Escudo", descripcion: "Virgen de Guadalupe." }, arbol: { nombre: "Café", descripcion: "Cultivo principal." } }
+      historia: "Guadalupe fue fundado en 1710 por frailes agustinos. Su nombre es una devoción a la Virgen de Guadalupe. Su arquitectura colonial y calles empedradas evocan el pasado. Es conocido por sus artesanías en fique y la dulcería tradicional."
     },
-    acevedo: { nombre: "Acevedo", coords: [1.8006, -75.8772], poblacion: 32500, area: 624, homicidios_anual: 7, petroleo_bpd: 0, nbi: 45,
+    acevedo: {
+      nombre: "Acevedo", coords: [1.8006, -75.8772], poblacion: 32500, area: 624, homicidios_anual: 7, petroleo_bpd: 0, nbi: 45,
       tendencias: { homicidios: [12,11,9,8,7,6] }, cultivos: { "Café":1150,"Cacao":230,"Plátano":310,"Maíz":190,"Coca":21,"Caña":80 },
       ambiente: { deforestacion: "15 ha", calidadAgua: "Regular", riesgoInundacion: "Medio", temp: "20.5°C", gobernanza: "65/100", energia: "Red" },
       eventos: [ { nombre: "Carnaval Campesino", fecha: "2025-09-12", tipo: "tradicional", descripcion: "Desfile de tractores." } ],
-      simbolos: { bandera: { nombre: "Bandera", descripcion: "Tricolor: amarillo, verde y rojo." }, escudo: { nombre: "Escudo", descripcion: "Montañas y río." }, arbol: { nombre: "Cedro", descripcion: "Especie nativa." } }
+      historia: "Fundado en 1905 por colonos provenientes de Garzón. El nombre honra al general José Acevedo y Gómez, prócer de la independencia. Es un municipio agrícola rodeado de montañas, famoso por sus quesos y la producción de café orgánico."
     },
-    palestina: { nombre: "Palestina", coords: [2.0161, -75.8217], poblacion: 11500, area: 147, homicidios_anual: 2, petroleo_bpd: 0, nbi: 36,
+    palestina: {
+      nombre: "Palestina", coords: [2.0161, -75.8217], poblacion: 11500, area: 147, homicidios_anual: 2, petroleo_bpd: 0, nbi: 36,
       tendencias: { homicidios: [4,3,3,2,2,1] }, cultivos: { "Café":480,"Cacao":95,"Plátano":70,"Maíz":55,"Coca":3,"Frutales":28 },
       ambiente: { deforestacion: "2 ha", calidadAgua: "Buena", riesgoInundacion: "Bajo", temp: "19.8°C", gobernanza: "78/100", energia: "Solar" },
       eventos: [ { nombre: "Festival de la Panela", fecha: "2025-07-25", tipo: "tradicional", descripcion: "Degustación." } ],
-      simbolos: { bandera: { nombre: "Bandera", descripcion: "Blanco y verde oliva." }, escudo: { nombre: "Escudo", descripcion: "Paloma y caña." }, arbol: { nombre: "Caña panelera", descripcion: "Tradición dulcera." } }
+      historia: "Palestina fue fundado en 1920. Su nombre evoca la Tierra Santa, por influencia de misioneros. Es un pequeño paraíso cafetero y panelero, con paisajes de colinas verdes y un clima de eterna primavera. La producción de panela es su mayor orgullo."
     },
-    isnos: { nombre: "Isnos", coords: [1.9406, -76.2372], poblacion: 26400, area: 582, homicidios_anual: 6, petroleo_bpd: 0, nbi: 48,
+    isnos: {
+      nombre: "Isnos", coords: [1.9406, -76.2372], poblacion: 26400, area: 582, homicidios_anual: 6, petroleo_bpd: 0, nbi: 48,
       tendencias: { homicidios: [9,8,7,7,6,5] }, cultivos: { "Café":920,"Caña":340,"Plátano":210,"Maíz":115,"Coca":14,"Cacao":45 },
       ambiente: { deforestacion: "18 ha", calidadAgua: "Buena", riesgoInundacion: "Medio", temp: "17.5°C", gobernanza: "63/100", energia: "Eólica" },
       eventos: [ { nombre: "Fiesta de San Isidro", fecha: "2025-05-15", tipo: "tradicional", descripcion: "Bendición de cosechas." } ],
-      simbolos: { bandera: { nombre: "Bandera", descripcion: "Tres franjas: rojo, blanco, verde." }, escudo: { nombre: "Escudo", descripcion: "Río Magdalena y montañas." }, arbol: { nombre: "Roble", descripcion: "Bosque altoandino." } }
+      historia: "El nombre Isnos proviene de la voz quechua 'isnu' que significa 'tierra fría'. Fundado en 1910, fue paso obligado entre el Macizo Colombiano y el valle. Es conocido por su producción de mora, lulo y por ser la puerta al Parque Nacional Natural Puracé."
     },
-    palermo: { nombre: "Palermo", coords: [2.8915, -75.4379], poblacion: 33200, area: 706, homicidios_anual: 9, petroleo_bpd: 0, nbi: 40,
+    palermo: {
+      nombre: "Palermo", coords: [2.8915, -75.4379], poblacion: 33200, area: 706, homicidios_anual: 9, petroleo_bpd: 0, nbi: 40,
       tendencias: { homicidios: [14,13,11,10,9,8] }, cultivos: { "Café":1450,"Cacao":210,"Plátano":380,"Maíz":270,"Coca":27,"Arroz":140 },
       ambiente: { deforestacion: "25 ha", calidadAgua: "Regular", riesgoInundacion: "Medio", temp: "22.4°C", gobernanza: "66/100", energia: "Biomasa" },
       eventos: [ { nombre: "Festival del Arroz", fecha: "2025-08-18", tipo: "tradicional", descripcion: "Muestra cultural." } ],
-      simbolos: { bandera: { nombre: "Bandera", descripcion: "Blanco y verde." }, escudo: { nombre: "Escudo", descripcion: "Arroz y montañas." }, arbol: { nombre: "Arroz", descripcion: "Cultivo insignia." } }
+      historia: "Palermo fue fundado en 1912 por colonos tolimenses. Su nombre fue un homenaje a la ciudad italiana de Palermo. Su economía gira en torno al arroz y el café, y es conocido como el 'granero del Huila'. Sus paisajes de llanuras y montañas son únicos."
     },
-    laplata: { nombre: "La Plata", coords: [2.3935, -75.8911], poblacion: 61300, area: 1270, homicidios_anual: 14, petroleo_bpd: 0, nbi: 44,
+    laplata: {
+      nombre: "La Plata", coords: [2.3935, -75.8911], poblacion: 61300, area: 1270, homicidios_anual: 14, petroleo_bpd: 0, nbi: 44,
       tendencias: { homicidios: [19,18,16,15,14,13] }, cultivos: { "Café":2100,"Caña":890,"Cacao":340,"Plátano":520,"Maíz":410,"Coca":68 },
       ambiente: { deforestacion: "42 ha", calidadAgua: "Regular", riesgoInundacion: "Medio-alto", temp: "21.5°C", gobernanza: "60/100", energia: "Hidro" },
       eventos: [ { nombre: "Feria de la Caña", fecha: "2025-06-10", tipo: "tradicional", descripcion: "Molienda y panela." } ],
-      simbolos: { bandera: { nombre: "Bandera", descripcion: "Rojo, blanco y verde." }, escudo: { nombre: "Escudo", descripcion: "Caña y río." }, arbol: { nombre: "Caña panelera", descripcion: "Principal producto." } }
+      historia: "La Plata fue fundada en 1650 por el español Juan Alonso de la Cruz. Su nombre se debe a la abundancia de minerales plateados en los ríos. Fue un importante centro minero y hoy destaca por su producción de caña panelera y café. Su arquitectura colonial perdura en el centro."
     },
-    gigante: { nombre: "Gigante", coords: [2.3872, -75.5472], poblacion: 27900, area: 626, homicidios_anual: 8, petroleo_bpd: 0, nbi: 38,
+    gigante: {
+      nombre: "Gigante", coords: [2.3872, -75.5472], poblacion: 27900, area: 626, homicidios_anual: 8, petroleo_bpd: 0, nbi: 38,
       tendencias: { homicidios: [12,11,10,9,8,7] }, cultivos: { "Café":1180,"Cacao":195,"Plátano":310,"Maíz":210,"Coca":11,"Frijol":70 },
       ambiente: { deforestacion: "10 ha", calidadAgua: "Buena", riesgoInundacion: "Bajo", temp: "23.2°C", gobernanza: "69/100", energia: "Red + solar" },
       eventos: [ { nombre: "Carnaval del Río Magdalena", fecha: "2025-07-19", tipo: "tradicional", descripcion: "Competiciones acuáticas." } ],
-      simbolos: { bandera: { nombre: "Bandera", descripcion: "Amarillo, azul y verde." }, escudo: { nombre: "Escudo", descripcion: "Gigante legendario." }, arbol: { nombre: "Samán", descripcion: "Árbol emblemático." } }
+      historia: "La leyenda cuenta que Gigante fue fundado en 1805 por un colono de enorme estatura, apodado 'el gigante'. El nombre oficial se adoptó por esa característica. Se ubica a orillas del río Magdalena y es famoso por sus balnearios y el puente más largo del departamento."
     }
   };
 
@@ -489,16 +464,20 @@
     document.getElementById('eventsList').innerHTML = html || '<div class="event-item">Sin eventos registrados</div>';
   }
 
-  function renderSimbolos(munKey) {
+  function renderHistoria(munKey) {
     const data = municipiosData[munKey];
-    if (!data || !data.simbolos) return;
-    const s = data.simbolos;
-    const banderaHtml = s.bandera ? `<div class="symbol-item"><div class="symbol-icon"><i class="fas fa-flag"></i></div><div class="symbol-info"><div class="symbol-name">${s.bandera.nombre}</div><div class="symbol-desc">${s.bandera.descripcion} ${s.bandera.colores ? `· Colores: ${s.bandera.colores.join(', ')}` : ''}</div></div></div>` : '';
-    const escudoHtml = s.escudo ? `<div class="symbol-item"><div class="symbol-icon"><i class="fas fa-shield-alt"></i></div><div class="symbol-info"><div class="symbol-name">${s.escudo.nombre}</div><div class="symbol-desc">${s.escudo.descripcion} ${s.escudo.icono ? s.escudo.icono : ''}</div></div></div>` : '';
-    const arbolHtml = s.arbol ? `<div class="symbol-item"><div class="symbol-icon"><i class="fas fa-tree"></i></div><div class="symbol-info"><div class="symbol-name">🌳 Árbol emblemático: ${s.arbol.nombre}</div><div class="symbol-desc">${s.arbol.descripcion}</div></div></div>` : '';
-    const himnoHtml = s.himno ? `<div class="symbol-item"><div class="symbol-icon"><i class="fas fa-music"></i></div><div class="symbol-info"><div class="symbol-name">🎵 ${s.himno.nombre}</div><div class="symbol-desc">${s.himno.descripcion}</div></div></div>` : '';
-    const otroHtml = s.otro ? `<div class="symbol-item"><div class="symbol-icon"><i class="fas fa-flower"></i></div><div class="symbol-info"><div class="symbol-name">${s.otro.nombre}</div><div class="symbol-desc">${s.otro.descripcion}</div></div></div>` : '';
-    document.getElementById('symbolsContent').innerHTML = banderaHtml + escudoHtml + arbolHtml + himnoHtml + otroHtml;
+    if (!data || !data.historia) return;
+    const html = `
+      <div class="history-text">
+        <i class="fas fa-history history-icon"></i> 
+        <strong>${data.nombre}</strong><br><br>
+        ${data.historia}
+      </div>
+      <div class="history-highlight">
+        <i class="fas fa-map-marked-alt"></i> <strong>Dato fundacional:</strong> ${data.historia.split('.')[0]}.
+      </div>
+    `;
+    document.getElementById('historyContent').innerHTML = html;
   }
 
   function actualizarMonitor(munKey) {
@@ -547,7 +526,7 @@
       <div class="sustainability-item"><span class="sustainability-label"><i class="fas fa-charging-station"></i> Energía renovable</span><span class="sustainability-value">${amb.energia}</span></div>
     `;
     renderEventos(munKey);
-    renderSimbolos(munKey);
+    renderHistoria(munKey);
   }
 
   document.getElementById('fechaActualizacion').innerText = new Date().toLocaleDateString('es-CO', { year:'numeric', month:'long', day:'numeric' });
